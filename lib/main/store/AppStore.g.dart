@@ -6,10 +6,11 @@ part of 'AppStore.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AppStore on AppStoreBase, Store {
-  final _$isDarkModeOnAtom = Atom(name: 'AppStoreBase.isDarkModeOn');
+  late final _$isDarkModeOnAtom =
+      Atom(name: 'AppStoreBase.isDarkModeOn', context: context);
 
   @override
   bool get isDarkModeOn {
@@ -24,7 +25,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$isHoverAtom = Atom(name: 'AppStoreBase.isHover');
+  late final _$isHoverAtom =
+      Atom(name: 'AppStoreBase.isHover', context: context);
 
   @override
   bool get isHover {
@@ -39,7 +41,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$webListingListAtom = Atom(name: 'AppStoreBase.webListingList');
+  late final _$webListingListAtom =
+      Atom(name: 'AppStoreBase.webListingList', context: context);
 
   @override
   List<ProTheme> get webListingList {
@@ -54,8 +57,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$scaffoldBackgroundAtom =
-      Atom(name: 'AppStoreBase.scaffoldBackground');
+  late final _$scaffoldBackgroundAtom =
+      Atom(name: 'AppStoreBase.scaffoldBackground', context: context);
 
   @override
   Color? get scaffoldBackground {
@@ -70,7 +73,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$backgroundColorAtom = Atom(name: 'AppStoreBase.backgroundColor');
+  late final _$backgroundColorAtom =
+      Atom(name: 'AppStoreBase.backgroundColor', context: context);
 
   @override
   Color? get backgroundColor {
@@ -85,8 +89,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$backgroundSecondaryColorAtom =
-      Atom(name: 'AppStoreBase.backgroundSecondaryColor');
+  late final _$backgroundSecondaryColorAtom =
+      Atom(name: 'AppStoreBase.backgroundSecondaryColor', context: context);
 
   @override
   Color? get backgroundSecondaryColor {
@@ -102,7 +106,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$textPrimaryColorAtom = Atom(name: 'AppStoreBase.textPrimaryColor');
+  late final _$textPrimaryColorAtom =
+      Atom(name: 'AppStoreBase.textPrimaryColor', context: context);
 
   @override
   Color? get textPrimaryColor {
@@ -117,8 +122,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$appColorPrimaryLightColorAtom =
-      Atom(name: 'AppStoreBase.appColorPrimaryLightColor');
+  late final _$appColorPrimaryLightColorAtom =
+      Atom(name: 'AppStoreBase.appColorPrimaryLightColor', context: context);
 
   @override
   Color? get appColorPrimaryLightColor {
@@ -134,8 +139,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$textSecondaryColorAtom =
-      Atom(name: 'AppStoreBase.textSecondaryColor');
+  late final _$textSecondaryColorAtom =
+      Atom(name: 'AppStoreBase.textSecondaryColor', context: context);
 
   @override
   Color? get textSecondaryColor {
@@ -150,7 +155,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$appBarColorAtom = Atom(name: 'AppStoreBase.appBarColor');
+  late final _$appBarColorAtom =
+      Atom(name: 'AppStoreBase.appBarColor', context: context);
 
   @override
   Color? get appBarColor {
@@ -165,7 +171,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$iconColorAtom = Atom(name: 'AppStoreBase.iconColor');
+  late final _$iconColorAtom =
+      Atom(name: 'AppStoreBase.iconColor', context: context);
 
   @override
   Color? get iconColor {
@@ -180,8 +187,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$iconSecondaryColorAtom =
-      Atom(name: 'AppStoreBase.iconSecondaryColor');
+  late final _$iconSecondaryColorAtom =
+      Atom(name: 'AppStoreBase.iconSecondaryColor', context: context);
 
   @override
   Color? get iconSecondaryColor {
@@ -196,8 +203,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$selectedLanguageCodeAtom =
-      Atom(name: 'AppStoreBase.selectedLanguageCode');
+  late final _$selectedLanguageCodeAtom =
+      Atom(name: 'AppStoreBase.selectedLanguageCode', context: context);
 
   @override
   String get selectedLanguageCode {
@@ -213,8 +220,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$selectedDrawerItemAtom =
-      Atom(name: 'AppStoreBase.selectedDrawerItem');
+  late final _$selectedDrawerItemAtom =
+      Atom(name: 'AppStoreBase.selectedDrawerItem', context: context);
 
   @override
   int get selectedDrawerItem {
@@ -229,8 +236,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  final _$toggleDarkModeAsyncAction =
-      AsyncAction('AppStoreBase.toggleDarkMode');
+  late final _$toggleDarkModeAsyncAction =
+      AsyncAction('AppStoreBase.toggleDarkMode', context: context);
 
   @override
   Future<void> toggleDarkMode({bool? value}) {
@@ -238,7 +245,8 @@ mixin _$AppStore on AppStoreBase, Store {
         .run(() => super.toggleDarkMode(value: value));
   }
 
-  final _$setLanguageAsyncAction = AsyncAction('AppStoreBase.setLanguage');
+  late final _$setLanguageAsyncAction =
+      AsyncAction('AppStoreBase.setLanguage', context: context);
 
   @override
   Future<void> setLanguage(String val, {BuildContext? context}) {
@@ -246,22 +254,24 @@ mixin _$AppStore on AppStoreBase, Store {
         .run(() => super.setLanguage(val, context: context));
   }
 
-  final _$setWebListingAsyncAction = AsyncAction('AppStoreBase.setWebListing');
+  late final _$setWebListingAsyncAction =
+      AsyncAction('AppStoreBase.setWebListing', context: context);
 
   @override
   Future<dynamic> setWebListing(List<ProTheme> data) {
     return _$setWebListingAsyncAction.run(() => super.setWebListing(data));
   }
 
-  final _$clearWebListingAsyncAction =
-      AsyncAction('AppStoreBase.clearWebListing');
+  late final _$clearWebListingAsyncAction =
+      AsyncAction('AppStoreBase.clearWebListing', context: context);
 
   @override
   Future<dynamic> clearWebListing() {
     return _$clearWebListingAsyncAction.run(() => super.clearWebListing());
   }
 
-  final _$AppStoreBaseActionController = ActionController(name: 'AppStoreBase');
+  late final _$AppStoreBaseActionController =
+      ActionController(name: 'AppStoreBase', context: context);
 
   @override
   void toggleHover({bool value = false}) {

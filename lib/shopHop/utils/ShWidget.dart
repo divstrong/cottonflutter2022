@@ -1,18 +1,18 @@
+import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/main/utils/common.dart';
+import 'package:cotton_natural/main/utils/dots_indicator/dots_indicator.dart';
 import 'package:cotton_natural/shopHop/controllers/AuthController.dart';
+import 'package:cotton_natural/shopHop/models/ShProduct.dart';
 import 'package:cotton_natural/shopHop/providers/OrdersProvider.dart';
 import 'package:cotton_natural/shopHop/screens/ShHomeScreen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:lottie/lottie.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:cotton_natural/main/utils/AppWidget.dart';
-import 'package:cotton_natural/main/utils/dots_indicator/dots_indicator.dart';
-import 'package:cotton_natural/shopHop/models/ShProduct.dart';
 import 'package:cotton_natural/shopHop/screens/ShProductDetail.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
 import 'package:cotton_natural/shopHop/utils/ShImages.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 import 'ShConstant.dart';
@@ -337,7 +337,7 @@ class PinEntryTextFieldState extends State<PinEntryTextField> {
     _focusNodes = List<FocusNode?>.filled(widget.fields, null, growable: false);
     _textControllers = List<TextEditingController?>.filled(widget.fields, null,
         growable: false);
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         if (widget.lastPin != null) {
           for (var i = 0; i < widget.lastPin!.length; i++) {
@@ -569,16 +569,21 @@ Widget cartIcon(context, cartCount) {
             : Container()
       ],
     ),
-    onTap: () async{
-      if(Provider.of<OrdersProvider>(context, listen: false).isLoggedIn == false){
-        Provider.of<OrdersProvider>(context, listen: false).isLoggedIn = await AuthController.isLoginUser();
+    onTap: () async {
+      if (Provider.of<OrdersProvider>(context, listen: false).isLoggedIn ==
+          false) {
+        Provider.of<OrdersProvider>(context, listen: false).isLoggedIn =
+            await AuthController.isLoginUser();
       }
       // if(Provider.of<OrdersProvider>(context, listen: false).isLoggedIn == false){
       //   toasty(context, 'Please Login First');
       // }else
-      if(Provider.of<OrdersProvider>(context, listen: false).getOrderCount() > 0){
-        ShHomeScreen( goToTabIndex: 2, ).launch(context);
-      }else{
+      if (Provider.of<OrdersProvider>(context, listen: false).getOrderCount() >
+          0) {
+        ShHomeScreen(
+          goToTabIndex: 2,
+        ).launch(context);
+      } else {
         toasty(context, 'Your Cart Is Empty');
       }
     },
