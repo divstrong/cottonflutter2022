@@ -71,22 +71,19 @@ flutter:
     - assets/shophop_data/
 
   fonts:
-    - family: Andina
-      fonts:
-        - asset: fonts/andina.ttf
-
     - family: Regular
       fonts:
-        - asset: fonts/googlesansregular.ttf
+        - asset: fonts/Dosis-Regular.ttf
 
     - family: Medium
       fonts:
-        - asset: fonts/googlesansmedium.ttf
+        - asset: fonts/Dosis-Medium.ttf
 
     - family: Semibold
       fonts:
-        - asset: fonts/googlesansmedium.ttf
+        - asset: fonts/Dosis-SemiBold.ttf
 
     - family: Bold
       fonts:
-        - asset: fonts/googlesansebold.ttf
+        - asset: fonts/Dosis-Bold.ttf
+

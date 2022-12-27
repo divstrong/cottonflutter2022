@@ -36,11 +36,14 @@ class ShAddNewAddressState extends State<ShAddNewAddress> {
   }
 
   init() async {
-    providerAddress = Provider.of<OrdersProvider>(context,listen: false).getAddress();
-    if(isAddressProviderEmpty()){
-      providerAddress = await AddressController.getAddressFromSharePreferences();
+    providerAddress =
+        Provider.of<OrdersProvider>(context, listen: false).getAddress();
+    if (isAddressProviderEmpty()) {
+      providerAddress =
+          await AddressController.getAddressFromSharePreferences();
       // print('loaded from shp ${providerAddress.name} ${providerAddress.email}');
-      Provider.of<OrdersProvider>(context,listen: false).setAddress(providerAddress);
+      Provider.of<OrdersProvider>(context, listen: false)
+          .setAddress(providerAddress);
     }
 
     // print('${isAddressProviderEmpty()} loaded from provider ${providerAddress.name} ${providerAddress.email}');
@@ -54,22 +57,18 @@ class ShAddNewAddressState extends State<ShAddNewAddress> {
     emailCont.text = providerAddress.email;
   }
 
-  bool isAddressProviderEmpty(){
-    return (
-        providerAddress.name == ''
-        || providerAddress.address == ''
-        || providerAddress.city == ''
-        || providerAddress.email == ''
-        || providerAddress.country == ''
-        || providerAddress.region == ''
-        || providerAddress.zip == ''
-    );
+  bool isAddressProviderEmpty() {
+    return (providerAddress.name == '' ||
+        providerAddress.address == '' ||
+        providerAddress.city == '' ||
+        providerAddress.email == '' ||
+        providerAddress.country == '' ||
+        providerAddress.region == '' ||
+        providerAddress.zip == '');
   }
-
 
   @override
   Widget build(BuildContext context) {
-
     void onSaveClicked() async {
       ShAddressModel newAddress = ShAddressModel(
         name: nameCont.text,
@@ -81,11 +80,12 @@ class ShAddNewAddressState extends State<ShAddNewAddress> {
         email: emailCont.text,
       );
       await AddressController.saveAddressToSharePreferences(newAddress);
-      Provider.of<OrdersProvider>(context,listen: false).setAddress(newAddress);
+      Provider.of<OrdersProvider>(context, listen: false)
+          .setAddress(newAddress);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) =>  ShOrderSummaryScreen(),
+          builder: (BuildContext context) => ShOrderSummaryScreen(),
         ),
       );
     }
@@ -182,81 +182,97 @@ class ShAddNewAddressState extends State<ShAddNewAddress> {
     final saveButton = MaterialButton(
       height: 50,
       minWidth: double.infinity,
-      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0)),
+      shape:
+          RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0)),
       onPressed: () {
         if (validateAddress()) {
           onSaveClicked();
         }
       },
       color: sh_colorPrimary,
-      child: text(sh_lbl_save_address, fontFamily: fontMedium, fontSize: textSizeLargeMedium, textColor: sh_white),
+      child: text(sh_lbl_save_address,
+          fontFamily: fontMedium,
+          fontSize: textSizeLargeMedium,
+          textColor: sh_white),
     );
 
-
-    final body = Wrap(runSpacing: spacing_standard_new, children: <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Expanded(child: name),
-        ],
-      ),
-      address,
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Expanded(child: city),
-          SizedBox(
-            width: spacing_standard_new,
-          ),
-          Expanded(child: region),
-        ],
-      ),
-      Row(
-        children: <Widget>[
-          Expanded(child: country),
-          SizedBox(
-            width: spacing_standard_new,
-          ),
-          Expanded(child: zip),
-        ],
-      ),
-      email,
-      saveButton,
-    ]);
+    final body = Wrap(
+      runSpacing: spacing_standard_new,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Expanded(child: name),
+          ],
+        ),
+        address,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Expanded(child: city),
+            SizedBox(
+              width: spacing_standard_new,
+            ),
+            Expanded(child: region),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            Expanded(child: country),
+            SizedBox(
+              width: spacing_standard_new,
+            ),
+            Expanded(child: zip),
+          ],
+        ),
+        email,
+        saveButton,
+      ],
+    );
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: sh_white,
-        title: text((providerAddress.name == '' && providerAddress.address == '' && providerAddress.city == '') ? sh_lbl_add_new_address : sh_lbl_edit_address, textColor: sh_textColorPrimary, fontSize: textSizeNormal, fontFamily: fontMedium),
+        title: text(
+            (providerAddress.name == '' &&
+                    providerAddress.address == '' &&
+                    providerAddress.city == '')
+                ? sh_lbl_add_new_address
+                : sh_lbl_edit_address,
+            textColor: sh_textColorPrimary,
+            fontSize: textSizeNormal,
+            fontFamily: fontMedium),
         iconTheme: IconThemeData(color: sh_textColorPrimary),
         actionsIconTheme: IconThemeData(color: sh_colorPrimary),
         // actions: <Widget>[cartIcon(context, 3)],
       ),
-      body: Container(width: double.infinity, child: SingleChildScrollView(child: body), margin: EdgeInsets.all(16)),
+      body: Container(
+          width: double.infinity,
+          child: SingleChildScrollView(child: body),
+          margin: EdgeInsets.all(16)),
     );
   }
 
   bool validateAddress() {
-    if(nameCont.text.trim()==''){
+    if (nameCont.text.trim() == '') {
       toasty(context, 'Name is require');
       return false;
-    }else if(addressCont.text.trim()==''){
+    } else if (addressCont.text.trim() == '') {
       toasty(context, 'Address is require');
       return false;
-    }else if(cityCont.text.trim()==''){
+    } else if (cityCont.text.trim() == '') {
       toasty(context, 'City name is require');
       return false;
-    }else if(regionCont.text.trim()==''){
+    } else if (regionCont.text.trim() == '') {
       toasty(context, 'State name required');
       return false;
-    }else if(countryCont.text.trim()==''){
+    } else if (countryCont.text.trim() == '') {
       toasty(context, 'Country name is require');
       return false;
-    }else if(zipCont.text.trim()==''){
+    } else if (zipCont.text.trim() == '') {
       toasty(context, 'Zip Code is require');
       return false;
     }
     return true;
   }
-
 }

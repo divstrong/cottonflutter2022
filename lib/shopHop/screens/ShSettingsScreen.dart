@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
 import 'package:cotton_natural/shopHop/utils/ShStrings.dart';
 import 'package:cotton_natural/shopHop/utils/ShWidget.dart';
-import 'package:cotton_natural/main/utils/AppWidget.dart';
+import 'package:flutter/material.dart';
 
 class ShSettingsScreen extends StatefulWidget {
   static String tag = '/ShSettingsScreen';
@@ -24,7 +23,12 @@ class ShSettingsScreenState extends State<ShSettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: sh_white,
-        title: text(sh_lbl_settings, textColor: sh_textColorPrimary, fontSize: textSizeNormal, fontFamily: fontMedium),
+        title: text(
+          sh_lbl_settings,
+          textColor: sh_textColorPrimary,
+          fontSize: textSizeNormal,
+          fontFamily: fontMedium,
+        ),
         iconTheme: IconThemeData(color: sh_textColorPrimary),
         actionsIconTheme: IconThemeData(color: sh_colorPrimary),
         // actions: <Widget>[cartIcon(context, 3)],
@@ -33,14 +37,23 @@ class ShSettingsScreenState extends State<ShSettingsScreen> {
         child: Column(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(left: spacing_standard_new, right: spacing_standard_new, top: spacing_standard_new),
+              margin: EdgeInsets.only(
+                left: spacing_standard_new,
+                right: spacing_standard_new,
+                top: spacing_standard_new,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      text(sh_lbl_push_notification, textColor: sh_textColorPrimary, fontSize: textSizeLargeMedium, fontFamily: fontMedium),
+                      text(
+                        sh_lbl_push_notification,
+                        textColor: sh_textColorPrimary,
+                        fontSize: textSizeLargeMedium,
+                        fontFamily: fontMedium,
+                      ),
                       Switch(
                         value: pushNotification,
                         onChanged: (value) {
@@ -58,14 +71,22 @@ class ShSettingsScreenState extends State<ShSettingsScreen> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: spacing_standard_new, right: spacing_standard_new),
+              margin: EdgeInsets.only(
+                left: spacing_standard_new,
+                right: spacing_standard_new,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      text(sh_lbl_sms_notification, textColor: sh_textColorPrimary, fontSize: textSizeLargeMedium, fontFamily: fontMedium),
+                      text(
+                        sh_lbl_sms_notification,
+                        textColor: sh_textColorPrimary,
+                        fontSize: textSizeLargeMedium,
+                        fontFamily: fontMedium,
+                      ),
                       Switch(
                         value: smsNotification,
                         onChanged: (value) {
@@ -83,14 +104,22 @@ class ShSettingsScreenState extends State<ShSettingsScreen> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: spacing_standard_new, right: spacing_standard_new),
+              margin: EdgeInsets.only(
+                left: spacing_standard_new,
+                right: spacing_standard_new,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      text(sh_lbl_email_notification, textColor: sh_textColorPrimary, fontSize: textSizeLargeMedium, fontFamily: fontMedium),
+                      text(
+                        sh_lbl_email_notification,
+                        textColor: sh_textColorPrimary,
+                        fontSize: textSizeLargeMedium,
+                        fontFamily: fontMedium,
+                      ),
                       Switch(
                         value: emailNotification,
                         onChanged: (value) {

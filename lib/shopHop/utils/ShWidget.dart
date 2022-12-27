@@ -7,7 +7,6 @@ import 'package:cotton_natural/shopHop/providers/OrdersProvider.dart';
 import 'package:cotton_natural/shopHop/screens/ShHomeScreen.dart';
 import 'package:cotton_natural/shopHop/screens/ShProductDetail.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
-import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
 import 'package:cotton_natural/shopHop/utils/ShImages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,8 +18,9 @@ import 'ShConstant.dart';
 import 'ShStrings.dart';
 
 var textFiledBorderStyle = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(32.0),
-    borderSide: BorderSide(width: 0, color: sh_editText_background));
+  borderRadius: BorderRadius.circular(32.0),
+  borderSide: BorderSide(width: 0, color: sh_editText_background),
+);
 
 InputDecoration formFieldDecoration(String hintText) {
   return InputDecoration(
@@ -59,18 +59,22 @@ class ProductHorizontalList extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ShProductDetail(product: list[index])));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ShProductDetail(product: list[index]),
+                        ),
+                      );
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        networkCachedImage(list[index].images![0],
-                            aWidth: double.infinity,
-                            aHeight: 200,
-                            fit: BoxFit.cover),
+                        networkCachedImage(
+                          list[index].images![0],
+                          aWidth: double.infinity,
+                          aHeight: 200,
+                          fit: BoxFit.cover,
+                        ),
                         SizedBox(height: spacing_standard),
                         Expanded(
                           child: Row(
@@ -78,26 +82,28 @@ class ProductHorizontalList extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Expanded(
-                                  child: text(list[index].name,
-                                      maxLine: 2,
-                                      textColor: sh_textColorPrimary,
-                                      fontFamily: fontMedium,
-                                      fontSize: textSizeMedium)),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  SizedBox(width: spacing_control_half),
-                                  text(
-                                    list[index]
-                                        .price
-                                        .toString()
-                                        .toCurrencyFormat(),
-                                    textColor: sh_colorPrimary,
-                                    fontFamily: fontMedium,
-                                    fontSize: textSizeMedium,
-                                  ),
-                                ],
-                              )
+                                child: text(
+                                  list[index].name,
+                                  maxLine: 2,
+                                  textColor: sh_textColorPrimary,
+                                  fontFamily: fontMedium,
+                                ),
+                              ),
+                              // Row(
+                              //   crossAxisAlignment: CrossAxisAlignment.center,
+                              //   children: <Widget>[
+                              //     SizedBox(width: spacing_control_half),
+                              //     text(
+                              //       list[index]
+                              //           .price
+                              //           .toString()
+                              //           .toCurrencyFormat(),
+                              //       textColor: sh_colorPrimary,
+                              //       fontFamily: fontMedium,
+                              //       fontSize: textSizeMedium,
+                              //     ),
+                              //   ],
+                              // )
                             ],
                           ),
                         ),
@@ -105,16 +111,18 @@ class ProductHorizontalList extends StatelessWidget {
                     ),
                   ),
                 );
-              })
+              },
+            )
           : Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
                   'There is no product for this category',
                   style: TextStyle(
-                      color: sh_cat_4,
-                      fontFamily: fontSemibold,
-                      fontSize: textSizeNormal),
+                    color: sh_cat_4,
+                    fontFamily: fontSemibold,
+                    fontSize: textSizeNormal,
+                  ),
                 ),
                 Container(
                   height: 200,
@@ -176,10 +184,13 @@ class TopBarState extends State<TopBar> {
               },
             ),
             Center(
-                child: text(widget.titleName,
-                    textColor: sh_textColorPrimary,
-                    fontSize: textSizeNormal,
-                    fontFamily: fontBold))
+              child: text(
+                widget.titleName,
+                textColor: sh_textColorPrimary,
+                fontSize: textSizeNormal,
+                fontFamily: fontBold,
+              ),
+            )
           ],
         ),
       ),
@@ -258,12 +269,14 @@ Widget ring(String description) {
         ),
       ),
       SizedBox(height: 16),
-      text(description,
-          textColor: sh_textColorPrimary,
-          fontSize: textSizeNormal,
-          fontFamily: fontSemibold,
-          isCentered: true,
-          maxLine: 2)
+      text(
+        description,
+        textColor: sh_textColorPrimary,
+        fontSize: textSizeNormal,
+        fontFamily: fontSemibold,
+        isCentered: true,
+        maxLine: 2,
+      )
     ],
   );
 }
@@ -307,15 +320,15 @@ class PinEntryTextField extends StatefulWidget {
   final isTextObscure;
   final showFieldAsBox;
 
-  PinEntryTextField(
-      {this.lastPin,
-      this.fields: 4,
-      this.onSubmit,
-      this.fieldWidth: 40.0,
-      this.fontSize: 20.0,
-      this.isTextObscure: false,
-      this.showFieldAsBox: false})
-      : assert(fields > 0);
+  PinEntryTextField({
+    this.lastPin,
+    this.fields: 4,
+    this.onSubmit,
+    this.fieldWidth: 40.0,
+    this.fontSize: 20.0,
+    this.isTextObscure: false,
+    this.showFieldAsBox: false,
+  }) : assert(fields > 0);
 
   @override
   State createState() {
@@ -335,8 +348,11 @@ class PinEntryTextFieldState extends State<PinEntryTextField> {
     super.initState();
     _pin = List<String?>.filled(widget.fields, null, growable: false);
     _focusNodes = List<FocusNode?>.filled(widget.fields, null, growable: false);
-    _textControllers = List<TextEditingController?>.filled(widget.fields, null,
-        growable: false);
+    _textControllers = List<TextEditingController?>.filled(
+      widget.fields,
+      null,
+      growable: false,
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         if (widget.lastPin != null) {
@@ -365,14 +381,16 @@ class PinEntryTextFieldState extends State<PinEntryTextField> {
     }
 
     return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        verticalDirection: VerticalDirection.down,
-        children: textFields);
+      mainAxisAlignment: MainAxisAlignment.center,
+      verticalDirection: VerticalDirection.down,
+      children: textFields,
+    );
   }
 
   void clearTextFields() {
     _textControllers.forEach(
-        (TextEditingController? tEditController) => tEditController!.clear());
+      (TextEditingController? tEditController) => tEditController!.clear(),
+    );
     _pin.clear();
   }
 
@@ -400,17 +418,19 @@ class PinEntryTextFieldState extends State<PinEntryTextField> {
         textAlign: TextAlign.center,
         maxLength: 1,
         style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontFamily: fontMedium,
-            fontSize: widget.fontSize),
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+          fontFamily: fontMedium,
+          fontSize: widget.fontSize,
+        ),
         focusNode: _focusNodes[i],
         obscureText: widget.isTextObscure,
         decoration: InputDecoration(
-            counterText: "",
-            border: widget.showFieldAsBox
-                ? OutlineInputBorder(borderSide: BorderSide(width: 2.0))
-                : null),
+          counterText: "",
+          border: widget.showFieldAsBox
+              ? OutlineInputBorder(borderSide: BorderSide(width: 2.0))
+              : null,
+        ),
         onChanged: (String str) {
           setState(() {
             _pin[i] = str;
@@ -463,20 +483,27 @@ Widget horizontalHeading(var title, {bool showViewAll = true, var callback}) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        text(title,
-            fontSize: textSizeLargeMedium,
-            textColor: sh_textColorPrimary,
-            fontFamily: fontMedium),
+        text(
+          title,
+          fontSize: textSizeLargeMedium,
+          textColor: sh_textColorPrimary,
+          fontFamily: fontBold,
+          textAllCaps: true,
+        ),
         showViewAll
             ? GestureDetector(
                 onTap: callback,
                 child: Container(
                   padding: EdgeInsets.only(
-                      left: spacing_standard_new,
-                      top: spacing_control,
-                      bottom: spacing_control),
-                  child: text(sh_lbl_view_all,
-                      textColor: sh_textColorSecondary, fontFamily: fontMedium),
+                    left: spacing_standard_new,
+                    top: spacing_control,
+                    bottom: spacing_control,
+                  ),
+                  child: text(
+                    sh_lbl_view_all,
+                    textColor: sh_textColorSecondary,
+                    fontFamily: fontMedium,
+                  ),
                 ),
               )
             : Container()
@@ -489,21 +516,22 @@ Widget loadingWidgetMaker() {
   return Container(
     alignment: Alignment.center,
     child: Card(
-        semanticContainer: true,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        elevation: spacing_control,
-        margin: EdgeInsets.all(4),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50.0),
+      semanticContainer: true,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      elevation: spacing_control,
+      margin: EdgeInsets.all(4),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50.0),
+      ),
+      child: Container(
+        width: 45,
+        height: 45,
+        padding: const EdgeInsets.all(8.0),
+        child: CircularProgressIndicator(
+          strokeWidth: 3,
         ),
-        child: Container(
-          width: 45,
-          height: 45,
-          padding: const EdgeInsets.all(8.0),
-          child: CircularProgressIndicator(
-            strokeWidth: 3,
-          ),
-        )),
+      ),
+    ),
   );
 }
 
@@ -562,8 +590,11 @@ Widget cartIcon(context, cartCount) {
                   padding: EdgeInsets.all(6),
                   decoration:
                       BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-                  child: text(cartCount.toString(),
-                      textColor: sh_white, fontSize: textSizeSmall),
+                  child: text(
+                    cartCount.toString(),
+                    textColor: sh_white,
+                    fontSize: textSizeSmall,
+                  ),
                 ),
               )
             : Container()
@@ -592,8 +623,10 @@ Widget cartIcon(context, cartCount) {
 }
 
 Widget headingText(String content) {
-  return text(content,
-      textColor: sh_textColorPrimary,
-      fontFamily: fontMedium,
-      fontSize: textSizeLargeMedium);
+  return text(
+    content,
+    textColor: sh_textColorPrimary,
+    fontFamily: fontMedium,
+    fontSize: textSizeLargeMedium,
+  );
 }

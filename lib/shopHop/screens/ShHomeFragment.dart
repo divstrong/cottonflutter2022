@@ -1,16 +1,15 @@
+import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/shopHop/api/MyResponse.dart';
 import 'package:cotton_natural/shopHop/controllers/CategoryController.dart';
-import 'package:cotton_natural/shopHop/utils/ColorUtils.dart';
-import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/shopHop/models/ShCategory.dart';
 import 'package:cotton_natural/shopHop/models/ShProduct.dart';
 import 'package:cotton_natural/shopHop/screens/ShSubCategory.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
+import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class ShHomeFragment extends StatefulWidget {
   static String tag = '/ShHomeFragment';
@@ -45,27 +44,24 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
   }
 
   fetchData() async {
-
-
-    MyResponse<List<ShCategory>> myResponse = await CategoryController.getMainCategories();
+    MyResponse<List<ShCategory>> myResponse =
+        await CategoryController.getMainCategories();
 
     if (myResponse.success) {
       list.clear();
       list = myResponse.data;
-
     } else {
       toasty(context, myResponse.errorText);
     }
-    setState(() { });
+    setState(() {});
 
     List<ShProduct> products = await loadProducts();
     List<ShProduct> featured = [];
     products.forEach((product) {
-      if (product.featured==1) {
+      if (product.featured == 1) {
         featured.add(product);
       }
     });
-
 
     setState(() {
       newestProducts.clear();
@@ -96,7 +92,10 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
                       child: Stack(
                         alignment: Alignment.bottomCenter,
                         children: <Widget>[
-                          Image.asset('images/shophop/bg-home.jpg',fit: BoxFit.fitWidth,)
+                          Image.asset(
+                            'images/shophop/bg-home.jpg',
+                            fit: BoxFit.fitWidth,
+                          )
                         ],
                       ),
                     ),
@@ -108,23 +107,47 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
                         itemCount: list.length,
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.only(left: spacing_standard, right: spacing_standard),
+                        padding: EdgeInsets.only(
+                          left: spacing_standard,
+                          right: spacing_standard,
+                        ),
                         itemBuilder: (BuildContext context, int index) {
                           return InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => ShSubCategory(category: list[index])));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ShSubCategory(
+                                    category: list[index],
+                                  ),
+                                ),
+                              );
                             },
                             child: Container(
-                              margin: EdgeInsets.only(left: spacing_standard, right: spacing_standard),
+                              margin: EdgeInsets.only(
+                                left: spacing_standard,
+                                right: spacing_standard,
+                              ),
                               child: Column(
                                 children: <Widget>[
                                   Container(
                                     padding: EdgeInsets.all(spacing_middle),
-                                    decoration: BoxDecoration(shape: BoxShape.circle, color: sh_textColorPrimary),
-                                    child: Image.asset('images/shophop/cat/${list[index].slug}.png', width: 25, color: sh_white),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: sh_textColorPrimary,
+                                    ),
+                                    child: Image.asset(
+                                      'images/shophop/cat/${list[index].slug}.png',
+                                      width: 25,
+                                      color: sh_white,
+                                    ),
                                   ),
                                   SizedBox(height: spacing_control),
-                                  text(list[index].name, textColor:  sh_textColorPrimary, fontFamily: fontMedium)
+                                  text(
+                                    list[index].name,
+                                    textColor: sh_textColorPrimary,
+                                    fontFamily: fontMedium,
+                                  )
                                 ],
                               ),
                             ),
@@ -135,46 +158,63 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
                     Container(
                       height: 250,
                       margin: EdgeInsets.only(top: spacing_standard_new),
-                      padding: EdgeInsets.symmetric(vertical: 20,horizontal: 30),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                       child: InkWell(
-                        onTap: (){
-                          ShSubCategory(category: womenCategory).launch(context);
+                        onTap: () {
+                          ShSubCategory(category: womenCategory)
+                              .launch(context);
                         },
                         child: Stack(
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(9),
-                              child: Image.asset('images/shophop/for-her.jpg',fit: BoxFit.fitWidth,),
+                              child: Image.asset(
+                                'images/shophop/for-her.jpg',
+                                fit: BoxFit.fitWidth,
+                              ),
                             ),
                             Positioned(
-                              child: text('Hers', textColor:  sh_textColorPrimary, fontFamily: fontMedium),
+                              child: text(
+                                'Hers',
+                                textColor: sh_textColorPrimary,
+                                fontFamily: fontMedium,
+                              ),
                               bottom: 10,
                               left: 10,
                             )
-                          ]
+                          ],
                         ),
                       ),
                     ),
                     Container(
                       height: 250,
                       margin: EdgeInsets.only(top: spacing_standard_new),
-                      padding: EdgeInsets.symmetric(vertical: 20,horizontal: 30),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           ShSubCategory(category: menCategory).launch(context);
                         },
                         child: Stack(
-                          children:[
+                          children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(9),
-                              child: Image.asset('images/shophop/for-him.jpg',fit: BoxFit.fitWidth,),
+                              child: Image.asset(
+                                'images/shophop/for-him.jpg',
+                                fit: BoxFit.fitWidth,
+                              ),
                             ),
                             Positioned(
-                              child: text('His', textColor:  sh_textColorPrimary, fontFamily: fontMedium),
+                              child: text(
+                                'His',
+                                textColor: sh_textColorPrimary,
+                                fontFamily: fontMedium,
+                              ),
                               bottom: 10,
                               left: 10,
                             )
-                          ] ,
+                          ],
                         ),
                       ),
                     ),

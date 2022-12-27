@@ -1,18 +1,17 @@
+import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/main/utils/common.dart';
 import 'package:cotton_natural/shopHop/models/ShOrder.dart';
 import 'package:cotton_natural/shopHop/models/ShProduct.dart';
 import 'package:cotton_natural/shopHop/providers/OrdersProvider.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:lottie/lottie.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/shopHop/screens/ShOrderSummaryScreen.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
 import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
 import 'package:cotton_natural/shopHop/utils/ShStrings.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class ShCartFragment extends StatefulWidget {
@@ -242,7 +241,7 @@ class ShCartFragmentState extends State<ShCartFragment> {
             ),
           );
           // return Chats(mListings[index], index);
-        }):
+        },):
     Center(
       child: Container(
         height: 300,
