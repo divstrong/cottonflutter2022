@@ -25,6 +25,7 @@ Widget text(
   bool textAllCaps = false,
   var isLongText = false,
   bool lineThrough = false,
+  bool underline = false,
 }) {
   return Text(
     textAllCaps ? text!.toUpperCase() : text!,
@@ -37,17 +38,20 @@ Widget text(
       color: textColor ?? appStore.textSecondaryColor,
       height: 1.5,
       letterSpacing: latterSpacing,
-      decoration:
-          lineThrough ? TextDecoration.lineThrough : TextDecoration.none,
+      decoration: TextDecoration.combine([
+        lineThrough ? TextDecoration.lineThrough : TextDecoration.none,
+        underline ? TextDecoration.underline : TextDecoration.none,
+      ]),
     ),
   );
 }
 
-BoxDecoration boxDecoration(
-    {double radius = 2,
-    Color color = Colors.transparent,
-    Color? bgColor,
-    var showShadow = false}) {
+BoxDecoration boxDecoration({
+  double radius = 2,
+  Color color = Colors.transparent,
+  Color? bgColor,
+  var showShadow = false,
+}) {
   return BoxDecoration(
     color: bgColor ?? appStore.scaffoldBackground,
     boxShadow: showShadow
@@ -59,7 +63,8 @@ BoxDecoration boxDecoration(
 }
 
 Future<List<LatLngAndGeohash>> getListOfLatLngAndGeoHash(
-    BuildContext context) async {
+  BuildContext context,
+) async {
   try {
     final fakeList = await (loadDataFromJson(context));
     List<LatLngAndGeohash> myPoints = [];
@@ -82,8 +87,12 @@ void changeStatusColor(Color color) async {
   setStatusBarColor(color);
 }
 
-Widget commonCacheImageWidget(String? url, double height,
-    {double? width, BoxFit? fit}) {
+Widget commonCacheImageWidget(
+  String? url,
+  double height, {
+  double? width,
+  BoxFit? fit,
+}) {
   if (url.validate().startsWith('http')) {
     if (isMobile) {
       return CachedNetworkImage(
@@ -98,22 +107,33 @@ Widget commonCacheImageWidget(String? url, double height,
         },
       );
     } else {
-      return Image.network(url!,
-          height: height, width: width, fit: fit ?? BoxFit.cover);
+      return Image.network(
+        url!,
+        height: height,
+        width: width,
+        fit: fit ?? BoxFit.cover,
+      );
     }
   } else {
-    return Image.asset(url!,
-        height: height, width: width, fit: fit ?? BoxFit.cover);
+    return Image.asset(
+      url!,
+      height: height,
+      width: width,
+      fit: fit ?? BoxFit.cover,
+    );
   }
 }
 
-Widget settingItem(context, String text,
-    {Function? onTap,
-    Widget? detail,
-    Widget? leading,
-    Color? textColor,
-    int? textSize,
-    double? padding}) {
+Widget settingItem(
+  context,
+  String text, {
+  Function? onTap,
+  Widget? detail,
+  Widget? leading,
+  Color? textColor,
+  int? textSize,
+  double? padding,
+}) {
   return InkWell(
     onTap: onTap as void Function()?,
     child: Container(
@@ -125,28 +145,38 @@ Widget settingItem(context, String text,
           Row(
             children: <Widget>[
               Container(
-                  child: leading ?? SizedBox(),
-                  width: 30,
-                  alignment: Alignment.center),
+                child: leading ?? SizedBox(),
+                width: 30,
+                alignment: Alignment.center,
+              ),
               leading != null ? 10.width : SizedBox(),
-              Text(text,
-                      style: primaryTextStyle(
-                          size: textSize ?? 18,
-                          color: textColor ?? appStore.textPrimaryColor))
-                  .expand(),
+              Text(
+                text,
+                style: primaryTextStyle(
+                  size: textSize ?? 18,
+                  color: textColor ?? appStore.textPrimaryColor,
+                ),
+              ).expand(),
             ],
           ).expand(),
           detail ??
-              Icon(Icons.arrow_forward_ios,
-                  size: 16, color: appStore.textSecondaryColor),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: appStore.textSecondaryColor,
+              ),
         ],
       ).paddingOnly(left: 16, right: 16, top: 8, bottom: 8),
     ),
   );
 }
 
-Widget appBarTitleWidget(context, String title,
-    {Color? color, Color? textColor}) {
+Widget appBarTitleWidget(
+  context,
+  String title, {
+  Color? color,
+  Color? textColor,
+}) {
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 60,
@@ -156,7 +186,9 @@ Widget appBarTitleWidget(context, String title,
         Text(
           title,
           style: boldTextStyle(
-              color: color ?? appStore.textPrimaryColor, size: 20),
+            color: color ?? appStore.textPrimaryColor,
+            size: 20,
+          ),
           maxLines: 1,
         ).expand(),
       ],
@@ -164,12 +196,15 @@ Widget appBarTitleWidget(context, String title,
   );
 }
 
-AppBar appBar(BuildContext context, String title,
-    {List<Widget>? actions,
-    bool showBack = true,
-    Color? color,
-    Color? iconColor,
-    Color? textColor}) {
+AppBar appBar(
+  BuildContext context,
+  String title, {
+  List<Widget>? actions,
+  bool showBack = true,
+  Color? color,
+  Color? iconColor,
+  Color? textColor,
+}) {
   return AppBar(
     automaticallyImplyLeading: false,
     backgroundColor: color ?? appStore.appBarColor,
@@ -178,8 +213,10 @@ AppBar appBar(BuildContext context, String title,
             onPressed: () {
               finish(context);
             },
-            icon: Icon(Icons.arrow_back,
-                color: appStore.isDarkModeOn ? white : black),
+            icon: Icon(
+              Icons.arrow_back,
+              color: appStore.isDarkModeOn ? white : black,
+            ),
           )
         : null,
     title:
@@ -193,8 +230,11 @@ class ExampleItemWidget extends StatelessWidget {
   final Function onTap;
   final bool showTrailing;
 
-  ExampleItemWidget(this.tabBarType,
-      {required this.onTap, this.showTrailing = false});
+  ExampleItemWidget(
+    this.tabBarType, {
+    required this.onTap,
+    this.showTrailing = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -207,8 +247,11 @@ class ExampleItemWidget extends StatelessWidget {
         onTap: () => onTap(),
         title: Text(tabBarType.name!, style: boldTextStyle()),
         trailing: showTrailing
-            ? Icon(Icons.arrow_forward_ios,
-                size: 15, color: appStore.textPrimaryColor)
+            ? Icon(
+                Icons.arrow_forward_ios,
+                size: 15,
+                color: appStore.textPrimaryColor,
+              )
             : tabBarType.isNew.validate()
                 ? Text('New', style: secondaryTextStyle(color: Colors.red))
                 : null,

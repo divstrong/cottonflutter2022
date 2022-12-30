@@ -148,17 +148,21 @@ class ShProductDetailState extends State<ShProductDetail> {
             setState(() {});
           },
           child: Container(
-            // width: 30,
-            // height: 30,
-            margin: EdgeInsets.only(right: spacing_standard_new),
-            padding: EdgeInsets.all(spacing_standard),
+            width: 40,
+            height: 40,
+            margin: EdgeInsets.only(right: spacing_control),
+            // padding: EdgeInsets.all(spacing_control),
             decoration: selectedSize == index
                 ? BoxDecoration(
-                    shape: BoxShape.circle,
+                    shape: BoxShape.rectangle,
                     border: Border.all(color: sh_textColorPrimary, width: 0.5),
                     color: sh_colorPrimary,
                   )
-                : BoxDecoration(),
+                : BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    border: Border.all(color: sh_textColorPrimary, width: 1),
+                    // color: sh_colorPrimary,
+                  ),
             child: Center(
               child: text(
                 ShProduct.getSizeTypeText(
@@ -187,36 +191,40 @@ class ShProductDetailState extends State<ShProductDetail> {
                 text(
                   parseHtmlString(widget.product!.description),
                   maxLine: 15,
-                  isLongText: isExpanded,
+                  // isLongText: isExpanded,
                   fontSize: 16.0,
                 ),
-                InkWell(
-                  child: Container(
-                    padding: EdgeInsets.all(spacing_control_half),
-                    color: sh_white,
-                    child: text(
-                      isExpanded ? "Read Less" : "Read More",
-                      textColor: sh_textColorPrimary,
-                      fontSize: textSizeMedium,
-                    ),
-                  ),
-                  onTap: () {
-                    isExpanded = !isExpanded;
-                    setState(() {});
-                  },
-                )
+                // InkWell(
+                //   child: Container(
+                //     padding: EdgeInsets.all(spacing_control_half),
+                //     color: sh_white,
+                //     child: text(
+                //       isExpanded ? "Read Less" : "Read More",
+                //       textColor: sh_textColorPrimary,
+                //       fontSize: textSizeMedium,
+                //     ),
+                //   ),
+                //   onTap: () {
+                //     isExpanded = !isExpanded;
+                //     setState(() {});
+                //   },
+                // )
               ],
             ),
             SizedBox(height: spacing_large),
             widget.product!.sizes!.isNotEmpty
                 ? text(
                     sh_lbl_size,
+                    textAllCaps: true,
                     textColor: sh_textColorPrimary,
                     fontFamily: fontMedium,
                     fontSize: textSizeLargeMedium,
                   )
                 : SizedBox(),
-            Container(height: 50, child: sizes)
+            Container(
+              height: 50,
+              child: sizes,
+            )
           ],
         ),
       ),
@@ -273,7 +281,9 @@ class ShProductDetailState extends State<ShProductDetail> {
                     offset: Offset(3, 1),
                   )
                 ],
-                color: sh_colorPrimary,
+                color: widget.product!.sizes!.isNotEmpty && selectedSize < 0
+                    ? Colors.grey
+                    : sh_colorPrimary,
               ),
               child: text(
                 sh_lbl_add_to_cart,

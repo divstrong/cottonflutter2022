@@ -4,14 +4,17 @@ const sh_lbl_sign_up = "Sign Up";
 const sh_lbl_sign_in_with = "Sign In with";
 const sh_lbl_forgot = "Forgot ?";
 const sh_lbl_already_have_a_account = "Already have a account?";
-const sh_lbl_enter_the_code_nto_verify_email = "Enter the Code to Verify Your Email";
-const sh_lbl_we_have_sent_you_mail_with_verification_code_to = "We have sent you mail with verification code to";
+const sh_lbl_enter_the_code_nto_verify_email =
+    "Enter the Code to Verify Your Email";
+const sh_lbl_we_have_sent_you_mail_with_verification_code_to =
+    "We have sent you mail with verification code to";
 const sh_lbl_tep_email = "jonndeo@gmail.com";
 const sh_lbl_did_not_receive = "Didn\'t receive?";
 const sh_lbl_resend_code = "Resend code";
 const sh_lbl_verify = "Verify";
 const sh_lbl_hi_we_re_woobox = "Hi, We\'re Woobox!";
-const sh_lbl_subheading = "We make around your city Affordable, easy and efficient.";
+const sh_lbl_subheading =
+    "We make around your city Affordable, easy and efficient.";
 const sh_lbl_my_order = "My Order";
 const sh_lbl_reward = "Reward";
 const sh_lbl_wish_list = "Wishlist";
@@ -50,7 +53,7 @@ const sh_lbl_price = "Price";
 const sh_lbl_brands = "Brands";
 const sh_lbl_select_all = "Select All";
 const sh_lbl_colors = "Colors";
-const sh_lbl_size = "Size";
+const sh_lbl_size = "Choose Size";
 const sh_lbl_discount = "Discount";
 const sh_lbl_ratings = "Ratings";
 const sh_lbl_reset = "Reset";
@@ -76,10 +79,14 @@ const sh_lbl_continue = "Continue";
 const sh_lbl_delivered_by = "Delivery By,";
 const sh_lbl_change_address = "Change Address";
 const sh_lbl_item_deliver_here = "Item Deliver Here";
-const sh_lbl_add_new_address = "Add New address";
+
 const sh_lbl_current_location = "Use Current Location";
 const sh_lbl_save_address = "Save Address";
-const sh_lbl_edit_address = "Edit Address";
+const sh_lbl_add_new_Bill_address = "Add Bill To Address";
+const sh_lbl_edit_Bill_address = "Edit Bill Address";
+
+const sh_lbl_add_new_Ship_address = "Add Ship To Address";
+const sh_lbl_edit_Ship_address = "Edit Ship Address";
 const sh_lbl_home = "Home Address";
 const sh_lbl_office_commercial = "Work Address";
 const sh_lbl_add_card = "Add card";
@@ -99,7 +106,8 @@ const sh_lbl_my_orders = "My Orders";
 const sh_lbl_address_manager = "Address Manager";
 const sh_lbl_verify_now = "Verify now";
 const sh_lbl_get_newest_offers = "Get newest offers";
-const sh_lbl_please_verify_your_email_or_number = "Please verify your email or number";
+const sh_lbl_please_verify_your_email_or_number =
+    "Please verify your email or number";
 const sh_lbl_next_time_buy = "Next time buy";
 const sh_lbl_remove = "Remove";
 const sh_lbl_move_to_cart = "Move to Cart";
@@ -152,7 +160,8 @@ const sh_text_start_to_shopping = "Start to Shopping";
 const sh_text_todo = "TODO";
 const sh_text_juliane_deerman = "Juliane Deerman";
 const sh_text_collection_2019 = "Collection 2019";
-const sh_text_description = "Blue solid woven regular top, has a round neck, three-quarter sleeves, stylised back Blue solid woven regular top, has a round neck, three-quarter sleeves, stylised back";
+const sh_text_description =
+    "Blue solid woven regular top, has a round neck, three-quarter sleeves, stylised back Blue solid woven regular top, has a round neck, three-quarter sleeves, stylised back";
 const sh_text_25_jun_monday = "25 Jun,Monday";
 const sh_text_black_colour = "Black Colour";
 const sh_text_solid = "Solid";
@@ -164,7 +173,8 @@ const sh_text_date = "24 Aug 2019";
 const sh_text_order_approved = "Order Approved";
 const sh_text_item_delivered = "Item Delivered";
 const sh_text_pin_code = "386466";
-const sh_text_reward = "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration.";
+const sh_text_reward =
+    "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration.";
 const sh_text_mobile = "+91 123456745";
 
 const sh_title_account = "My Account";
@@ -180,12 +190,21 @@ const sh_action_filter = "Filter";
 
 const sh_menu_my_cart = "My Cart";
 
+const sh_cached_data = "Cached Data";
+const sh_cached_ship_to_address = "Cached Ship To";
+const sh_cached_bill_to_address = "Cached Bill To";
+
 const sh_home = "Home";
 const sh_profile = "Profile";
 const sh_cart = "My Cart";
 const sh_more = "Read More";
 const sh_less = "Read Less";
 const sh_order_summary = "Order Summary";
+const sh_order_checkout = "Checkout";
+const sh_order_placed_title = "Thank You";
+const sh_order_Placed_header = "Your Order has been Placed Successfully!";
+const sh_order_Placed_body =
+    "Once of our representatives will contact you within two (2) business days to confirm details and process the order.";
 const sh_success = "Successfully deleted";
 const sh_success_add = "Successfully Added";
 const sh_send_to = "Share with";
@@ -249,7 +268,8 @@ const sh_hint_no_products = "No Products";
 const sh_lbl_order_pend = "Order Pending";
 const sh_lbl_item_delivering = "Item Delivering";
 const sh_lbl_order_hold = "Order on hold";
-const sh_lbl_order_completed = "<![CDATA[Order <font color=#64B931>Completed</font>]]>";
+const sh_lbl_order_completed =
+    "<![CDATA[Order <font color=#64B931>Completed</font>]]>";
 const sh_lbl_order_cacelled = "Order Cancelled";
 const sh_lbl_refunded = "Order Refunded";
 const sh_lbl_free = "Free";
@@ -282,7 +302,8 @@ const sh_lbl_get_started = "Get Started";
 const sh_lbl_product_desc = "Product Description";
 const sh_lbl_shopping = "Shipping";
 const sh_lbl_view_all_products = "All Products";
-const sh_msg_confirmation_move_wishist = "Are you sure want to move this item  in wishlist";
+const sh_msg_confirmation_move_wishist =
+    "Are you sure want to move this item  in wishlist";
 const sh_lbl_total_amount_ = "Total Amount";
 
 const sh_category_array = <String>[
@@ -318,13 +339,18 @@ const sh_category_array = <String>[
 const sh_lbl_men_s_style = "Men\'s Style";
 const sh_lbl_by_faballey = "by Faballey";
 
-const sh_lbl_change_profile = "<![CDATA[Change your profile details & password]]>";
+const sh_lbl_change_profile =
+    "<![CDATA[Change your profile details & password]]>";
 const sh_lbl_check_your_order_status = "Check your order status";
-const sh_lbl_manage_coupons_for_additional_discounts = "Manage coupons for additional discounts";
+const sh_lbl_manage_coupons_for_additional_discounts =
+    "Manage coupons for additional discounts";
 const sh_lbl_your_most_loved_styles = "Your most loved styles";
-const sh_lbl_save_your_cards_for_faster_checkout = "Save your cards for faster checkout";
-const sh_lbl_help_regarding_your_recent_purchases = "Help regarding your recent purchases";
-const sh_lbl_manage_notification_app_settings = "<![CDATA[Manage notification & app settings]]>";
+const sh_lbl_save_your_cards_for_faster_checkout =
+    "Save your cards for faster checkout";
+const sh_lbl_help_regarding_your_recent_purchases =
+    "Help regarding your recent purchases";
+const sh_lbl_manage_notification_app_settings =
+    "<![CDATA[Manage notification & app settings]]>";
 const sh_lbl_profile_detail = "Profile Detail";
 const sh_txt_johndoe_gmail_com = "johndoe@gmail.com";
 const sh_lbl_orders = "Orders";

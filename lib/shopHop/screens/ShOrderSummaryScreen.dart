@@ -6,7 +6,7 @@ import 'package:cotton_natural/shopHop/models/ShOrder.dart';
 import 'package:cotton_natural/shopHop/models/ShProduct.dart';
 import 'package:cotton_natural/shopHop/providers/OrdersProvider.dart';
 import 'package:cotton_natural/shopHop/screens/ShAddNewAddress.dart';
-import 'package:cotton_natural/shopHop/screens/ShPaymentsScreen.dart';
+import 'package:cotton_natural/shopHop/screens/sh_order_placed.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
 import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
@@ -14,6 +14,8 @@ import 'package:cotton_natural/shopHop/utils/ShStrings.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+
+import 'ShAddNewBillToAddress.dart';
 
 class ShOrderSummaryScreen extends StatefulWidget {
   static String tag = '/ShOrderSummaryScreen';
@@ -29,8 +31,10 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
   var currentIndex = 0;
   var isLoaded = false;
   List<ShOrder> orderList = [];
-  late ShAddressModel addressModel;
+  late ShAddressModel shipAddressModel;
+  late ShAddressModel billAddressModel;
   var primaryColor;
+  bool billAsShipping = false;
 
   @override
   void initState() {
@@ -39,12 +43,17 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
   }
 
   fetchData() async {
-    addressModel =
+    shipAddressModel =
         Provider.of<OrdersProvider>(context, listen: false).getAddress();
+    billAddressModel =
+        Provider.of<OrdersProvider>(context, listen: false).getBillAddress();
     if (isAddressEmpty()) {
-      addressModel = await AddressController.getAddressFromSharePreferences();
+      shipAddressModel = await AddressController.getShipToFromCachedData();
+      billAddressModel = shipAddressModel;
       Provider.of<OrdersProvider>(context, listen: false)
-          .setAddress(addressModel);
+          .setShipAddress(shipAddressModel);
+      Provider.of<OrdersProvider>(context, listen: false)
+          .setBillAddress(billAddressModel);
     }
 
     orderList =
@@ -66,11 +75,9 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
     super.dispose();
   }
 
-  bool isAddressEmpty() {
-    return (addressModel.name == '' &&
-        addressModel.address == '' &&
-        addressModel.city == '');
-  }
+  bool isAddressEmpty() => (shipAddressModel == ShAddressModel.empty());
+
+  bool isBillAddressEmpty() => (billAddressModel == ShAddressModel.empty());
 
   @override
   Widget build(BuildContext context) {
@@ -78,35 +85,31 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
 
     // address
     final name = Text(
-      addressModel.name,
-      style: TextStyle(fontFamily: fontBold, fontSize: textSizeXNormal),
+      shipAddressModel.name,
+      style: TextStyle(fontFamily: fontRegular, fontSize: textSizeMedium),
     );
     final address = Text(
-      addressModel.address,
+      shipAddressModel.address,
       style: TextStyle(fontFamily: fontRegular, fontSize: textSizeMedium),
     );
     final city = Text(
-      addressModel.city,
+      shipAddressModel.city,
       style: TextStyle(fontFamily: fontRegular, fontSize: textSizeMedium),
     );
     final region = Text(
-      addressModel.region,
+      shipAddressModel.region,
       style: TextStyle(fontFamily: fontRegular, fontSize: textSizeMedium),
     );
     final country = Text(
-      addressModel.country,
+      shipAddressModel.country,
       style: TextStyle(fontFamily: fontRegular, fontSize: textSizeMedium),
     );
     final zip = Text(
-      addressModel.zip,
-      style: TextStyle(fontFamily: fontRegular, fontSize: textSizeMedium),
-    );
-    final email = Text(
-      addressModel.email,
+      shipAddressModel.zip,
       style: TextStyle(fontFamily: fontRegular, fontSize: textSizeMedium),
     );
 
-    final body = Container(
+    final bodySipTo = Container(
       child: Wrap(
         runSpacing: spacing_standard_new,
         children: <Widget>[
@@ -115,55 +118,46 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
             children: <Widget>[
               Expanded(
                 child: text(
-                  'Shipping Address',
+                  'Ship To:',
                   textColor: sh_textColorPrimary,
-                  fontSize: textSizeLargeMedium,
-                  fontFamily: fontMedium,
+                  fontSize: textSizeXNormal,
+                  fontFamily: fontBold,
                 ),
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Expanded(child: name),
-            ],
-          ),
-          isAddressEmpty()
-              ? Center(
-                  child: text(
-                    'Address Is Empty',
-                    textColor: sh_textColorPrimary,
-                    fontSize: textSizeLargeMedium,
-                    fontFamily: fontMedium,
-                  ),
-                )
-              : address,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Expanded(child: city),
-              SizedBox(
-                width: spacing_standard_new,
-              ),
-              Expanded(child: region),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(child: country),
-              SizedBox(
-                width: spacing_standard_new,
-              ),
-              Expanded(child: zip),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Expanded(child: email),
-            ],
-          ),
+          if (!(shipAddressModel == ShAddressModel.empty()))
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Expanded(child: name),
+                  ],
+                ),
+                isAddressEmpty() ? SizedBox() : address,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Expanded(child: city),
+                    SizedBox(
+                      width: spacing_standard_new,
+                    ),
+                    Expanded(child: region),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(child: country),
+                    SizedBox(
+                      width: spacing_standard_new,
+                    ),
+                    Expanded(child: zip),
+                  ],
+                ),
+              ],
+            ),
 
           Row(
             children: <Widget>[
@@ -172,24 +166,32 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
                   onTap: () {
                     ShAddNewAddress().launch(context);
                   },
-                  child: Container(
-                    margin: const EdgeInsets.only(
-                      top: spacing_standard_new,
-                    ),
-                    padding: const EdgeInsets.only(top: 8, bottom: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: sh_colorPrimary.withOpacity(0.9),
-                    ),
-                    child: Center(
-                      child: text(
-                        isAddressEmpty() ? 'Add Address' : 'Edit Address',
-                        textColor: sh_white,
-                        fontSize: textSizeLargeMedium,
-                        fontFamily: fontRegular,
-                      ),
-                    ),
-                  ),
+                  child: isAddressEmpty()
+                      ? Container(
+                          margin: const EdgeInsets.only(
+                            top: spacing_standard_new,
+                          ),
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: sh_colorPrimary.withOpacity(0.9),
+                          ),
+                          child: Center(
+                            child: text(
+                              'Add Ship Address',
+                              textColor: sh_white,
+                              fontSize: textSizeLargeMedium,
+                              fontFamily: fontRegular,
+                            ),
+                          ),
+                        )
+                      : text(
+                          'Change Ship To',
+                          textColor: sh_colorPrimary,
+                          fontSize: textSizeSMedium,
+                          fontFamily: fontRegular,
+                          underline: true,
+                        ),
                 ),
               ),
             ],
@@ -243,6 +245,119 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
       ),
     );
 
+    final bodyBillTo = Container(
+      child: Wrap(
+        runSpacing: spacing_standard_new,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                flex: 5,
+                child: text(
+                  'Bill To:',
+                  textColor: sh_textColorPrimary,
+                  fontSize: textSizeXNormal,
+                  fontFamily: fontBold,
+                ),
+              ),
+              SizedBox(
+                width: 150,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Checkbox(
+                      activeColor: sh_colorPrimary,
+                      value: billAsShipping,
+                      onChanged: (bool? value) {
+                        billAsShipping = value!;
+                        if (value) {
+                          billAddressModel == shipAddressModel;
+                        }
+                        setState(() {});
+                      },
+                    ),
+                    Expanded(
+                      child: text("Same As Ship To", fontSize: textSizeSmall),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          if (!(billAddressModel == ShAddressModel.empty()))
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Expanded(child: name),
+                  ],
+                ),
+                isBillAddressEmpty() ? SizedBox() : address,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Expanded(child: city),
+                    SizedBox(
+                      width: spacing_standard_new,
+                    ),
+                    Expanded(child: region),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(child: country),
+                    SizedBox(
+                      width: spacing_standard_new,
+                    ),
+                    Expanded(child: zip),
+                  ],
+                ),
+              ],
+            ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    ShAddNewBillToAddress().launch(context);
+                  },
+                  child: isBillAddressEmpty()
+                      ? Container(
+                          margin: const EdgeInsets.only(
+                            top: spacing_standard_new,
+                          ),
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: sh_colorPrimary.withOpacity(0.9),
+                          ),
+                          child: Center(
+                            child: text(
+                              'Add Bill Address',
+                              textColor: sh_white,
+                              fontSize: textSizeLargeMedium,
+                              fontFamily: fontRegular,
+                            ),
+                          ),
+                        )
+                      : text(
+                          'Change Bill To',
+                          textColor: sh_colorPrimary,
+                          fontSize: textSizeSMedium,
+                          fontFamily: fontRegular,
+                          underline: true,
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+
     var cartList = isLoaded
         ? ListView.builder(
             scrollDirection: Axis.vertical,
@@ -251,146 +366,173 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
             padding: EdgeInsets.only(bottom: spacing_standard_new),
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return Container(
-                color: sh_itemText_background,
-                margin: EdgeInsets.only(
-                  left: spacing_standard_new,
-                  right: spacing_standard_new,
-                  top: spacing_standard_new,
-                ),
-                child: IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      networkCachedImage(
-                        list[index]!.image_url!,
-                        aWidth: width * 0.25,
-                        aHeight: width * 0.3,
-                        fit: BoxFit.fill,
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: spacing_standard,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 16.0),
-                                    child: text(
-                                      list[index]!.name,
-                                      textColor: sh_textColorPrimary,
-                                      fontSize: textSizeLargeMedium,
-                                      fontFamily: fontMedium,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 16.0,
-                                      top: spacing_control,
-                                    ),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.black,
-                                          ),
-                                          padding: EdgeInsets.all(
-                                            spacing_control_half,
-                                          ),
-                                          child: Icon(
-                                            Icons.done,
-                                            color: sh_white,
-                                            size: 12,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: spacing_standard,
-                                        ),
-                                        text(
-                                          ShProduct.getSizeTypeText(
-                                            list[index]!.size!,
-                                          ),
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(spacing_standard_new),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Expanded(
+                          child: text(
+                            'Items:',
+                            textColor: sh_textColorPrimary,
+                            fontSize: textSizeXNormal,
+                            fontFamily: fontBold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    color: sh_itemText_background,
+                    margin: EdgeInsets.only(
+                      left: spacing_standard_new,
+                      right: spacing_standard_new,
+                      top: spacing_standard_new,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          networkCachedImage(
+                            list[index]!.image_url!,
+                            aWidth: width * 0.25,
+                            aHeight: width * 0.3,
+                            fit: BoxFit.fill,
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        height: spacing_standard,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16.0),
+                                        child: text(
+                                          list[index]!.name,
                                           textColor: sh_textColorPrimary,
-                                          fontSize: textSizeMedium,
-                                        ),
-                                        SizedBox(
-                                          width: spacing_standard,
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.fromLTRB(
-                                            spacing_standard,
-                                            1,
-                                            spacing_standard,
-                                            1,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: sh_view_color,
-                                              width: 1,
-                                            ),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              text(
-                                                "Qty: ${Provider.of<OrdersProvider>(context, listen: true).getItemQty(list[index]!.id.toInt(), list[index]!.size)}",
-                                                textColor: sh_textColorPrimary,
-                                                fontSize: textSizeSMedium,
-                                              ),
-                                              // Icon(
-                                              //   Icons.arrow_drop_down,
-                                              //   color: sh_textColorPrimary,
-                                              //   size: 16,
-                                              // )
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 16.0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        text(
-                                          list[index]!
-                                              .price
-                                              .toString()
-                                              .toCurrencyFormat(),
-                                          textColor: sh_colorPrimary,
-                                          fontSize: textSizeNormal,
+                                          fontSize: textSizeLargeMedium,
                                           fontFamily: fontMedium,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 16.0,
+                                          top: spacing_control,
+                                        ),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.black,
+                                              ),
+                                              padding: EdgeInsets.all(
+                                                spacing_control_half,
+                                              ),
+                                              child: Icon(
+                                                Icons.done,
+                                                color: sh_white,
+                                                size: 12,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: spacing_standard,
+                                            ),
+                                            text(
+                                              ShProduct.getSizeTypeText(
+                                                list[index]!.size!,
+                                              ),
+                                              textColor: sh_textColorPrimary,
+                                              fontSize: textSizeMedium,
+                                            ),
+                                            SizedBox(
+                                              width: spacing_standard,
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.fromLTRB(
+                                                spacing_standard,
+                                                1,
+                                                spacing_standard,
+                                                1,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: sh_view_color,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  text(
+                                                    "Qty: ${Provider.of<OrdersProvider>(context, listen: true).getItemQty(list[index]!.id.toInt(), list[index]!.size)}",
+                                                    textColor:
+                                                        sh_textColorPrimary,
+                                                    fontSize: textSizeSMedium,
+                                                  ),
+                                                  // Icon(
+                                                  //   Icons.arrow_drop_down,
+                                                  //   color: sh_textColorPrimary,
+                                                  //   size: 16,
+                                                  // )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16.0),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: <Widget>[
+                                            text(
+                                              list[index]!
+                                                  .price
+                                                  .toString()
+                                                  .toCurrencyFormat(),
+                                              textColor: sh_colorPrimary,
+                                              fontSize: textSizeNormal,
+                                              fontFamily: fontMedium,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      )
-                    ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               );
               // return Chats(mListings[index], index);
             },
           )
         : Container();
+
+    //! deleted
     var paymentDetail = Container(
       margin: EdgeInsets.fromLTRB(
         spacing_standard_new,
@@ -467,24 +609,46 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
         ],
       ),
     );
+
     var addressContainer = isLoaded
         ? Container(
             width: double.infinity,
-            color: sh_item_background,
+            // color: sh_item_background,
             padding: EdgeInsets.all(spacing_standard_new),
-            margin: EdgeInsets.all(spacing_standard_new),
+            // margin: EdgeInsets.all(spacing_standard_new),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
                   width: double.infinity,
-                  child: SingleChildScrollView(child: body),
+                  child: SingleChildScrollView(child: bodySipTo),
                   margin: EdgeInsets.all(16),
                 ),
               ],
             ),
           )
         : Container();
+
+    var billToAddressContainer = isLoaded
+        ? Container(
+            width: double.infinity,
+            // color: sh_item_background,
+            padding: EdgeInsets.all(spacing_standard_new),
+            // margin: EdgeInsets.all(spacing_standard_new),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: double.infinity,
+                  child: SingleChildScrollView(child: bodyBillTo),
+                  margin: EdgeInsets.all(16),
+                ),
+              ],
+            ),
+          )
+        : Container();
+
+    //! deleted
     var bottomButtons = Container(
       height: 60,
       decoration: BoxDecoration(
@@ -530,15 +694,15 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
                 height: double.infinity,
               ),
               onTap: () {
-                if (validateAddress(context)) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => ShPaymentsScreen(),
-                    ),
-                  );
-                  // ShPaymentsScreen().launch(context);
-                }
+                // if (validateAddress(context)) {
+                //   Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (BuildContext context) => ShPaymentsScreen(),
+                //     ),
+                //   );
+                //   // ShPaymentsScreen().launch(context);
+                // }
               },
             ),
           )
@@ -546,52 +710,104 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
       ),
     );
 
+    var submitOrder = list.length > 0
+        ? SizedBox(
+            width: 300,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => OrderPlaced()),
+                    ),
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: spacing_standard_new,
+                      ),
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: sh_colorPrimary.withOpacity(0.9),
+                      ),
+                      child: Center(
+                        child: text(
+                          'Submit Order',
+                          textColor: sh_white,
+                          fontSize: textSizeLargeMedium,
+                          fontFamily: fontBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        : SizedBox();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: sh_white,
         title: text(
-          sh_order_summary,
+          sh_order_checkout,
           textColor: sh_textColorPrimary,
           fontSize: textSizeNormal,
           fontFamily: fontMedium,
         ),
         iconTheme: IconThemeData(color: sh_textColorPrimary),
+        automaticallyImplyLeading: false,
       ),
-      body: Stack(
-        alignment: Alignment.bottomLeft,
-        children: <Widget>[
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 70.0),
-              child: Column(
-                children: <Widget>[
-                  isLoaded ? addressContainer : Container(),
-                  cartList,
-                  paymentDetail,
-                  images.isNotEmpty
-                      ? Container(
-                          decoration: BoxDecoration(
-                            border:
-                                Border.all(color: sh_view_color, width: 0.5),
-                          ),
-                          margin: const EdgeInsets.all(spacing_standard_new),
-                          child: Image.asset(
-                            images[currentIndex],
-                            width: double.infinity,
-                            height: width * 0.4,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : Container(),
-                ],
-              ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.bottomLeft,
+              children: <Widget>[
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 70.0),
+                    child: Column(
+                      children: <Widget>[
+                        isLoaded ? addressContainer : Container(),
+                        isLoaded ? billToAddressContainer : Container(),
+                        cartList,
+                        // paymentDetail,
+                        images.isNotEmpty
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: sh_view_color,
+                                    width: 0.5,
+                                  ),
+                                ),
+                                margin:
+                                    const EdgeInsets.all(spacing_standard_new),
+                                child: Image.asset(
+                                  images[currentIndex],
+                                  width: double.infinity,
+                                  height: width * 0.4,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Container(),
+                        submitOrder,
+                        //? order total and Continue button
+                        // Container(
+                        //   color: sh_white,
+                        //   child: bottomButtons,
+                        // ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Container(
-            color: sh_white,
-            child: bottomButtons,
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

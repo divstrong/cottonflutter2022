@@ -11,15 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
-class ShAddNewAddress extends StatefulWidget {
+class ShAddNewBillToAddress extends StatefulWidget {
   static String tag = '/AddNewAddress';
   @override
-  ShAddNewAddressState createState() => ShAddNewAddressState();
+  ShAddNewBillToAddressState createState() => ShAddNewBillToAddressState();
 }
 
-class ShAddNewAddressState extends State<ShAddNewAddress> {
+class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
   var primaryColor;
-  late ShAddressModel providerAddress;
+  late ShAddressModel billProviderAddress;
 
   var zipCont = TextEditingController();
   var addressCont = TextEditingController();
@@ -36,33 +36,35 @@ class ShAddNewAddressState extends State<ShAddNewAddress> {
   }
 
   init() async {
-    providerAddress =
-        Provider.of<OrdersProvider>(context, listen: false).getAddress();
+    billProviderAddress =
+        Provider.of<OrdersProvider>(context, listen: false).getBillAddress();
     if (isAddressProviderEmpty()) {
-      providerAddress = await AddressController.getShipToFromCachedData();
+      billProviderAddress = await AddressController.getBillToFromCachedData();
       // print('loaded from shp ${providerAddress.name} ${providerAddress.email}');
       Provider.of<OrdersProvider>(context, listen: false)
-          .setShipAddress(providerAddress);
+          .setBillAddress(billProviderAddress);
     }
 
     // print('${isAddressProviderEmpty()} loaded from provider ${providerAddress.name} ${providerAddress.email}');
 
-    nameCont.text = providerAddress.name;
-    addressCont.text = providerAddress.address;
-    cityCont.text = providerAddress.city;
-    regionCont.text = providerAddress.region;
-    countryCont.text = providerAddress.country;
-    zipCont.text = providerAddress.zip;
+    nameCont.text = billProviderAddress.name;
+    addressCont.text = billProviderAddress.address;
+    cityCont.text = billProviderAddress.city;
+    regionCont.text = billProviderAddress.region;
+    countryCont.text = billProviderAddress.country;
+    zipCont.text = billProviderAddress.zip;
   }
 
-  bool isAddressProviderEmpty() {
-    return (providerAddress.name == '' ||
-        providerAddress.address == '' ||
-        providerAddress.city == '' ||
-        providerAddress.country == '' ||
-        providerAddress.region == '' ||
-        providerAddress.zip == '');
-  }
+  bool isAddressProviderEmpty() =>
+      ShAddressModel(
+        name: billProviderAddress.name,
+        zip: billProviderAddress.zip,
+        region: billProviderAddress.region,
+        city: billProviderAddress.city,
+        address: billProviderAddress.address,
+        country: billProviderAddress.country,
+      ) ==
+      ShAddressModel.empty();
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +77,9 @@ class ShAddNewAddressState extends State<ShAddNewAddress> {
         address: addressCont.text,
         country: countryCont.text,
       );
-      await AddressController.cacheShipToAddress(newAddress);
+      await AddressController.cacheBillToAddress(newAddress);
       Provider.of<OrdersProvider>(context, listen: false)
-          .setShipAddress(newAddress);
+          .setBillAddress(newAddress);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -221,11 +223,11 @@ class ShAddNewAddressState extends State<ShAddNewAddress> {
       appBar: AppBar(
         backgroundColor: sh_white,
         title: text(
-          (providerAddress.name == '' &&
-                  providerAddress.address == '' &&
-                  providerAddress.city == '')
-              ? sh_lbl_add_new_Ship_address
-              : sh_lbl_edit_Ship_address,
+          (billProviderAddress.name == '' &&
+                  billProviderAddress.address == '' &&
+                  billProviderAddress.city == '')
+              ? sh_lbl_add_new_Bill_address
+              : sh_lbl_edit_Bill_address,
           textColor: sh_textColorPrimary,
           fontSize: textSizeNormal,
           fontFamily: fontMedium,

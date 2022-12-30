@@ -5,13 +5,12 @@ import 'package:cotton_natural/shopHop/controllers/CategoryController.dart';
 import 'package:cotton_natural/shopHop/models/Account.dart';
 import 'package:cotton_natural/shopHop/models/ShCategory.dart';
 import 'package:cotton_natural/shopHop/screens/ShAccountScreen.dart';
-import 'package:cotton_natural/shopHop/screens/ShCartFragment.dart';
 import 'package:cotton_natural/shopHop/screens/ShHomeFragment.dart';
 import 'package:cotton_natural/shopHop/screens/ShOrderListScreen.dart';
 import 'package:cotton_natural/shopHop/screens/ShProfileFragment.dart';
 import 'package:cotton_natural/shopHop/screens/ShSearchScreen.dart';
-import 'package:cotton_natural/shopHop/screens/ShSignIn.dart';
 import 'package:cotton_natural/shopHop/screens/ShWishlistFragment.dart';
+import 'package:cotton_natural/shopHop/screens/sh_call_us.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
 import 'package:cotton_natural/shopHop/utils/ShImages.dart';
@@ -20,6 +19,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'ShOrderSummaryScreen.dart';
 import 'ShSubCategory.dart';
 
 class ShHomeScreen extends StatefulWidget {
@@ -33,10 +33,10 @@ class ShHomeScreen extends StatefulWidget {
 class ShHomeScreenState extends State<ShHomeScreen> {
   List<ShCategory> list = [];
   var homeFragment = ShHomeFragment();
-  var cartFragment = ShCartFragment();
+  var cartFragment = ShOrderSummaryScreen();
   var wishlistFragment = ShWishlistFragment();
   var profileFragment = ShAccountScreen();
-  var loginFragment = ShSignIn();
+  var loginFragment = CallUs();
   late var fragments;
   var selectedTab = 0;
   Account userAccount = Account(null, '', '', '');
@@ -90,13 +90,13 @@ class ShHomeScreenState extends State<ShHomeScreen> {
         title = "Wishlist";
         break;
       case 2:
-        title = "Shopping Cart";
+        title = "Cart Checkout";
         break;
       case 3:
         title = "Profile";
         break;
       case 4:
-        title = "SignIn";
+        title = "Call Us";
         break;
     }
     return Scaffold(
@@ -148,13 +148,16 @@ class ShHomeScreenState extends State<ShHomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
-                      tabItem(0, sh_ic_home),
+                      tabItem(0, sh_ic_tag),
                       // tabItem(1, sh_ic_heart),
-                      tabItem(2, sh_ic_cart),
+                      tabItem(
+                        2,
+                        sh_ic_cart,
+                      ),
                       if (login) ...{
                         tabItem(3, sh_user)
                       } else ...{
-                        tabItem(4, sh_user)
+                        tabItem(4, sh_ic_call)
                       },
                     ],
                   ),
@@ -409,7 +412,7 @@ class ShHomeScreenState extends State<ShHomeScreen> {
     );
   }
 
-  Widget tabItem(var pos, var icon) {
+  Widget tabItem(var pos, var icon, {bool? notSVG}) {
     return GestureDetector(
       onTap: () {
         selectedTab = pos;

@@ -8,7 +8,6 @@ import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
 import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
 import 'package:cotton_natural/shopHop/utils/ShStrings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -65,9 +64,10 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
               return Container(
                 color: sh_itemText_background,
                 margin: EdgeInsets.only(
-                    left: spacing_standard_new,
-                    right: spacing_standard_new,
-                    top: spacing_standard_new),
+                  left: spacing_standard_new,
+                  right: spacing_standard_new,
+                  top: spacing_standard_new,
+                ),
                 child: IntrinsicHeight(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -93,22 +93,28 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 16.0),
-                                    child: text(itemsList[index].name,
-                                        textColor: sh_textColorPrimary,
-                                        fontSize: textSizeLargeMedium,
-                                        fontFamily: fontMedium),
+                                    child: text(
+                                      itemsList[index].name,
+                                      textColor: sh_textColorPrimary,
+                                      fontSize: textSizeLargeMedium,
+                                      fontFamily: fontMedium,
+                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 16.0, top: spacing_control),
+                                      left: 16.0,
+                                      top: spacing_control,
+                                    ),
                                     child: Row(
                                       children: <Widget>[
                                         Container(
                                           decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.black),
+                                            shape: BoxShape.circle,
+                                            color: Colors.black,
+                                          ),
                                           padding: EdgeInsets.all(
-                                              spacing_control_half),
+                                            spacing_control_half,
+                                          ),
                                           child: Icon(
                                             Icons.done,
                                             color: sh_white,
@@ -118,15 +124,20 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
                                         SizedBox(
                                           width: spacing_standard_new,
                                         ),
-                                        text(itemsList[index].size,
-                                            textColor: sh_textColorPrimary,
-                                            fontSize: textSizeLargeMedium),
+                                        text(
+                                          itemsList[index].size,
+                                          textColor: sh_textColorPrimary,
+                                          fontSize: textSizeLargeMedium,
+                                        ),
                                       ],
                                     ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 16.0, top: 4.0, bottom: 4.0),
+                                      left: 16.0,
+                                      top: 4.0,
+                                      bottom: 4.0,
+                                    ),
                                     child: text(itemsList[index].name),
                                   ),
                                   Padding(
@@ -136,13 +147,14 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
                                           CrossAxisAlignment.end,
                                       children: <Widget>[
                                         text(
-                                            itemsList[index]
-                                                .price
-                                                .toString()
-                                                .toCurrencyFormat()!,
-                                            textColor: sh_colorPrimary,
-                                            fontSize: textSizeNormal,
-                                            fontFamily: fontMedium),
+                                          itemsList[index]
+                                              .price
+                                              .toString()
+                                              .toCurrencyFormat()!,
+                                          textColor: sh_colorPrimary,
+                                          fontSize: textSizeNormal,
+                                          fontFamily: fontMedium,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -159,8 +171,12 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
             },
           )
         : Center(
-            child: text('No Product Found',
-                textColor: sh_tomato, fontSize: textSizeMedium));
+            child: text(
+              'No Product Found',
+              textColor: sh_tomato,
+              fontSize: textSizeMedium,
+            ),
+          );
     var orderStatus = Container(
       height: width * 0.32,
       margin: EdgeInsets.all(16.0),
@@ -179,7 +195,9 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
                   width: 10.0,
                   height: 10.0,
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.amber),
+                    shape: BoxShape.circle,
+                    color: Colors.amber,
+                  ),
                 ),
                 Expanded(
                   child: VerticalDivider(
@@ -204,13 +222,17 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   text(
-                      widget.order!.createdAt!.substring(0, 10) +
-                          "\n Order Placed",
-                      maxLine: 2,
-                      fontSize: textSizeMedium,
-                      textColor: sh_textColorPrimary),
-                  text(widget.order!.status!.toUpperCase(),
-                      fontSize: textSizeMedium, textColor: sh_textColorPrimary),
+                    widget.order!.createdAt!.substring(0, 10) +
+                        "\n Order Placed",
+                    maxLine: 2,
+                    fontSize: textSizeMedium,
+                    textColor: sh_textColorPrimary,
+                  ),
+                  text(
+                    widget.order!.status!.toUpperCase(),
+                    fontSize: textSizeMedium,
+                    textColor: sh_textColorPrimary,
+                  ),
                 ],
               ),
             )
@@ -220,34 +242,49 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
     );
     var shippingDetail = Container(
       margin: EdgeInsets.only(
-          left: spacing_standard_new, right: spacing_standard_new),
+        left: spacing_standard_new,
+        right: spacing_standard_new,
+      ),
       decoration:
           BoxDecoration(border: Border.all(color: sh_view_color, width: 1.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.fromLTRB(spacing_standard_new,
-                spacing_middle, spacing_standard_new, spacing_middle),
-            child: text(sh_lbl_shipping_details,
-                textColor: sh_textColorPrimary,
-                fontSize: textSizeLargeMedium,
-                fontFamily: fontMedium),
+            padding: const EdgeInsets.fromLTRB(
+              spacing_standard_new,
+              spacing_middle,
+              spacing_standard_new,
+              spacing_middle,
+            ),
+            child: text(
+              sh_lbl_shipping_details,
+              textColor: sh_textColorPrimary,
+              fontSize: textSizeLargeMedium,
+              fontFamily: fontMedium,
+            ),
           ),
           Divider(
             height: 1,
             color: sh_view_color,
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(spacing_standard_new,
-                spacing_middle, spacing_standard_new, spacing_middle),
+            padding: const EdgeInsets.fromLTRB(
+              spacing_standard_new,
+              spacing_middle,
+              spacing_standard_new,
+              spacing_middle,
+            ),
             child: Column(
               children: <Widget>[
                 Row(
                   children: <Widget>[
                     text(sh_lbl_order_id),
-                    text('#' + widget.order!.id.toString(),
-                        textColor: sh_textColorPrimary, fontFamily: fontMedium),
+                    text(
+                      '#' + widget.order!.id.toString(),
+                      textColor: sh_textColorPrimary,
+                      fontFamily: fontMedium,
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -256,8 +293,11 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
                 Row(
                   children: <Widget>[
                     text(sh_lbl_order_date),
-                    text(widget.order!.createdAt!.substring(0, 10),
-                        textColor: sh_textColorPrimary, fontFamily: fontMedium),
+                    text(
+                      widget.order!.createdAt!.substring(0, 10),
+                      textColor: sh_textColorPrimary,
+                      fontFamily: fontMedium,
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -266,10 +306,12 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
                 Row(
                   children: <Widget>[
                     text(sh_lbl_shipping_charge),
-                    text("\$" + widget.order!.shipping!,
-                        textColor: sh_colorPrimary,
-                        fontFamily: fontBold,
-                        fontSize: textSizeLargeMedium),
+                    text(
+                      "\$" + widget.order!.shipping!,
+                      textColor: sh_colorPrimary,
+                      fontFamily: fontBold,
+                      fontSize: textSizeLargeMedium,
+                    ),
                   ],
                 ),
               ],
@@ -280,29 +322,40 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
     );
     var paymentDetail = Container(
       margin: EdgeInsets.only(
-          left: spacing_standard_new,
-          right: spacing_standard_new,
-          top: spacing_standard_new),
+        left: spacing_standard_new,
+        right: spacing_standard_new,
+        top: spacing_standard_new,
+      ),
       decoration:
           BoxDecoration(border: Border.all(color: sh_view_color, width: 1.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.fromLTRB(spacing_standard_new,
-                spacing_middle, spacing_standard_new, spacing_middle),
-            child: text(sh_lbl_payment_details,
-                textColor: sh_textColorPrimary,
-                fontSize: textSizeLargeMedium,
-                fontFamily: fontMedium),
+            padding: const EdgeInsets.fromLTRB(
+              spacing_standard_new,
+              spacing_middle,
+              spacing_standard_new,
+              spacing_middle,
+            ),
+            child: text(
+              sh_lbl_payment_details,
+              textColor: sh_textColorPrimary,
+              fontSize: textSizeLargeMedium,
+              fontFamily: fontMedium,
+            ),
           ),
           Divider(
             height: 1,
             color: sh_view_color,
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(spacing_standard_new,
-                spacing_middle, spacing_standard_new, spacing_middle),
+            padding: const EdgeInsets.fromLTRB(
+              spacing_standard_new,
+              spacing_middle,
+              spacing_standard_new,
+              spacing_middle,
+            ),
             child: Column(
               children: <Widget>[
                 // Row(
@@ -326,10 +379,12 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
                 Row(
                   children: <Widget>[
                     text(sh_lbl_total_amount),
-                    text("\$" + widget.order!.total!,
-                        textColor: sh_colorPrimary,
-                        fontFamily: fontBold,
-                        fontSize: textSizeLargeMedium),
+                    text(
+                      "\$" + widget.order!.total!,
+                      textColor: sh_colorPrimary,
+                      fontFamily: fontBold,
+                      fontSize: textSizeLargeMedium,
+                    ),
                   ],
                 ),
               ],
@@ -342,10 +397,12 @@ class ShOrderDetailScreenState extends State<ShOrderDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: sh_white,
-        title: text(sh_lbl_my_orders,
-            textColor: sh_textColorPrimary,
-            fontSize: textSizeNormal,
-            fontFamily: fontBold),
+        title: text(
+          sh_lbl_my_orders,
+          textColor: sh_textColorPrimary,
+          fontSize: textSizeNormal,
+          fontFamily: fontBold,
+        ),
         iconTheme: IconThemeData(color: sh_textColorPrimary),
       ),
       body: SingleChildScrollView(

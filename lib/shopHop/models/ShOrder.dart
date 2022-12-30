@@ -6,11 +6,14 @@ class ShOrder {
   String? order_status;
   // ignore: non_constant_identifier_names
   String? order_number;
-  ShippingMethod? shipping_method;
-
 
   // ignore: non_constant_identifier_names
-  ShOrder({this.item, this.order_date, this.order_status, this.order_number, this.shipping_method});
+  ShOrder({
+    this.item,
+    this.order_date,
+    this.order_status,
+    this.order_number,
+  });
 
   factory ShOrder.fromJson(Map<String, dynamic> json) {
     return ShOrder(
@@ -18,7 +21,6 @@ class ShOrder {
       order_date: json['order_date'],
       order_status: json['order_status'],
       order_number: json['order_number'],
-      shipping_method: ShippingMethod.fromJson(json['shipping_method']),
     );
   }
 
@@ -27,7 +29,7 @@ class ShOrder {
     data['order_date'] = this.order_date;
     data['order_status'] = this.order_status;
     data['order_number'] = this.order_number;
-    data['shipping_method'] = this.shipping_method!.toJson();
+
     if (this.item != null) {
       data['item'] = this.item!.toJson();
     }
@@ -44,7 +46,15 @@ class Item {
   String? slug;
   String? size;
 
-  Item({this.id, this.name, this.price, this.image_url,this.count,this.slug,this.size});
+  Item({
+    this.id,
+    this.name,
+    this.price,
+    this.image_url,
+    this.count,
+    this.slug,
+    this.size,
+  });
 
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
@@ -77,7 +87,7 @@ class ShippingMethod {
   String? price;
   String? description;
 
-  ShippingMethod({ this.id,this.name, this.price, this.description});
+  ShippingMethod({this.id, this.name, this.price, this.description});
 
   factory ShippingMethod.fromJson(Map<String, dynamic> json) {
     return ShippingMethod(
