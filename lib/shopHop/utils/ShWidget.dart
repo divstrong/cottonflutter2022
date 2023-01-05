@@ -2,7 +2,6 @@ import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/main/utils/common.dart';
 import 'package:cotton_natural/main/utils/dots_indicator/dots_indicator.dart';
 import 'package:cotton_natural/shopHop/controllers/AuthController.dart';
-import 'package:cotton_natural/shopHop/models/ShProduct.dart';
 import 'package:cotton_natural/shopHop/providers/OrdersProvider.dart';
 import 'package:cotton_natural/shopHop/screens/ShHomeScreen.dart';
 import 'package:cotton_natural/shopHop/screens/ShProductDetail.dart';
@@ -10,7 +9,7 @@ import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShImages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lottie/lottie.dart';
+import 'package:flutter_wp_woocommerce/woocommerce.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +33,7 @@ InputDecoration formFieldDecoration(String hintText) {
 
 // ignore: must_be_immutable
 class ProductHorizontalList extends StatelessWidget {
-  List<ShProduct> list = [];
+  List<WooProduct> list = [];
   var isHorizontal = false;
 
   ProductHorizontalList(this.list, {this.isHorizontal = false});
@@ -70,7 +69,7 @@ class ProductHorizontalList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         networkCachedImage(
-                          list[index].images![0],
+                          list[index].images[0].src,
                           aWidth: double.infinity,
                           aHeight: 200,
                           fit: BoxFit.cover,
@@ -124,13 +123,14 @@ class ProductHorizontalList extends StatelessWidget {
                     fontSize: textSizeNormal,
                   ),
                 ),
-                Container(
-                  height: 200,
-                  child: Lottie.asset(
-                    'assets/lottie/not-found.json',
-                    fit: BoxFit.fitHeight,
-                  ),
-                ),
+                //! to be Deleted
+                // Container(
+                //   height: 200,
+                //   child: Lottie.asset(
+                //     'assets/lottie/not-found.json',
+                //     fit: BoxFit.fitHeight,
+                //   ),
+                // ),
               ],
             ),
     );
@@ -612,7 +612,7 @@ Widget cartIcon(context, cartCount) {
       if (Provider.of<OrdersProvider>(context, listen: false).getOrderCount() >
           0) {
         ShHomeScreen(
-          goToTabIndex: 2,
+          goToTabIndex: 1,
         ).launch(context);
       } else {
         toasty(context, 'Your Cart Is Empty');

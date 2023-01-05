@@ -6,9 +6,7 @@ import 'package:cotton_natural/shopHop/api/Network.dart';
 import 'package:cotton_natural/shopHop/api/api_util.dart';
 import 'package:cotton_natural/shopHop/utils/InternetUtils.dart';
 
-
 class MaintenanceController {
-
   //------------------------ Checking maintenance  -----------------------------------------//
   static Future<MyResponse> checkMaintenance() async {
     String maintenanceUrl = ApiUtil.MAIN_API_URL + ApiUtil.MAINTENANCE;
@@ -20,8 +18,10 @@ class MaintenanceController {
     }
 
     try {
-      NetworkResponse response = await Network.get(maintenanceUrl,
-          headers: ApiUtil.getHeader(requestType: RequestType.Post));
+      NetworkResponse response = await Network.get(
+        maintenanceUrl,
+        headers: ApiUtil.getHeader(requestType: RequestType.Post),
+      );
 
       log(response.body);
       MyResponse myResponse = MyResponse(response.statusCode);

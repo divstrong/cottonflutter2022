@@ -24,4 +24,8 @@ const spacing_large = 24.0;
 const spacing_xlarge = 32.0;
 const spacing_xxLarge = 40.0;
 
+const base_url = "https://www.cottonnatural.com";
+const api_Consumer_Key = "ck_724f18fc88171808d26b68bd5991767feae24943";
+const api_Consumer_Secret = "cs_7baef0d62f6d9446b3b753eb20a13b6345b71c65";
+
 enum ConfirmAction { CANCEL, ACCEPT }

@@ -1,19 +1,27 @@
-import 'package:cotton_natural/shopHop/models/ShCategory.dart';
-
 class ShAttributes {
   List<Brand>? brand;
   List<ShSize>? size;
   List<ShColor>? color;
-  List<ShCategory>? categories;
+  // List<ShCategory>? categories;
 
-  ShAttributes({this.brand, this.size, this.color, this.categories});
+  ShAttributes({
+    this.brand,
+    this.size,
+    this.color,
+  });
 
   factory ShAttributes.fromJson(Map<String, dynamic> json) {
     return ShAttributes(
-      brand: json['brand'] != null ? (json['brand'] as List).map((i) => Brand.fromJson(i)).toList() : null,
-      size: json['size'] != null ? (json['size'] as List).map((i) => ShSize.fromJson(i)).toList() : null,
-      color: json['color'] != null ? (json['color'] as List).map((i) => ShColor.fromJson(i)).toList() : null,
-      categories: json['categories'] != null ? (json['categories'] as List).map((i) => ShCategory.fromJson(i)).toList() : null,
+      brand: json['brand'] != null
+          ? (json['brand'] as List).map((i) => Brand.fromJson(i)).toList()
+          : null,
+      size: json['size'] != null
+          ? (json['size'] as List).map((i) => ShSize.fromJson(i)).toList()
+          : null,
+      color: json['color'] != null
+          ? (json['color'] as List).map((i) => ShColor.fromJson(i)).toList()
+          : null,
+      // categories: json['categories'] != null ? (json['categories'] as List).map((i) => ShCategory.fromJson(i)).toList() : null,
     );
   }
 }
@@ -29,7 +37,14 @@ class ShColor {
   bool isSelected = false;
 
   // ignore: non_constant_identifier_names
-  ShColor({this.count, this.description, this.id, this.menu_order, this.name, this.slug});
+  ShColor({
+    this.count,
+    this.description,
+    this.id,
+    this.menu_order,
+    this.name,
+    this.slug,
+  });
 
   factory ShColor.fromJson(Map<String, dynamic> json) {
     return ShColor(
@@ -65,7 +80,14 @@ class ShSize {
   bool isSelected = false;
 
   // ignore: non_constant_identifier_names
-  ShSize({this.count, this.description, this.id, this.menu_order, this.name, this.slug});
+  ShSize({
+    this.count,
+    this.description,
+    this.id,
+    this.menu_order,
+    this.name,
+    this.slug,
+  });
 
   factory ShSize.fromJson(Map<String, dynamic> json) {
     return ShSize(

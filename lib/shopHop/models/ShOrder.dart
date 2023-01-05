@@ -1,11 +1,16 @@
+import 'ShAddress.dart';
+
 class ShOrder {
   Item? item;
-  // ignore: non_constant_identifier_names
   String? order_date;
-  // ignore: non_constant_identifier_names
+
   String? order_status;
-  // ignore: non_constant_identifier_names
+
   String? order_number;
+
+  ShAddressModel? shipTo;
+
+  ShAddressModel? billTo;
 
   // ignore: non_constant_identifier_names
   ShOrder({
@@ -13,6 +18,8 @@ class ShOrder {
     this.order_date,
     this.order_status,
     this.order_number,
+    this.billTo,
+    this.shipTo,
   });
 
   factory ShOrder.fromJson(Map<String, dynamic> json) {
@@ -21,6 +28,8 @@ class ShOrder {
       order_date: json['order_date'],
       order_status: json['order_status'],
       order_number: json['order_number'],
+      shipTo: json['shipTo'],
+      billTo: json['billTo'],
     );
   }
 
@@ -29,6 +38,8 @@ class ShOrder {
     data['order_date'] = this.order_date;
     data['order_status'] = this.order_status;
     data['order_number'] = this.order_number;
+    data['shipTo'] = this.shipTo;
+    data['billTo'] = this.billTo;
 
     if (this.item != null) {
       data['item'] = this.item!.toJson();

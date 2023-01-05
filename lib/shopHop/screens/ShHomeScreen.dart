@@ -1,26 +1,19 @@
 import 'package:cotton_natural/main/utils/AppWidget.dart';
-import 'package:cotton_natural/shopHop/api/MyResponse.dart';
-import 'package:cotton_natural/shopHop/controllers/AuthController.dart';
 import 'package:cotton_natural/shopHop/controllers/CategoryController.dart';
-import 'package:cotton_natural/shopHop/models/Account.dart';
-import 'package:cotton_natural/shopHop/models/ShCategory.dart';
-import 'package:cotton_natural/shopHop/screens/ShAccountScreen.dart';
 import 'package:cotton_natural/shopHop/screens/ShHomeFragment.dart';
-import 'package:cotton_natural/shopHop/screens/ShOrderListScreen.dart';
-import 'package:cotton_natural/shopHop/screens/ShProfileFragment.dart';
 import 'package:cotton_natural/shopHop/screens/ShSearchScreen.dart';
-import 'package:cotton_natural/shopHop/screens/ShWishlistFragment.dart';
 import 'package:cotton_natural/shopHop/screens/sh_call_us.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
 import 'package:cotton_natural/shopHop/utils/ShImages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_wp_woocommerce/woocommerce.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'ShOrderSummaryScreen.dart';
-import 'ShSubCategory.dart';
 
 class ShHomeScreen extends StatefulWidget {
   static String tag = '/ShHomeScreen';
@@ -31,15 +24,13 @@ class ShHomeScreen extends StatefulWidget {
 }
 
 class ShHomeScreenState extends State<ShHomeScreen> {
-  List<ShCategory> list = [];
+  List<WooProductCategory> list = [];
   var homeFragment = ShHomeFragment();
   var cartFragment = ShOrderSummaryScreen();
-  var wishlistFragment = ShWishlistFragment();
-  var profileFragment = ShAccountScreen();
-  var loginFragment = CallUs();
+
+  var callUs = CallUs();
   late var fragments;
   var selectedTab = 0;
-  Account userAccount = Account(null, '', '', '');
 
   bool login = false;
 
@@ -49,33 +40,18 @@ class ShHomeScreenState extends State<ShHomeScreen> {
     selectedTab = ((widget.goToTabIndex != null) ? widget.goToTabIndex : 0)!;
     fragments = [
       homeFragment,
-      wishlistFragment,
       cartFragment,
-      profileFragment,
-      loginFragment
+      callUs,
     ];
     fetchData();
   }
 
   fetchData() async {
-    MyResponse<List<ShCategory>> myResponse =
-        await CategoryController.getMainCategories();
-
-    if (myResponse.success) {
-      list.clear();
-      list = myResponse.data;
-      setState(() {});
-    } else {
-      toasty(context, myResponse.errorText);
-    }
-
-    login = await AuthController.isLoginUser();
-
-    if (login) {
-      userAccount = await AuthController.getAccount();
-    } else {
-      userAccount.name = "Guest User";
-    }
+    final catController =
+        Provider.of<CategoryController>(context, listen: false);
+    await catController.fetchMainCategories().then(
+          (value) => list = catController.getMainCategory,
+        );
   }
 
   @override
@@ -87,15 +63,9 @@ class ShHomeScreenState extends State<ShHomeScreen> {
         title = "100% Pure Cotton";
         break;
       case 1:
-        title = "Wishlist";
-        break;
-      case 2:
         title = "Cart Checkout";
         break;
-      case 3:
-        title = "Profile";
-        break;
-      case 4:
+      case 2:
         title = "Call Us";
         break;
     }
@@ -109,13 +79,6 @@ class ShHomeScreenState extends State<ShHomeScreen> {
               icon: Icon(Icons.search),
               onPressed: () {
                 ShSearchScreen().launch(context);
-              },
-            )
-          } else if (selectedTab == 3) ...{
-            IconButton(
-              icon: Icon(Icons.edit_rounded),
-              onPressed: () {
-                ShProfileFragment().launch(context);
               },
             )
           }
@@ -148,17 +111,18 @@ class ShHomeScreenState extends State<ShHomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
-                      tabItem(0, sh_ic_tag),
-                      // tabItem(1, sh_ic_heart),
                       tabItem(
-                        2,
+                        0,
+                        sh_ic_tag,
+                      ),
+                      tabItem(
+                        1,
                         sh_ic_cart,
                       ),
-                      if (login) ...{
-                        tabItem(3, sh_user)
-                      } else ...{
-                        tabItem(4, sh_ic_call)
-                      },
+                      tabItem(
+                        2,
+                        sh_ic_call,
+                      ),
                     ],
                   ),
                 )
@@ -198,68 +162,9 @@ class ShHomeScreenState extends State<ShHomeScreen> {
                       ),
                     ],
                   ),
-                  login
-                      ? SizedBox(height: 30)
-                      : SizedBox(
-                          height: 0,
-                        ),
-                  login
-                      ? Container(
-                          color: sh_editText_background,
-                          padding: EdgeInsets.fromLTRB(
-                            0,
-                            spacing_standard,
-                            0,
-                            spacing_standard,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () {
-                                    ShOrderListScreen().launch(context);
-                                  },
-                                  child: Column(
-                                    children: <Widget>[
-                                      SizedBox(height: spacing_control),
-                                      text(
-                                        "My Order",
-                                        textColor: sh_textColorPrimary,
-                                        fontFamily: fontMedium,
-                                      ),
-                                      SizedBox(height: spacing_control),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).pop();
-                                    setState(() {
-                                      selectedTab = 1;
-                                    });
-                                  },
-                                  child: Column(
-                                    children: <Widget>[
-                                      SizedBox(height: spacing_control),
-                                      text(
-                                        "Wishlist",
-                                        textColor: sh_textColorPrimary,
-                                        fontFamily: fontMedium,
-                                      ),
-                                      SizedBox(height: spacing_control),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : SizedBox(
-                          height: 0,
-                        ),
+                  SizedBox(
+                    height: 0,
+                  ),
                   ListView.builder(
                     padding: EdgeInsets.all(0.0),
                     scrollDirection: Axis.vertical,
@@ -270,44 +175,12 @@ class ShHomeScreenState extends State<ShHomeScreen> {
                       return getDrawerItem(
                         list[index].name,
                         callback: () {
-                          ShSubCategory(category: list[index]).launch(context);
+                          // ToDO return;
+                          // ShSubCategory(category: list[index]).launch(context);
                         },
                       );
                     },
                   ),
-                  // SizedBox(height: 30),
-                  // Divider(color: sh_view_color, height: 1),
-                  // SizedBox(height: 20),
-                  // login
-                  //     ? SizedBox()
-                  //     : getDrawerItem(
-                  //         'Login',
-                  //         callback: () {
-                  //           ShSignIn().launch(context);
-                  //         },
-                  //       ),
-                  // getDrawerItem(
-                  //   sh_lbl_settings,
-                  //   callback: () {
-                  //     ShSettingsScreen().launch(context);
-                  //   },
-                  // ),
-                  // SizedBox(height: 10),
-                  // getDrawerItem('Company', callback: () {}),
-                  // SizedBox(height: 10),
-                  // getDrawerItem(
-                  //   'Payment Methods',
-                  //   callback: () async {
-                  //     const String url =
-                  //         'https://cottonlaravel-o7458.ondigitalocean.app/payment-methods';
-                  //     await launch(
-                  //       url,
-                  //       forceSafariVC: true,
-                  //       forceWebView: false,
-                  //       enableJavaScript: true,
-                  //     );
-                  //   },
-                  // ),
                   SizedBox(height: 10),
                   getDrawerItem(
                     'Shipping & Handling',

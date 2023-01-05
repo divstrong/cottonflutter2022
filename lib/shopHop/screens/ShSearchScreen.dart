@@ -1,15 +1,10 @@
 import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/main/utils/common.dart';
-import 'package:cotton_natural/shopHop/api/MyResponse.dart';
-import 'package:cotton_natural/shopHop/api/api_util.dart';
-import 'package:cotton_natural/shopHop/controllers/ProductController.dart';
-import 'package:cotton_natural/shopHop/models/ShProduct.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
 import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:flutter_wp_woocommerce/models/products.dart';
 
 import 'ShProductDetail.dart';
 
@@ -22,7 +17,7 @@ class ShSearchScreen extends StatefulWidget {
 
 class ShSearchScreenState extends State<ShSearchScreen> {
   TextEditingController searchController = TextEditingController();
-  List<ShProduct> list = [];
+  List<WooProduct> list = [];
   bool isLoadingMoreData = false;
   bool isEmpty = false;
   var searchText = "";
@@ -33,23 +28,7 @@ class ShSearchScreenState extends State<ShSearchScreen> {
   }
 
   fetchData() async {
-    List<ShProduct> filteredList = [];
-
-    MyResponse<List<ShProduct>> myResponseProduct =
-        await ProductController.getSearchProduct(searchText);
-    if (myResponseProduct.success) {
-      filteredList = myResponseProduct.data;
-      list.clear();
-      list.addAll(filteredList);
-    } else {
-      if (mounted) {
-        ApiUtil.checkRedirectNavigation(
-          context,
-          myResponseProduct.responseCode,
-        );
-        toasty(context, myResponseProduct.errorText);
-      }
-    }
+    List<WooProduct> filteredList = [];
 
     setState(() {
       isEmpty = list.isEmpty;
@@ -68,10 +47,11 @@ class ShSearchScreenState extends State<ShSearchScreen> {
         return InkWell(
           onTap: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ShProductDetail(product: list[index])));
+              context,
+              MaterialPageRoute(
+                builder: (context) => ShProductDetail(product: list[index]),
+              ),
+            );
           },
           child: Container(
             padding: EdgeInsets.all(10.0),
@@ -82,11 +62,14 @@ class ShSearchScreenState extends State<ShSearchScreen> {
                   Container(
                     padding: EdgeInsets.all(1),
                     decoration: BoxDecoration(
-                        border: Border.all(color: sh_view_color, width: 1)),
-                    child: networkCachedImage(list[index].images![0],
-                        fit: BoxFit.cover,
-                        aHeight: width * 0.35,
-                        aWidth: width * 0.29),
+                      border: Border.all(color: sh_view_color, width: 1),
+                    ),
+                    child: networkCachedImage(
+                      list[index].images[0].src,
+                      fit: BoxFit.cover,
+                      aHeight: width * 0.35,
+                      aWidth: width * 0.29,
+                    ),
                   ),
                   SizedBox(width: 10),
                   Expanded(
@@ -137,7 +120,9 @@ class ShSearchScreenState extends State<ShSearchScreen> {
                                   margin:
                                       EdgeInsets.only(right: spacing_standard),
                                   decoration: BoxDecoration(
-                                      shape: BoxShape.circle, color: sh_white),
+                                    shape: BoxShape.circle,
+                                    color: sh_white,
+                                  ),
                                   child: Icon(
                                     Icons.favorite_border,
                                     color: sh_textColorPrimary,
@@ -219,14 +204,16 @@ class ShSearchScreenState extends State<ShSearchScreen> {
                       height: 80,
                     ),
                     text(
-                        "No results found for \"" +
-                            searchController.text +
-                            "\"",
-                        textColor: sh_textColorPrimary,
-                        fontFamily: fontMedium,
-                        fontSize: textSizeLarge),
-                    text("Try a different keyword",
-                        fontFamily: fontMedium, fontSize: textSizeMedium)
+                      "No results found for \"" + searchController.text + "\"",
+                      textColor: sh_textColorPrimary,
+                      fontFamily: fontMedium,
+                      fontSize: textSizeLarge,
+                    ),
+                    text(
+                      "Try a different keyword",
+                      fontFamily: fontMedium,
+                      fontSize: textSizeMedium,
+                    )
                   ],
                 ),
               ),

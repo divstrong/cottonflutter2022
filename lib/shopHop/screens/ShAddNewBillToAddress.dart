@@ -27,7 +27,19 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
   var regionCont = TextEditingController();
   var countryCont = TextEditingController();
   var nameCont = TextEditingController();
-  var emailCont = TextEditingController();
+  var phoneCont = TextEditingController();
+
+  @override
+  void dispose() {
+    zipCont.dispose();
+    addressCont.dispose();
+    cityCont.dispose();
+    regionCont.dispose();
+    countryCont.dispose();
+    nameCont.dispose();
+    phoneCont.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -53,6 +65,7 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
     regionCont.text = billProviderAddress.region;
     countryCont.text = billProviderAddress.country;
     zipCont.text = billProviderAddress.zip;
+    phoneCont.text = billProviderAddress.phone!;
   }
 
   bool isAddressProviderEmpty() =>
@@ -76,6 +89,7 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
         city: cityCont.text,
         address: addressCont.text,
         country: countryCont.text,
+        phone: phoneCont.text,
       );
       await AddressController.cacheBillToAddress(newAddress);
       Provider.of<OrdersProvider>(context, listen: false)
@@ -166,6 +180,18 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
       decoration: formFieldDecoration('Zip Code'),
     );
 
+    final phone = TextFormField(
+      controller: phoneCont,
+      keyboardType: TextInputType.number,
+      autofocus: false,
+      onFieldSubmitted: (term) {
+        FocusScope.of(context).nextFocus();
+      },
+      textInputAction: TextInputAction.next,
+      style: TextStyle(fontFamily: fontRegular, fontSize: textSizeMedium),
+      decoration: formFieldDecoration('Phone Number'),
+    );
+
     final saveButton = MaterialButton(
       height: 50,
       minWidth: double.infinity,
@@ -214,7 +240,7 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
             Expanded(child: zip),
           ],
         ),
-        // email,
+        phone,
         saveButton,
       ],
     );
@@ -225,7 +251,8 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
         title: text(
           (billProviderAddress.name == '' &&
                   billProviderAddress.address == '' &&
-                  billProviderAddress.city == '')
+                  billProviderAddress.city == '' &&
+                  billProviderAddress.phone == '')
               ? sh_lbl_add_new_Bill_address
               : sh_lbl_edit_Bill_address,
           textColor: sh_textColorPrimary,
@@ -262,6 +289,9 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
       return false;
     } else if (zipCont.text.trim() == '') {
       toasty(context, 'Zip Code is require');
+      return false;
+    } else if (phoneCont.text.trim() == '') {
+      toasty(context, 'Phone is require');
       return false;
     }
     return true;

@@ -1,4 +1,6 @@
 import 'package:cotton_natural/main/utils/AppTheme.dart';
+import 'package:cotton_natural/shopHop/controllers/CategoryController.dart';
+import 'package:cotton_natural/shopHop/controllers/ProductController.dart';
 import 'package:cotton_natural/shopHop/models/ShAddress.dart';
 import 'package:cotton_natural/shopHop/providers/OrdersProvider.dart';
 import 'package:cotton_natural/shopHop/screens/ShSplashScreen.dart';
@@ -21,7 +23,15 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => OrdersProvider()),
+        ChangeNotifierProvider(
+          create: (_) => OrdersProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => CategoryController(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProductController(),
+        ),
       ],
       child: const MyApp(),
     ),

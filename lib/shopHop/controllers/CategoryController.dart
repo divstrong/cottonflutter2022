@@ -1,71 +1,65 @@
-import 'dart:convert';
-import 'package:cotton_natural/shopHop/api/MyResponse.dart';
-import 'package:cotton_natural/shopHop/api/Network.dart';
-import 'package:cotton_natural/shopHop/api/api_util.dart';
-import 'package:cotton_natural/shopHop/models/ShCategory.dart';
-import 'package:cotton_natural/shopHop/utils/InternetUtils.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_wp_woocommerce/woocommerce.dart';
+import 'package:nb_utils/nb_utils.dart';
 
+import '../utils/ShConstant.dart';
 
-class CategoryController {
+class CategoryController with ChangeNotifier {
+  WooCommerce wooCommerce = WooCommerce(
+    baseUrl: base_url,
+    consumerKey: api_Consumer_Key,
+    consumerSecret: api_Consumer_Secret,
+  );
 
-  //--------------------- Get Main Cats ---------------------------------------------//
-  static Future<MyResponse<List<ShCategory>>> getMainCategories() async {
-
-    String url = ApiUtil.MAIN_API_URL + ApiUtil.MAIN_CATEGORIES ;
-    Map<String, String> headers = ApiUtil.getHeader(requestType: RequestType.Get);
-
-    //Check Internet
-    bool isConnected = await InternetUtils.checkConnection();
-    if (!isConnected) {
-      return MyResponse.makeInternetConnectionError();
-    }
+  List<WooProductCategory> _categoryList = [];
+  List<WooProductCategory> _mainCategoryList = [];
+  List<WooProductCategory> _subCategoryList = [];
+  //--------------------- Get All Cats ---------------------------------------------//
+  Future<void> fetchAllCategories() async {
+    _categoryList = [];
 
     try {
-      NetworkResponse response = await Network.get(url, headers: headers);
-      MyResponse<List<ShCategory>> myResponse = MyResponse(response.statusCode);
-
-      if (ApiUtil.isResponseSuccess(response.statusCode)) {
-        myResponse.success = true;
-        myResponse.data = ShCategory.getCategoryList(json.decode(response.body));
-      } else {
-        myResponse.success = false;
-        myResponse.setError(json.decode(response.body));
-      }
-      return myResponse;
-    }catch(e){
+      _categoryList = await wooCommerce.getProductCategories(perPage: 100);
+      log("all category length ===>>> ${_categoryList.length}");
+    } catch (e) {
       //If any server error...
-      return MyResponse.makeServerProblemError<List<ShCategory>>();
+      // return MyResponse.makeServerProblemError<List<ShCategory>>();
+      Fluttertoast.showToast(msg: e.toString() + "from fetching categoryData");
+      log(e.toString());
     }
+    notifyListeners();
   }
 
-  //--------------------- Get Sub Cats ---------------------------------------------//
-  static Future<MyResponse<List<ShCategory>>> getSubCategory(String? categorySlug) async {
-
-    String url = ApiUtil.MAIN_API_URL + ApiUtil.SUB_CATEGORIES + categorySlug! ;
-    Map<String, String> headers = ApiUtil.getHeader(requestType: RequestType.Get);
-
-    //Check Internet
-    bool isConnected = await InternetUtils.checkConnection();
-    if (!isConnected) {
-      return MyResponse.makeInternetConnectionError();
-    }
+//--------------------- Get Main Cats ---------------------------------------------//
+  Future<void> fetchMainCategories() async {
+    await fetchAllCategories();
+    _mainCategoryList = [];
 
     try {
-      NetworkResponse response = await Network.get(url, headers: headers);
-      MyResponse<List<ShCategory>> myResponse = MyResponse(response.statusCode);
-
-      if (ApiUtil.isResponseSuccess(response.statusCode)) {
-        myResponse.success = true;
-        myResponse.data = ShCategory.getCategoryList(json.decode(response.body));
-      } else {
-        myResponse.success = false;
-        myResponse.setError(json.decode(response.body));
-      }
-      return myResponse;
-    }catch(e){
+      _mainCategoryList = await wooCommerce.getProductCategories(parent: 0);
+      log("main category length ===>>> ${_mainCategoryList.toString()}");
+    } catch (e) {
       //If any server error...
-      return MyResponse.makeServerProblemError<List<ShCategory>>();
+      // return MyResponse.makeServerProblemError<List<ShCategory>>();
+      Fluttertoast.showToast(msg: e.toString() + "from fetching categoryData");
+      log(e.toString());
     }
+    notifyListeners();
   }
 
+  // --------------------- Get Sub Cats ---------------------------------------------//
+  List<WooProductCategory> fetchSubCategory(
+    int? id,
+  ) {
+    _subCategoryList = [];
+    for (var cat in _categoryList) {
+      if (cat.parent == id) {
+        _subCategoryList.add(cat);
+      }
+    }
+    return _subCategoryList;
+  }
+
+  List<WooProductCategory> get getAllCategory => _categoryList;
+  List<WooProductCategory> get getMainCategory => _mainCategoryList;
 }

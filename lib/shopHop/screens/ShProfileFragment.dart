@@ -1,6 +1,4 @@
 import 'package:cotton_natural/main/utils/AppWidget.dart';
-import 'package:cotton_natural/shopHop/controllers/AuthController.dart';
-import 'package:cotton_natural/shopHop/models/Account.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
 import 'package:cotton_natural/shopHop/utils/ShImages.dart';
@@ -21,7 +19,6 @@ class ShProfileFragmentState extends State<ShProfileFragment> {
   var passwordCont = TextEditingController();
   var confirmPasswordCont = TextEditingController();
 
-  Account userAccount = Account(null, '', '', '');
   late bool isInProgress;
 
   @override
@@ -38,10 +35,6 @@ class ShProfileFragmentState extends State<ShProfileFragment> {
       });
     }
 
-    userAccount = await AuthController.getAccount();
-    nameCont = TextEditingController(text: userAccount.name);
-    emailCont = TextEditingController(text: userAccount.email);
-
     if (mounted) {
       setState(() {
         isInProgress = false;
@@ -54,10 +47,12 @@ class ShProfileFragmentState extends State<ShProfileFragment> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: sh_white,
-        title: text(sh_lbl_account,
-            textColor: sh_textColorPrimary,
-            fontSize: textSizeNormal,
-            fontFamily: fontMedium),
+        title: text(
+          sh_lbl_account,
+          textColor: sh_textColorPrimary,
+          fontSize: textSizeNormal,
+          fontFamily: fontMedium,
+        ),
         iconTheme: IconThemeData(color: sh_textColorPrimary),
       ),
       body: SingleChildScrollView(
@@ -99,25 +94,33 @@ class ShProfileFragmentState extends State<ShProfileFragment> {
                 controller: nameCont,
                 textCapitalization: TextCapitalization.words,
                 style: TextStyle(
-                    color: sh_textColorPrimary,
-                    fontFamily: fontRegular,
-                    fontSize: textSizeMedium),
+                  color: sh_textColorPrimary,
+                  fontFamily: fontRegular,
+                  fontSize: textSizeMedium,
+                ),
                 decoration: InputDecoration(
                   filled: false,
                   hintText: sh_hint_first_name,
                   hintStyle: TextStyle(
-                      color: sh_textColorSecondary,
-                      fontFamily: fontRegular,
-                      fontSize: textSizeMedium),
+                    color: sh_textColorSecondary,
+                    fontFamily: fontRegular,
+                    fontSize: textSizeMedium,
+                  ),
                   contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                   focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0),
-                      borderSide: BorderSide(
-                          color: Colors.grey.withOpacity(0.5), width: 0.5)),
+                    borderRadius: BorderRadius.circular(32.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.5),
+                      width: 0.5,
+                    ),
+                  ),
                   enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0),
-                      borderSide: BorderSide(
-                          color: Colors.grey.withOpacity(0.5), width: 0)),
+                    borderRadius: BorderRadius.circular(32.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.5),
+                      width: 0,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(
@@ -129,25 +132,33 @@ class ShProfileFragmentState extends State<ShProfileFragment> {
                 controller: emailCont,
                 textCapitalization: TextCapitalization.words,
                 style: TextStyle(
-                    color: sh_textColorPrimary,
-                    fontFamily: fontRegular,
-                    fontSize: textSizeMedium),
+                  color: sh_textColorPrimary,
+                  fontFamily: fontRegular,
+                  fontSize: textSizeMedium,
+                ),
                 decoration: InputDecoration(
                   filled: false,
                   hintText: sh_hint_Email,
                   hintStyle: TextStyle(
-                      color: sh_textColorSecondary,
-                      fontFamily: fontRegular,
-                      fontSize: textSizeMedium),
+                    color: sh_textColorSecondary,
+                    fontFamily: fontRegular,
+                    fontSize: textSizeMedium,
+                  ),
                   contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                   focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0),
-                      borderSide: BorderSide(
-                          color: Colors.grey.withOpacity(0.5), width: 0.5)),
+                    borderRadius: BorderRadius.circular(32.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.5),
+                      width: 0.5,
+                    ),
+                  ),
                   enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0),
-                      borderSide: BorderSide(
-                          color: Colors.grey.withOpacity(0.5), width: 0)),
+                    borderRadius: BorderRadius.circular(32.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.5),
+                      width: 0,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: spacing_standard_new),
@@ -157,25 +168,33 @@ class ShProfileFragmentState extends State<ShProfileFragment> {
                 controller: phoneCont,
                 textCapitalization: TextCapitalization.words,
                 style: TextStyle(
-                    color: sh_textColorPrimary,
-                    fontFamily: fontRegular,
-                    fontSize: textSizeMedium),
+                  color: sh_textColorPrimary,
+                  fontFamily: fontRegular,
+                  fontSize: textSizeMedium,
+                ),
                 decoration: InputDecoration(
                   filled: false,
                   hintText: sh_hint_phone,
                   hintStyle: TextStyle(
-                      color: sh_textColorSecondary,
-                      fontFamily: fontRegular,
-                      fontSize: textSizeMedium),
+                    color: sh_textColorSecondary,
+                    fontFamily: fontRegular,
+                    fontSize: textSizeMedium,
+                  ),
                   contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                   focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0),
-                      borderSide: BorderSide(
-                          color: Colors.grey.withOpacity(0.5), width: 0.5)),
+                    borderRadius: BorderRadius.circular(32.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.5),
+                      width: 0.5,
+                    ),
+                  ),
                   enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0),
-                      borderSide: BorderSide(
-                          color: Colors.grey.withOpacity(0.5), width: 0)),
+                    borderRadius: BorderRadius.circular(32.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.5),
+                      width: 0,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(
@@ -187,13 +206,16 @@ class ShProfileFragmentState extends State<ShProfileFragment> {
                 // height: double.infinity,
                 child: MaterialButton(
                   padding: EdgeInsets.all(spacing_standard),
-                  child: text(sh_lbl_save_profile,
-                      fontSize: textSizeNormal,
-                      fontFamily: fontMedium,
-                      textColor: sh_white),
+                  child: text(
+                    sh_lbl_save_profile,
+                    fontSize: textSizeNormal,
+                    fontFamily: fontMedium,
+                    textColor: sh_white,
+                  ),
                   textColor: sh_white,
                   shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(40.0)),
+                    borderRadius: new BorderRadius.circular(40.0),
+                  ),
                   color: sh_colorPrimary,
                   onPressed: () => {},
                 ),
@@ -207,14 +229,17 @@ class ShProfileFragmentState extends State<ShProfileFragment> {
                 // height: double.infinity,
                 child: MaterialButton(
                   padding: EdgeInsets.all(spacing_standard),
-                  child: text(sh_lbl_change_pswd,
-                      fontSize: textSizeNormal,
-                      fontFamily: fontMedium,
-                      textColor: sh_colorPrimary),
+                  child: text(
+                    sh_lbl_change_pswd,
+                    fontSize: textSizeNormal,
+                    fontFamily: fontMedium,
+                    textColor: sh_colorPrimary,
+                  ),
                   textColor: sh_white,
                   shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(40.0),
-                      side: BorderSide(color: sh_colorPrimary, width: 1)),
+                    borderRadius: new BorderRadius.circular(40.0),
+                    side: BorderSide(color: sh_colorPrimary, width: 1),
+                  ),
                   color: sh_white,
                   onPressed: () => {},
                 ),

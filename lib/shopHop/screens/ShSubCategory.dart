@@ -1,22 +1,21 @@
 import 'package:cotton_natural/main/utils/AppWidget.dart';
-import 'package:cotton_natural/shopHop/api/MyResponse.dart';
 import 'package:cotton_natural/shopHop/controllers/CategoryController.dart';
 import 'package:cotton_natural/shopHop/controllers/ProductController.dart';
-import 'package:cotton_natural/shopHop/models/ShCategory.dart';
-import 'package:cotton_natural/shopHop/models/ShProduct.dart';
 import 'package:cotton_natural/shopHop/screens/ShSearchScreen.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
 import 'package:cotton_natural/shopHop/utils/ShWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_wp_woocommerce/woocommerce.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 
 import 'ShViewAllProducts.dart';
 
 // ignore: must_be_immutable
 class ShSubCategory extends StatefulWidget {
   static String tag = '/ShSubCategory';
-  ShCategory? category;
+  WooProductCategory? category;
 
   ShSubCategory({this.category});
 
@@ -25,10 +24,14 @@ class ShSubCategory extends StatefulWidget {
 }
 
 class ShSubCategoryState extends State<ShSubCategory> {
-  List<ShCategory> list = [];
-  Map<String, List<ShProduct>> subCatProducts = {};
+  late WooProductCategory? category = widget.category;
+  List<WooProductCategory> subCategoryList = [];
+
+  Map<int, List<WooProduct>> subCatWooProducts = {};
   String subCatSlug = 'all';
   int limit = 10;
+
+  List<WooProduct> wooProducts = [];
 
   @override
   void initState() {
@@ -37,27 +40,14 @@ class ShSubCategoryState extends State<ShSubCategory> {
   }
 
   fetchData() async {
-    MyResponse<List<ShCategory>> myResponse =
-        await CategoryController.getSubCategory(widget.category!.slug);
-    if (myResponse.success) {
-      list.clear();
-      list = myResponse.data;
-    } else {
-      toasty(context, myResponse.errorText);
-    }
+    wooProducts =
+        Provider.of<ProductController>(context, listen: false).getAllProducts;
 
-    MyResponse<Map<String, List<ShProduct>>> myResponse2 =
-        await ProductController.getSubCatProduct(
-      widget.category!.slug,
-      subCatSlug,
-      limit,
-    );
-    if (myResponse2.success) {
-      subCatProducts.clear();
-      subCatProducts = myResponse2.data;
-    } else {
-      toasty(context, myResponse2.errorText);
-    }
+    subCategoryList = Provider.of<CategoryController>(context, listen: false)
+        .fetchSubCategory(category!.id);
+
+    subCatWooProducts = Provider.of<ProductController>(context, listen: false)
+        .getCategoryProducts(subCategoryList: subCategoryList);
     setState(() {});
   }
 
@@ -91,7 +81,7 @@ class ShSubCategoryState extends State<ShSubCategory> {
               padding: EdgeInsets.symmetric(vertical: 15),
               alignment: Alignment.topLeft,
               child: ListView.builder(
-                itemCount: list.length,
+                itemCount: subCategoryList.length,
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.only(
@@ -105,9 +95,10 @@ class ShSubCategoryState extends State<ShSubCategory> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ShViewAllProductScreen(
-                            mainCat: widget.category!.slug,
-                            subCatSlug: list[index].slug,
-                            subCatName: list[index].name,
+                            subCatId: subCategoryList[index].id,
+                            subCatName: subCategoryList[index].name,
+                            mProductModel:
+                                subCatWooProducts[subCategoryList[index].id]!,
                           ),
                         ),
                       );
@@ -125,15 +116,15 @@ class ShSubCategoryState extends State<ShSubCategory> {
                               shape: BoxShape.circle,
                               color: Colors.black87,
                             ),
-                            child: Image.asset(
-                              'images/shophop/sub_cat/${widget.category!.slug}/${list[index].slug}.png',
+                            child: Image.network(
+                              'images/shophop/sub_cat/${widget.category!.slug}/${subCategoryList[index].slug}.png',
                               width: 25,
                               color: sh_white,
                             ),
                           ),
                           SizedBox(height: spacing_control),
                           text(
-                            list[index].name,
+                            subCategoryList[index].name,
                             textColor: Colors.black87,
                             fontFamily: fontMedium,
                           )
@@ -144,23 +135,24 @@ class ShSubCategoryState extends State<ShSubCategory> {
                 },
               ),
             ),
-            for (int i = 0; i < list.length; i++) ...{
+            for (int i = 0; i < subCategoryList.length; i++) ...{
               horizontalHeading(
-                list[i].name,
+                subCategoryList[i].name,
                 callback: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ShViewAllProductScreen(
-                        mainCat: widget.category!.slug,
-                        subCatSlug: list[i].slug,
-                        subCatName: list[i].name,
+                        subCatId: subCategoryList[i].id,
+                        subCatName: subCategoryList[i].name,
+                        mProductModel:
+                            subCatWooProducts[subCategoryList[i].id]!,
                       ),
                     ),
                   );
                 },
               ),
-              ProductHorizontalList(subCatProducts[list[i].slug]!),
+              ProductHorizontalList(subCatWooProducts[subCategoryList[i].id]!),
               SizedBox(height: spacing_xlarge),
             }
           ],

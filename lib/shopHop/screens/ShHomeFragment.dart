@@ -1,15 +1,13 @@
 import 'package:cotton_natural/main/utils/AppWidget.dart';
-import 'package:cotton_natural/shopHop/api/MyResponse.dart';
 import 'package:cotton_natural/shopHop/controllers/CategoryController.dart';
-import 'package:cotton_natural/shopHop/models/ShCategory.dart';
-import 'package:cotton_natural/shopHop/models/ShProduct.dart';
+import 'package:cotton_natural/shopHop/controllers/ProductController.dart';
 import 'package:cotton_natural/shopHop/screens/ShSubCategory.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
-import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_wp_woocommerce/woocommerce.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 
 class ShHomeFragment extends StatefulWidget {
   static String tag = '/ShHomeFragment';
@@ -19,20 +17,22 @@ class ShHomeFragment extends StatefulWidget {
 }
 
 class ShHomeFragmentState extends State<ShHomeFragment> {
-  List<ShCategory> list = [];
-  List<ShProduct> newestProducts = [];
-  List<ShProduct> featuredProducts = [];
+  List<WooProductCategory> list = [];
+  List<WooProduct> allProducts = [];
+  List<WooProduct> featured = [];
+  List<WooProduct> newestProducts = [];
+  List<WooProduct> featuredProducts = [];
   var position = 0;
   var colors = [sh_cat_1, sh_cat_2, sh_cat_3, sh_cat_4, sh_cat_5];
 
   //todo
-  ShCategory menCategory = ShCategory(
-    id: 45,
+  WooProductCategory menCategory = WooProductCategory(
+    id: 78,
     name: 'Men',
     slug: 'men',
   );
-  ShCategory womenCategory = ShCategory(
-    id: 18,
+  WooProductCategory womenCategory = WooProductCategory(
+    id: 82,
     name: 'Women',
     slug: 'women',
   );
@@ -44,20 +44,21 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
   }
 
   fetchData() async {
-    MyResponse<List<ShCategory>> myResponse =
-        await CategoryController.getMainCategories();
+    final catController =
+        Provider.of<CategoryController>(context, listen: false);
+    final proController =
+        Provider.of<ProductController>(context, listen: false);
 
-    if (myResponse.success) {
-      list.clear();
-      list = myResponse.data;
-    } else {
-      toasty(context, myResponse.errorText);
-    }
+    await catController.fetchMainCategories().then(
+          (value) => list = catController.getMainCategory,
+        );
+
+    await proController
+        .fetchWooProducts()
+        .then((value) => allProducts = proController.getAllProducts);
     setState(() {});
 
-    List<ShProduct> products = await loadProducts();
-    List<ShProduct> featured = [];
-    products.forEach((product) {
+    allProducts.forEach((product) {
       if (product.featured == 1) {
         featured.add(product);
       }
@@ -66,7 +67,7 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
     setState(() {
       newestProducts.clear();
       featuredProducts.clear();
-      newestProducts.addAll(products);
+      newestProducts.addAll(allProducts);
       featuredProducts.addAll(featured);
     });
   }

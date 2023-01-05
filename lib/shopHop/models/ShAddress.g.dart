@@ -23,13 +23,14 @@ class ShAddressModelAdapter extends TypeAdapter<ShAddressModel> {
       city: fields[3] as String,
       address: fields[5] as String,
       country: fields[2] as String,
+      phone: fields[6] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ShAddressModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class ShAddressModelAdapter extends TypeAdapter<ShAddressModel> {
       ..writeByte(4)
       ..write(obj.region)
       ..writeByte(5)
-      ..write(obj.address);
+      ..write(obj.address)
+      ..writeByte(6)
+      ..write(obj.phone);
   }
 
   @override

@@ -1,135 +1,133 @@
-import 'dart:convert';
+// import 'dart:convert';
 
-import 'package:cotton_natural/shopHop/api/MyResponse.dart';
-import 'package:cotton_natural/shopHop/api/Network.dart';
-import 'package:cotton_natural/shopHop/api/api_util.dart';
-import 'package:cotton_natural/shopHop/controllers/AuthController.dart';
-import 'package:cotton_natural/shopHop/models/ShProduct.dart';
-import 'package:cotton_natural/shopHop/utils/InternetUtils.dart';
+// import 'package:cotton_natural/shopHop/api/MyResponse.dart';
+// import 'package:cotton_natural/shopHop/api/Network.dart';
+// import 'package:cotton_natural/shopHop/api/api_util.dart';
+// import 'package:cotton_natural/shopHop/controllers/AuthController.dart';
+// import 'package:cotton_natural/shopHop/utils/InternetUtils.dart';
 
-class WishController{
+// class WishController {
+//   //--------------------- toggle wish ---------------------------------------------//
+//   static Future<MyResponse> toggleWish(int? productId) async {
+//     String url =
+//         ApiUtil.MAIN_API_URL + ApiUtil.TOGGLE_WISH + productId.toString();
+//     String token = await AuthController.getApiToken() ?? '';
+//     Map<String, String> headers =
+//         ApiUtil.getHeader(requestType: RequestType.PostWithAuth, token: token);
 
-  //--------------------- toggle wish ---------------------------------------------//
-  static Future<MyResponse> toggleWish(int? productId) async {
+//     //Check Internet
+//     bool isConnected = await InternetUtils.checkConnection();
+//     if (!isConnected) {
+//       return MyResponse.makeInternetConnectionError();
+//     }
 
-    String url = ApiUtil.MAIN_API_URL + ApiUtil.TOGGLE_WISH + productId.toString() ;
-    String token = await AuthController.getApiToken() ?? '';
-    Map<String, String> headers = ApiUtil.getHeader(requestType: RequestType.PostWithAuth,token: token);
+//     try {
+//       NetworkResponse response = await Network.post(url, headers: headers);
+//       MyResponse myResponse = MyResponse(response.statusCode);
 
-    //Check Internet
-    bool isConnected = await InternetUtils.checkConnection();
-    if (!isConnected) {
-      return MyResponse.makeInternetConnectionError();
-    }
+//       if (ApiUtil.isResponseSuccess(response.statusCode)) {
+//         myResponse.success = true;
+//         myResponse.data = json.decode(response.body);
+//       } else {
+//         myResponse.success = false;
+//         myResponse.setError(json.decode(response.body));
+//       }
+//       return myResponse;
+//     } catch (e) {
+//       return MyResponse.makeServerProblemError();
+//     }
+//   }
 
-    try {
+//   //--------------------- init Is Wished  ---------------------------------------------//
+//   static Future<MyResponse> initIsWished(int? productId) async {
+//     String url =
+//         ApiUtil.MAIN_API_URL + ApiUtil.INIT_IS_WISHED + productId.toString();
+//     String token = await AuthController.getApiToken() ?? '';
+//     Map<String, String> headers =
+//         ApiUtil.getHeader(requestType: RequestType.PostWithAuth, token: token);
 
-      NetworkResponse response = await Network.post(url, headers: headers);
-      MyResponse myResponse = MyResponse(response.statusCode);
+//     //Check Internet
+//     bool isConnected = await InternetUtils.checkConnection();
+//     if (!isConnected) {
+//       return MyResponse.makeInternetConnectionError();
+//     }
 
-      if (ApiUtil.isResponseSuccess(response.statusCode)) {
-        myResponse.success = true;
-        myResponse.data = json.decode(response.body);
-      } else {
-        myResponse.success = false;
-        myResponse.setError(json.decode(response.body));
-      }
-      return myResponse;
-    }catch(e){
-      return MyResponse.makeServerProblemError();
-    }
-  }
+//     try {
+//       NetworkResponse response = await Network.post(url, headers: headers);
+//       MyResponse myResponse = MyResponse(response.statusCode);
 
-  //--------------------- init Is Wished  ---------------------------------------------//
-  static Future<MyResponse> initIsWished(int? productId) async {
+//       if (ApiUtil.isResponseSuccess(response.statusCode)) {
+//         myResponse.success = true;
+//         myResponse.data = json.decode(response.body);
+//       } else {
+//         myResponse.success = false;
+//         myResponse.setError(json.decode(response.body));
+//       }
+//       return myResponse;
+//     } catch (e) {
+//       return MyResponse.makeServerProblemError();
+//     }
+//   }
 
-    String url = ApiUtil.MAIN_API_URL + ApiUtil.INIT_IS_WISHED + productId.toString() ;
-    String token = await AuthController.getApiToken() ?? '';
-    Map<String, String> headers = ApiUtil.getHeader(requestType: RequestType.PostWithAuth,token: token);
+//   //--------------------- get wish product ---------------------------------------------//
+//   // static Future<MyResponse<List<ShProduct>>> getWishProducts() async {
 
-    //Check Internet
-    bool isConnected = await InternetUtils.checkConnection();
-    if (!isConnected) {
-      return MyResponse.makeInternetConnectionError();
-    }
+//   //   String url = ApiUtil.MAIN_API_URL + ApiUtil.GET_WISH_PRODUCTS ;
+//   //   String token = await AuthController.getApiToken() ?? '';
+//   //   Map<String, String> headers = ApiUtil.getHeader(requestType: RequestType.GetWithAuth,token: token);
 
-    try {
-      NetworkResponse response = await Network.post(url, headers: headers);
-      MyResponse myResponse = MyResponse(response.statusCode);
+//   //   //Check Internet
+//   //   bool isConnected = await InternetUtils.checkConnection();
+//   //   if (!isConnected) {
+//   //     return MyResponse.makeInternetConnectionError();
+//   //   }
 
-      if (ApiUtil.isResponseSuccess(response.statusCode)) {
-        myResponse.success = true;
-        myResponse.data = json.decode(response.body);
-      } else {
-        myResponse.success = false;
-        myResponse.setError(json.decode(response.body));
-      }
-      return myResponse;
-    }catch(e){
-      return MyResponse.makeServerProblemError();
-    }
-  }
+//   //   try {
 
-  //--------------------- get wish product ---------------------------------------------//
-  static Future<MyResponse<List<ShProduct>>> getWishProducts() async {
+//   //     NetworkResponse response = await Network.get(url, headers: headers);
+//   //     MyResponse<List<ShProduct>> myResponse = MyResponse(response.statusCode);
 
-    String url = ApiUtil.MAIN_API_URL + ApiUtil.GET_WISH_PRODUCTS ;
-    String token = await AuthController.getApiToken() ?? '';
-    Map<String, String> headers = ApiUtil.getHeader(requestType: RequestType.GetWithAuth,token: token);
+//   //     if (ApiUtil.isResponseSuccess(response.statusCode)) {
+//   //       myResponse.success = true;
+//   //       myResponse.data = ShProduct.getListFromJson(json.decode(response.body));
+//   //     } else {
+//   //       myResponse.success = false;
+//   //       myResponse.setError(json.decode(response.body));
+//   //     }
+//   //     return myResponse;
+//   //   }catch(e){
+//   //     return MyResponse.makeServerProblemError<List<ShProduct>>();
+//   //   }
+//   // }
 
-    //Check Internet
-    bool isConnected = await InternetUtils.checkConnection();
-    if (!isConnected) {
-      return MyResponse.makeInternetConnectionError();
-    }
+//   //--------------------- remove from wish  ---------------------------------------------//
+//   static Future<MyResponse> removeWish(int? productId) async {
+//     String url =
+//         ApiUtil.MAIN_API_URL + ApiUtil.REMOVE_FROM_WISH + productId.toString();
+//     String token = await AuthController.getApiToken() ?? '';
+//     Map<String, String> headers =
+//         ApiUtil.getHeader(requestType: RequestType.GetWithAuth, token: token);
 
-    try {
+//     //Check Internet
+//     bool isConnected = await InternetUtils.checkConnection();
+//     if (!isConnected) {
+//       return MyResponse.makeInternetConnectionError();
+//     }
 
-      NetworkResponse response = await Network.get(url, headers: headers);
-      MyResponse<List<ShProduct>> myResponse = MyResponse(response.statusCode);
+//     try {
+//       NetworkResponse response = await Network.get(url, headers: headers);
+//       MyResponse myResponse = MyResponse(response.statusCode);
 
-      if (ApiUtil.isResponseSuccess(response.statusCode)) {
-        myResponse.success = true;
-        myResponse.data = ShProduct.getListFromJson(json.decode(response.body));
-      } else {
-        myResponse.success = false;
-        myResponse.setError(json.decode(response.body));
-      }
-      return myResponse;
-    }catch(e){
-      return MyResponse.makeServerProblemError<List<ShProduct>>();
-    }
-  }
-
-  //--------------------- remove from wish  ---------------------------------------------//
-  static Future<MyResponse> removeWish(int? productId) async {
-
-    String url = ApiUtil.MAIN_API_URL + ApiUtil.REMOVE_FROM_WISH + productId.toString() ;
-    String token = await AuthController.getApiToken() ?? '';
-    Map<String, String> headers = ApiUtil.getHeader(requestType: RequestType.GetWithAuth,token: token);
-
-    //Check Internet
-    bool isConnected = await InternetUtils.checkConnection();
-    if (!isConnected) {
-      return MyResponse.makeInternetConnectionError();
-    }
-
-    try {
-
-      NetworkResponse response = await Network.get(url, headers: headers);
-      MyResponse myResponse = MyResponse(response.statusCode);
-
-      if (ApiUtil.isResponseSuccess(response.statusCode)) {
-        myResponse.success = true;
-        myResponse.data = response.body.trim();
-      } else {
-        myResponse.success = false;
-        myResponse.setError(json.decode(response.body));
-      }
-      return myResponse;
-    }catch(e){
-      return MyResponse.makeServerProblemError();
-    }
-  }
-
-}
+//       if (ApiUtil.isResponseSuccess(response.statusCode)) {
+//         myResponse.success = true;
+//         myResponse.data = response.body.trim();
+//       } else {
+//         myResponse.success = false;
+//         myResponse.setError(json.decode(response.body));
+//       }
+//       return myResponse;
+//     } catch (e) {
+//       return MyResponse.makeServerProblemError();
+//     }
+//   }
+// }

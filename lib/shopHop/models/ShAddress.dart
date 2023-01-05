@@ -16,6 +16,8 @@ class ShAddressModel {
   String region;
   @HiveField(5)
   String address;
+  @HiveField(6)
+  String? phone;
 
   ShAddressModel({
     required this.name,
@@ -24,18 +26,8 @@ class ShAddressModel {
     required this.city,
     required this.address,
     required this.country,
+    this.phone,
   });
-
-  factory ShAddressModel.fromJson(Map<String, dynamic> json) {
-    return ShAddressModel(
-      name: json['company'] ?? '',
-      zip: json['zip'] ?? '',
-      city: json['city'] ?? '',
-      region: json['region'] ?? '',
-      address: json['phone'] ?? '',
-      country: json['country'] ?? '',
-    );
-  }
 
   ShAddressModel.empty()
       : name = '',
@@ -43,16 +35,8 @@ class ShAddressModel {
         city = '',
         region = '',
         address = '',
-        country = '';
-
-  Map<String, dynamic> toJson() => {
-        "company": name,
-        "zip": zip,
-        "country": country,
-        "city": city,
-        "region": region,
-        "phone": address,
-      };
+        country = '',
+        phone = null;
 
   @override
   bool operator ==(covariant ShAddressModel other) =>
@@ -61,7 +45,8 @@ class ShAddressModel {
       other.country == country &&
       other.city == city &&
       other.region == region &&
-      other.address == address;
+      other.address == address &&
+      other.phone == phone;
 
   @override
   int get hashCode => Object.hash(
@@ -71,5 +56,6 @@ class ShAddressModel {
         city,
         region,
         address,
+        phone,
       );
 }

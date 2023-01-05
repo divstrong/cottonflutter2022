@@ -1,13 +1,11 @@
 import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/main/utils/common.dart';
-import 'package:cotton_natural/shopHop/api/MyResponse.dart';
-import 'package:cotton_natural/shopHop/controllers/ProductController.dart';
 import 'package:cotton_natural/shopHop/models/ShAttribute.dart';
-import 'package:cotton_natural/shopHop/models/ShProduct.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
 import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_wp_woocommerce/models/products.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import 'ShProductDetail.dart';
@@ -16,14 +14,15 @@ import 'ShProductDetail.dart';
 class ShViewAllProductScreen extends StatefulWidget {
   static String tag = '/ViewAllProductScreen';
 
-  String? mainCat;
+  int? subCatId;
   String? subCatName;
-  String? subCatSlug;
+  List<WooProduct> mProductModel;
 
-  ShViewAllProductScreen(
-      {required this.mainCat,
-      required this.subCatName,
-      required this.subCatSlug});
+  ShViewAllProductScreen({
+    required this.subCatId,
+    required this.subCatName,
+    required this.mProductModel,
+  });
 
   @override
   ShViewAllProductScreenState createState() {
@@ -33,7 +32,7 @@ class ShViewAllProductScreen extends StatefulWidget {
 
 class ShViewAllProductScreenState extends State<ShViewAllProductScreen> {
   var sortType = -1;
-  List<ShProduct> mProductModel = [];
+  List<WooProduct> mProductModel = [];
   ShAttributes? mProductAttributeModel;
 
   var isListViewSelected = false;
@@ -53,21 +52,25 @@ class ShViewAllProductScreenState extends State<ShViewAllProductScreen> {
 
   @override
   void initState() {
+    mProductModel = widget.mProductModel;
     super.initState();
     fetchData();
   }
 
   fetchData() async {
-    MyResponse<Map<String, List<ShProduct>>> myResponse2 =
-        await ProductController.getSubCatProduct(
-            widget.mainCat, widget.subCatSlug, 0);
-    if (myResponse2.success) {
-      mProductModel.clear();
-      mProductModel = myResponse2.data[widget.subCatSlug] ?? [];
-      // mProductModel.forEach((element) {print(element.name); });
-    } else {
-      toasty(context, myResponse2.errorText);
-    }
+    // MyResponse<Map<String, List<ShProduct>>> myResponse2 =
+    //     await ProductController.getSubCatProduct(
+    //   widget.mainCat,
+    //   widget.subCatSlug,
+    //   0,
+    // );
+    // if (myResponse2.success) {
+    //   mProductModel.clear();
+    //   mProductModel = myResponse2.data[widget.subCatSlug] ?? [];
+    //   // mProductModel.forEach((element) {print(element.name); });
+    // } else {
+    //   toasty(context, myResponse2.errorText);
+    // }
     setState(() {});
 
     // var model = await loadAttributes();
@@ -99,10 +102,12 @@ class ShViewAllProductScreenState extends State<ShViewAllProductScreen> {
           return InkWell(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ShProductDetail(product: mProductModel[index])));
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ShProductDetail(product: mProductModel[index]),
+                ),
+              );
             },
             child: Container(
               padding: EdgeInsets.all(10.0),
@@ -113,30 +118,36 @@ class ShViewAllProductScreenState extends State<ShViewAllProductScreen> {
                     Container(
                       padding: EdgeInsets.all(1),
                       decoration: BoxDecoration(
-                          border: Border.all(color: sh_view_color, width: 1)),
-                      child: networkCachedImage(mProductModel[index].images![0],
-                          fit: BoxFit.cover,
-                          aHeight: width * 0.35,
-                          aWidth: width * 0.29),
+                        border: Border.all(color: sh_view_color, width: 1),
+                      ),
+                      child: networkCachedImage(
+                        mProductModel[index].images[0].src,
+                        fit: BoxFit.cover,
+                        aHeight: width * 0.35,
+                        aWidth: width * 0.29,
+                      ),
                     ),
                     SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          text(mProductModel[index].name,
-                              textColor: sh_textColorPrimary),
+                          text(
+                            mProductModel[index].name,
+                            textColor: sh_textColorPrimary,
+                          ),
                           SizedBox(height: 4),
                           Row(
                             children: <Widget>[
                               text(
-                                  mProductModel[index]
-                                      .price
-                                      .toString()
-                                      .toCurrencyFormat(),
-                                  textColor: sh_colorPrimary,
-                                  fontFamily: fontMedium,
-                                  fontSize: textSizeNormal),
+                                mProductModel[index]
+                                    .price
+                                    .toString()
+                                    .toCurrencyFormat(),
+                                textColor: sh_colorPrimary,
+                                fontFamily: fontMedium,
+                                fontSize: textSizeNormal,
+                              ),
                               SizedBox(
                                 width: spacing_control,
                               ),
@@ -157,10 +168,12 @@ class ShViewAllProductScreenState extends State<ShViewAllProductScreen> {
                                   Container(
                                     padding: EdgeInsets.all(spacing_control),
                                     margin: EdgeInsets.only(
-                                        right: spacing_standard),
+                                      right: spacing_standard,
+                                    ),
                                     decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: sh_white),
+                                      shape: BoxShape.circle,
+                                      color: sh_white,
+                                    ),
                                     child: Icon(
                                       Icons.favorite_border,
                                       color: sh_textColorPrimary,
@@ -186,123 +199,135 @@ class ShViewAllProductScreenState extends State<ShViewAllProductScreen> {
 
     final gridView = Container(
       child: GridView.builder(
-          itemCount: mProductModel.length,
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          padding: EdgeInsets.all(spacing_middle),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 9 / 14,
-              crossAxisSpacing: spacing_middle,
-              mainAxisSpacing: spacing_standard_new),
-          itemBuilder: (_, index) {
-            return InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ShProductDetail(product: mProductModel[index])));
-              },
-              child: Container(
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                  children: <Widget>[
-                    AspectRatio(
-                      aspectRatio: 9 / 11,
-                      child: Stack(
-                        alignment: Alignment.bottomRight,
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.all(1),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: sh_view_color, width: 0.5)),
-                            child: networkCachedImage(
-                              mProductModel[index].images![0],
-                              fit: BoxFit.cover,
-                              aWidth: double.infinity,
-                              aHeight: double.infinity,
+        itemCount: mProductModel.length,
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        padding: EdgeInsets.all(spacing_middle),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 9 / 14,
+          crossAxisSpacing: spacing_middle,
+          mainAxisSpacing: spacing_standard_new,
+        ),
+        itemBuilder: (_, index) {
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ShProductDetail(product: mProductModel[index]),
+                ),
+              );
+            },
+            child: Container(
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.start,
+                children: <Widget>[
+                  AspectRatio(
+                    aspectRatio: 9 / 11,
+                    child: Stack(
+                      alignment: Alignment.bottomRight,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.all(1),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: sh_view_color,
+                              width: 0.5,
                             ),
                           ),
-                          // Container(
-                          //   padding: EdgeInsets.all(spacing_control),
-                          //   margin: EdgeInsets.all(spacing_standard),
-                          //   decoration: BoxDecoration(shape: BoxShape.circle, color: sh_white),
-                          //   child: Icon(
-                          //     Icons.favorite_border,
-                          //     color: sh_textColorPrimary,
-                          //     size: 16,
-                          //   ),
-                          // )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 2),
-                    // Row(
-                    //   children: <Widget>[
-                    //     text(
-                    //         mProductModel[index]
-                    //             .price
-                    //             .toString()
-                    //             .toCurrencyFormat(),
-                    //         textColor: sh_colorPrimary,
-                    //         fontFamily: fontMedium,
-                    //         fontSize: textSizeNormal),
-                    //     SizedBox(
-                    //       width: spacing_control,
-                    //     ),
-                    //   ],
-                    // ),
-                    SizedBox(height: spacing_middle),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: text(mProductModel[index].name,
-                              textColor: sh_colorPrimary,
-                              maxLine: 2,
-                              fontFamily: fontMedium,
-                              fontSize: textSizeNormal),
+                          child: networkCachedImage(
+                            mProductModel[index].images[0].src,
+                            fit: BoxFit.cover,
+                            aWidth: double.infinity,
+                            aHeight: double.infinity,
+                          ),
                         ),
-                        SizedBox(
-                          width: spacing_control,
-                        ),
+                        // Container(
+                        //   padding: EdgeInsets.all(spacing_control),
+                        //   margin: EdgeInsets.all(spacing_standard),
+                        //   decoration: BoxDecoration(shape: BoxShape.circle, color: sh_white),
+                        //   child: Icon(
+                        //     Icons.favorite_border,
+                        //     color: sh_textColorPrimary,
+                        //     size: 16,
+                        //   ),
+                        // )
                       ],
                     ),
-                    SizedBox(height: spacing_middle),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 2.0, top: spacing_middle),
-                      // child: Row(children: colorWidget(mProductModel[index].attributes!)),
-                    )
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 2),
+                  // Row(
+                  //   children: <Widget>[
+                  //     text(
+                  //         mProductModel[index]
+                  //             .price
+                  //             .toString()
+                  //             .toCurrencyFormat(),
+                  //         textColor: sh_colorPrimary,
+                  //         fontFamily: fontMedium,
+                  //         fontSize: textSizeNormal),
+                  //     SizedBox(
+                  //       width: spacing_control,
+                  //     ),
+                  //   ],
+                  // ),
+                  SizedBox(height: spacing_middle),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: text(
+                          mProductModel[index].name,
+                          textColor: sh_colorPrimary,
+                          maxLine: 2,
+                          fontFamily: fontMedium,
+                          fontSize: textSizeNormal,
+                        ),
+                      ),
+                      SizedBox(
+                        width: spacing_control,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: spacing_middle),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 2.0, top: spacing_middle),
+                    // child: Row(children: colorWidget(mProductModel[index].attributes!)),
+                  )
+                ],
               ),
-            );
-          }),
+            ),
+          );
+        },
+      ),
     );
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: blackColor,
-        title: text(widget.subCatName,
-            textColor: sh_white,
-            fontSize: textSizeNormal,
-            fontFamily: fontMedium),
+        title: text(
+          widget.subCatName,
+          textColor: sh_white,
+          fontSize: textSizeNormal,
+          fontFamily: fontMedium,
+        ),
         iconTheme: IconThemeData(color: sh_white),
         actionsIconTheme: IconThemeData(color: sh_white),
         actions: <Widget>[
           // IconButton(icon: Icon(Icons.filter_list), onPressed: () => showMyBottomSheet(context)),
           IconButton(
-              icon: Icon(
-                isListViewSelected ? Icons.view_list : Icons.border_all,
-                size: 24,
-              ),
-              onPressed: () {
-                setState(() {
-                  isListViewSelected = !isListViewSelected;
-                });
-              })
+            icon: Icon(
+              isListViewSelected ? Icons.view_list : Icons.border_all,
+              size: 24,
+            ),
+            onPressed: () {
+              setState(() {
+                isListViewSelected = !isListViewSelected;
+              });
+            },
+          )
         ],
       ),
       body: SingleChildScrollView(
@@ -312,11 +337,13 @@ class ShViewAllProductScreenState extends State<ShViewAllProductScreen> {
             errorMsg.isEmpty
                 ? Center(
                     child: mProductModel.isNotEmpty
-                        ? Column(children: <Widget>[
-                            isListViewSelected ? listView : gridView,
-                            CircularProgressIndicator()
-                                .visible(isLoadingMoreData)
-                          ])
+                        ? Column(
+                            children: <Widget>[
+                              isListViewSelected ? listView : gridView,
+                              CircularProgressIndicator()
+                                  .visible(isLoadingMoreData)
+                            ],
+                          )
                         : CircularProgressIndicator().paddingAll(8),
                   )
                 : Center(child: Text(errorMsg)),
@@ -357,14 +384,19 @@ class ShViewAllProductScreenState extends State<ShViewAllProductScreen> {
 
     size.forEach((size) {
       if (currentIndex < maxWidget) {
-        list.add(Container(
-          margin: EdgeInsets.only(right: spacing_middle),
-          child: Center(
-              child: text(size.trim(),
-                  fontSize: textSizeMedium,
-                  textColor: sh_textColorPrimary,
-                  fontFamily: fontMedium)),
-        ));
+        list.add(
+          Container(
+            margin: EdgeInsets.only(right: spacing_middle),
+            child: Center(
+              child: text(
+                size.trim(),
+                fontSize: textSizeMedium,
+                textColor: sh_textColorPrimary,
+                fontFamily: fontMedium,
+              ),
+            ),
+          ),
+        );
         currentIndex++;
       } else {
         if (!flag) list.add(Text('+ ${totalSize - maxWidget} more'));

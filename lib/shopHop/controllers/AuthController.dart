@@ -1,20 +1,17 @@
 import 'dart:convert';
+
 import 'package:cotton_natural/shopHop/api/MyResponse.dart';
 import 'package:cotton_natural/shopHop/api/Network.dart';
 import 'package:cotton_natural/shopHop/api/api_util.dart';
-import 'package:cotton_natural/shopHop/models/Account.dart';
-import 'package:cotton_natural/shopHop/models/User.dart';
 import 'package:cotton_natural/shopHop/utils/InternetUtils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class AuthController {
-
   //--------------------- Log In ---------------------------------------------//
   static Future<MyResponse> loginUser(String email, String password) async {
-
     String loginUrl = ApiUtil.MAIN_API_URL + ApiUtil.AUTH_LOGIN;
-    Map<String, String> header = ApiUtil.getHeader(requestType: RequestType.Post);
+    Map<String, String> header =
+        ApiUtil.getHeader(requestType: RequestType.Post);
     Map data = {'email': email, 'password': password};
     String body = json.encode(data);
 
@@ -26,10 +23,12 @@ class AuthController {
 
     //Response
     try {
-      NetworkResponse response = await Network.post(loginUrl, headers: header, body: body );
+      NetworkResponse response =
+          await Network.post(loginUrl, headers: header, body: body);
       MyResponse myResponse = MyResponse(response.statusCode);
       if (response.statusCode == 200) {
-        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
         Map<String, dynamic> data = json.decode(response.body);
         Map<String, dynamic> user = data['user'];
         String token = data['token'];
@@ -43,15 +42,15 @@ class AuthController {
         myResponse.setError(data);
       }
       return myResponse;
-    }catch(e){
+    } catch (e) {
       print(e.toString());
       return MyResponse.makeServerProblemError();
     }
   }
 
   //--------------------- Register  ---------------------------------------------//
-  static Future<MyResponse> registerUser(String name, String email, String password) async {
-
+  static Future<MyResponse> registerUser(
+      String name, String email, String password) async {
     //URL
     String registerUrl = ApiUtil.MAIN_API_URL + ApiUtil.AUTH_REGISTER;
 
@@ -63,16 +62,16 @@ class AuthController {
 
     //Check Internet
     bool isConnected = await InternetUtils.checkConnection();
-    if(!isConnected){
+    if (!isConnected) {
       return MyResponse.makeInternetConnectionError();
     }
 
     //Response
     try {
       NetworkResponse response = await Network.post(
-          registerUrl,
-          headers: ApiUtil.getHeader(requestType: RequestType.Post),
-          body: body
+        registerUrl,
+        headers: ApiUtil.getHeader(requestType: RequestType.Post),
+        body: body,
       );
 
       MyResponse myResponse = MyResponse(response.statusCode);
@@ -86,7 +85,7 @@ class AuthController {
       }
 
       return myResponse;
-    }catch(e){
+    } catch (e) {
       print('my error : ${e.toString()}');
       //If any server error...
       return MyResponse.makeServerProblemError();
@@ -98,9 +97,7 @@ class AuthController {
     String url = ApiUtil.MAIN_API_URL + ApiUtil.FORGOT_PASSWORD;
 
     //Body date
-    Map data = {
-      'email': email
-    };
+    Map data = {'email': email};
 
     //Encode
     String body = json.encode(data);
@@ -113,14 +110,14 @@ class AuthController {
 
     try {
       NetworkResponse response = await Network.post(
-          url,
-          headers: ApiUtil.getHeader(requestType: RequestType.Post),
-          body: body
+        url,
+        headers: ApiUtil.getHeader(requestType: RequestType.Post),
+        body: body,
       );
 
       MyResponse myResponse = MyResponse(response.statusCode);
 
-      if (response.statusCode==200) {
+      if (response.statusCode == 200) {
         myResponse.success = true;
       } else {
         Map<String, dynamic> data = json.decode(response.body);
@@ -129,16 +126,13 @@ class AuthController {
       }
 
       return myResponse;
-    }catch(e){
+    } catch (e) {
       return MyResponse.makeServerProblemError();
     }
-
   }
-
 
   //------------------------ Logout -----------------------------------------//
   static Future<bool> logoutUser() async {
-
     //Clear all Data
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
@@ -150,34 +144,15 @@ class AuthController {
     return true;
   }
 
-
   //------------------------ Save user in cache -----------------------------------------//
-  static saveUser(Map<String,dynamic> user) async {
+  static saveUser(Map<String, dynamic> user) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setInt('id', user['id']);
     await sharedPreferences.setString('name', user['name']);
     await sharedPreferences.setString('email', user['email']);
   }
 
- static saveUserFromUser(User user) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setInt('id', user.id);
-    await sharedPreferences.setString('name', user.name);
-    await sharedPreferences.setString('email', user.email);
-  }
-
   //------------------------ Get user from cache -----------------------------------------//
-  static Future<Account> getAccount() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
-    int? id = sharedPreferences.getInt('id');
-    String? name = sharedPreferences.getString('name');
-    String? email = sharedPreferences.getString('email');
-    String? token = sharedPreferences.getString('token');
-
-    return Account(id!,name!, email!, token!);
-  }
-
 
   //------------------------ Check user logged in or not -----------------------------------------//
   static Future<bool> isLoginUser() async {
@@ -195,7 +170,4 @@ class AuthController {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString("token");
   }
-
-
-
 }

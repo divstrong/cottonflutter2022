@@ -1,4 +1,3 @@
-
 class Order {
   Order({
     int? id,
@@ -19,7 +18,8 @@ class Order {
     String? shippingMethod,
     required Order_data orderData,
     String? createdAt,
-    String? updatedAt,}){
+    String? updatedAt,
+  }) {
     _id = id;
     _customerId = customerId;
     _status = status;
@@ -42,7 +42,7 @@ class Order {
   }
 
   Order.fromJson(dynamic json) {
-    try{
+    try {
       _id = json['id'];
       _customerId = json['customer_id'];
       _status = json['status'];
@@ -59,23 +59,31 @@ class Order {
       _shippingZip = json['shipping_zip'];
       _paymentMethod = json['payment_method'];
       _shippingMethod = json['shipping_method'];
-      _orderData =
-          (json['order_data'] != null)?
-          Order_data.fromJson(json['order_data']) :
-          Order_data(
-            itemsList:ItemsList1(items: [Item1(name: '',count: '0',size: '0',price: '0',imageUrl: '',productId: '0',slug: '')]),
-            originalPrice: '0.00',
-            subTotalPrice: '0.00',
-            discountAmount: '0.00',
-            totalPrice: '0.00',
-            couponApplied: false,
-            hasOrder: true,
-            frameAmount: 0,
-            totalQty: 0,
-          );
+      _orderData = (json['order_data'] != null)
+          ? Order_data.fromJson(json['order_data'])
+          : Order_data(
+              itemsList: ItemsList1(items: [
+                Item1(
+                    name: '',
+                    count: '0',
+                    size: '0',
+                    price: '0',
+                    imageUrl: '',
+                    productId: '0',
+                    slug: '')
+              ]),
+              originalPrice: '0.00',
+              subTotalPrice: '0.00',
+              discountAmount: '0.00',
+              totalPrice: '0.00',
+              couponApplied: false,
+              hasOrder: true,
+              frameAmount: 0,
+              totalQty: 0,
+            );
       _createdAt = json['created_at'];
       _updatedAt = json['updated_at'];
-    }catch(e){
+    } catch (e) {
       print('efghijk 6: ${e.toString()}');
     }
   }
@@ -97,7 +105,16 @@ class Order {
   String? _paymentMethod;
   String? _shippingMethod;
   Order_data _orderData = Order_data(
-      itemsList:ItemsList1(items: [Item1(name: '',count: '0',size: '0',price: '0',imageUrl: '',productId: '0',slug: '')]),
+      itemsList: ItemsList1(items: [
+        Item1(
+            name: '',
+            count: '0',
+            size: '0',
+            price: '0',
+            imageUrl: '',
+            productId: '0',
+            slug: '')
+      ]),
       originalPrice: '0.00',
       subTotalPrice: '0.00',
       discountAmount: '0.00',
@@ -175,12 +192,20 @@ class Order_data {
   String? discountAmount;
   int? frameAmount;
 
-  Order_data({this.itemsList, this.subTotalPrice, this.totalPrice, this.totalQty, this.originalPrice, this.hasOrder, this.couponApplied, this.discountAmount, this.frameAmount});
+  Order_data(
+      {this.itemsList,
+      this.subTotalPrice,
+      this.totalPrice,
+      this.totalQty,
+      this.originalPrice,
+      this.hasOrder,
+      this.couponApplied,
+      this.discountAmount,
+      this.frameAmount});
 
   Order_data.fromJson(dynamic json) {
-
-    try{
-      itemsList =  ItemsList1.fromJson(json["items"]);
+    try {
+      itemsList = ItemsList1.fromJson(json["items"]);
       subTotalPrice = json['subTotalPrice'];
       totalPrice = json['totalPrice'];
       totalQty = json['totalQty'];
@@ -189,14 +214,14 @@ class Order_data {
       couponApplied = json['couponApplied'];
       discountAmount = json['discountAmount'];
       frameAmount = json['frameAmount'];
-    }catch(e){
+    } catch (e) {
       print('efghi1 : ${e.toString()}');
     }
   }
 
   static Map<String, dynamic> toJson(Order_data orderData) {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    try{
+    try {
       data['itemsList'] = orderData.itemsList!.toJson();
       data['subTotalPrice'] = orderData.subTotalPrice;
       data['totalPrice'] = orderData.totalPrice;
@@ -207,21 +232,21 @@ class Order_data {
       data['discountAmount'] = orderData.discountAmount;
       data['frameAmount'] = orderData.frameAmount;
       return data;
-    }catch(e){
+    } catch (e) {
       print('efghi2 : ${e.toString()}');
 
-      return {'error' : e.toString()};
+      return {'error': e.toString()};
     }
-
   }
-
 }
 
 class ItemsList1 {
   List<Item1>? items;
-  ItemsList1({required List<Item1> this.items,});
+  ItemsList1({
+    required List<Item1> this.items,
+  });
 
-  ItemsList1.fromJson(Map<String,dynamic> mapJson) {
+  ItemsList1.fromJson(Map<String, dynamic> mapJson) {
     List<Item1> itemsListX = [];
     mapJson.forEach((key, value) {
       itemsListX.add(Item1.fromJson(value));
@@ -230,8 +255,7 @@ class ItemsList1 {
   }
 
   List<Map<String, dynamic>> toJson() {
-
-    try{
+    try {
       final List<Map<String, dynamic>> mapList = [];
       if (this.items != null) {
         this.items!.forEach((Item1 item) {
@@ -239,7 +263,7 @@ class ItemsList1 {
         });
       }
       return mapList;
-    }catch(e){
+    } catch (e) {
       print('efghi3 : ${e.toString()}');
       return [
         {'error': e.toString()}
@@ -254,11 +278,9 @@ class ItemsList1 {
     }
     return list;
   }
-
 }
 
 class Item1 {
-
   String? _productId;
   String? _count;
   String? _imageUrl;
@@ -274,7 +296,8 @@ class Item1 {
     String? name,
     String? price,
     String? slug,
-    String? size,}){
+    String? size,
+  }) {
     _productId = productId;
     _count = count;
     _imageUrl = imageUrl;
@@ -303,8 +326,7 @@ class Item1 {
   String? get size => _size;
 
   Map<String, dynamic> toJson() {
-
-    try{
+    try {
       final map = <String, dynamic>{};
       map['product_id'] = _productId;
       map['count'] = _count;
@@ -314,10 +336,9 @@ class Item1 {
       map['slug'] = _slug;
       map['size'] = _size;
       return map;
-    }catch(e){
+    } catch (e) {
       print('efghi4 : ${e.toString()}');
-      return {'error' : e.toString()};
+      return {'error': e.toString()};
     }
-
   }
 }

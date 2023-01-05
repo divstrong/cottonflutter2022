@@ -1,9 +1,8 @@
 import 'package:cotton_natural/shopHop/models/ShAddress.dart';
 import 'package:cotton_natural/shopHop/models/ShOrder.dart';
-import 'package:cotton_natural/shopHop/models/ShPaymentCard.dart';
-import 'package:cotton_natural/shopHop/models/ShProduct.dart';
 import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_wp_woocommerce/models/products.dart';
 import 'package:nb_utils/src/extensions/string_extensions.dart';
 
 class OrdersProvider extends ChangeNotifier {
@@ -35,17 +34,6 @@ class OrdersProvider extends ChangeNotifier {
     address: '',
     country: '',
   );
-  ShPaymentCard _paymentCard =
-      ShPaymentCard(cardNo: '', month: '', year: '', cvv: '', holderName: '');
-
-  setCard(ShPaymentCard newCard) {
-    this._paymentCard = newCard;
-    notifyListeners();
-  }
-
-  ShPaymentCard getCard() {
-    return this._paymentCard;
-  }
 
   setShipAddress(ShAddressModel newAddress) {
     this._orderAddress = newAddress;
@@ -64,31 +52,6 @@ class OrdersProvider extends ChangeNotifier {
 
   ShAddressModel getBillAddress() {
     return this._billAddress;
-  }
-
-  setShippingMethod({String shippingMethodName = 'standard'}) {
-    this._shippingMethod = (shippingMethodName == 'standard')
-        ? ShippingMethod(
-            id: 'standard',
-            name: 'Standard Delivery',
-            price: '5.99',
-            description: 'Delivery in 5 to 7 business Days',
-          )
-        : (shippingMethodName == 'express')
-            ? ShippingMethod(
-                id: 'express',
-                name: ' Express Delivery',
-                price: '19.99',
-                description: 'Delivery in 1 business Days',
-              )
-            : ShippingMethod(
-                id: 'notset',
-                name: 'Not Set',
-                price: '0',
-                description: '',
-              );
-
-    notifyListeners();
   }
 
   ShippingMethod getShippingMethod() {
@@ -142,7 +105,7 @@ class OrdersProvider extends ChangeNotifier {
   }
 
   void addItemToBasket({
-    required ShProduct? product,
+    required WooProduct? product,
     int count = 1,
     String? size,
   }) {
@@ -151,7 +114,7 @@ class OrdersProvider extends ChangeNotifier {
     } else {
       Item item = Item(
         id: product.id.toString(),
-        image_url: product.images![0],
+        image_url: product.images[0].src,
         name: product.name,
         price: product.price,
         count: count.toString(),
@@ -225,8 +188,6 @@ class OrdersProvider extends ChangeNotifier {
     this._orderAddress = ShAddressModel.empty();
     this._billAddress = ShAddressModel.empty();
 
-    this._paymentCard =
-        ShPaymentCard(cardNo: '', month: '', year: '', cvv: '', holderName: '');
     notifyListeners();
   }
 }
