@@ -20,7 +20,7 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
   List<WooProductCategory> list = [];
   List<WooProduct> allProducts = [];
   List<WooProduct> featured = [];
-  List<WooProduct> newestProducts = [];
+
   List<WooProduct> featuredProducts = [];
   var position = 0;
   var colors = [sh_cat_1, sh_cat_2, sh_cat_3, sh_cat_4, sh_cat_5];
@@ -49,13 +49,23 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
     final proController =
         Provider.of<ProductController>(context, listen: false);
 
-    await catController.fetchMainCategories().then(
-          (value) => list = catController.getMainCategory,
-        );
+    if (catController.getAllCategory.isEmpty) {
+      await catController.fetchMainCategories().then(
+            (value) => list = catController.getMainCategory,
+          );
+    } else {
+      list.clear();
+      list = catController.getMainCategory;
+    }
 
-    await proController
-        .fetchWooProducts()
-        .then((value) => allProducts = proController.getAllProducts);
+    if (proController.getAllProducts.isEmpty) {
+      await proController.fetchWooProducts().then(
+            (value) => allProducts = proController.getAllProducts,
+          );
+    } else {
+      allProducts.clear();
+      allProducts = proController.getAllProducts;
+    }
     setState(() {});
 
     allProducts.forEach((product) {
@@ -65,9 +75,7 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
     });
 
     setState(() {
-      newestProducts.clear();
       featuredProducts.clear();
-      newestProducts.addAll(allProducts);
       featuredProducts.addAll(featured);
     });
   }
@@ -82,7 +90,7 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
     var height = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: newestProducts.isNotEmpty
+      body: allProducts.isNotEmpty
           ? SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.only(bottom: 30),
@@ -132,20 +140,22 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    padding: EdgeInsets.all(spacing_middle),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: sh_textColorPrimary,
-                                    ),
+                                    // padding:
+                                    //     EdgeInsets.all(spacing_control_half),
+                                    // decoration: BoxDecoration(
+                                    //   shape: BoxShape.circle,
+                                    //   color: sh_textColorPrimary,
+                                    // ),
                                     child: Image.asset(
                                       'images/shophop/cat/${list[index].slug}.png',
-                                      width: 25,
-                                      color: sh_white,
+                                      width: 40,
                                     ),
                                   ),
                                   SizedBox(height: spacing_control),
                                   text(
-                                    list[index].name,
+                                    CategoryController.decodeCategoriesNames(
+                                      list[index].name,
+                                    ),
                                     textColor: sh_textColorPrimary,
                                     fontFamily: fontMedium,
                                   )
@@ -224,7 +234,9 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
                 ),
               ),
             )
-          : Container(),
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 }

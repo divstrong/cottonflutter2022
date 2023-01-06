@@ -16,8 +16,6 @@ class ShAddressModel {
   String region;
   @HiveField(5)
   String address;
-  @HiveField(6)
-  String? phone;
 
   ShAddressModel({
     required this.name,
@@ -26,7 +24,6 @@ class ShAddressModel {
     required this.city,
     required this.address,
     required this.country,
-    this.phone,
   });
 
   ShAddressModel.empty()
@@ -35,8 +32,7 @@ class ShAddressModel {
         city = '',
         region = '',
         address = '',
-        country = '',
-        phone = null;
+        country = '';
 
   @override
   bool operator ==(covariant ShAddressModel other) =>
@@ -45,8 +41,7 @@ class ShAddressModel {
       other.country == country &&
       other.city == city &&
       other.region == region &&
-      other.address == address &&
-      other.phone == phone;
+      other.address == address;
 
   @override
   int get hashCode => Object.hash(
@@ -56,6 +51,5 @@ class ShAddressModel {
         city,
         region,
         address,
-        phone,
       );
 }

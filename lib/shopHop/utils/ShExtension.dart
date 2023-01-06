@@ -20,6 +20,11 @@ extension StringExtension on String? {
     }
   }
 
+//* capitalize first word
+  String capitalize() {
+    return "${this![0].toUpperCase()}${this?.substring(1).toLowerCase()}";
+  }
+
   String formatDate() {
     if (this == null || this!.isEmpty || this == "null") {
       return "NA";

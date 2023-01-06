@@ -65,7 +65,6 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
     regionCont.text = billProviderAddress.region;
     countryCont.text = billProviderAddress.country;
     zipCont.text = billProviderAddress.zip;
-    phoneCont.text = billProviderAddress.phone!;
   }
 
   bool isAddressProviderEmpty() =>
@@ -89,7 +88,6 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
         city: cityCont.text,
         address: addressCont.text,
         country: countryCont.text,
-        phone: phoneCont.text,
       );
       await AddressController.cacheBillToAddress(newAddress);
       Provider.of<OrdersProvider>(context, listen: false)
@@ -251,8 +249,7 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
         title: text(
           (billProviderAddress.name == '' &&
                   billProviderAddress.address == '' &&
-                  billProviderAddress.city == '' &&
-                  billProviderAddress.phone == '')
+                  billProviderAddress.city == '')
               ? sh_lbl_add_new_Bill_address
               : sh_lbl_edit_Bill_address,
           textColor: sh_textColorPrimary,

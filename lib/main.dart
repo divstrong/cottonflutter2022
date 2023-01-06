@@ -3,13 +3,13 @@ import 'package:cotton_natural/shopHop/controllers/CategoryController.dart';
 import 'package:cotton_natural/shopHop/controllers/ProductController.dart';
 import 'package:cotton_natural/shopHop/models/ShAddress.dart';
 import 'package:cotton_natural/shopHop/providers/OrdersProvider.dart';
-import 'package:cotton_natural/shopHop/screens/ShSplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'main/store/AppStore.dart';
+import 'shopHop/screens/ShHomeScreen.dart';
 import 'shopHop/utils/ShStrings.dart';
 
 AppStore appStore = AppStore();
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
     return Observer(
       builder: (_) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: ShSplashScreen(),
+        home: ShHomeScreen(),
         theme: !appStore.isDarkModeOn
             ? AppThemeData.lightTheme
             : AppThemeData.darkTheme,

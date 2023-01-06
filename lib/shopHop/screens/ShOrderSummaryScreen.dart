@@ -1,6 +1,7 @@
 import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/main/utils/common.dart';
 import 'package:cotton_natural/shopHop/controllers/AddressController.dart';
+import 'package:cotton_natural/shopHop/controllers/ProductController.dart';
 import 'package:cotton_natural/shopHop/models/ShAddress.dart';
 import 'package:cotton_natural/shopHop/models/ShOrder.dart';
 import 'package:cotton_natural/shopHop/providers/OrdersProvider.dart';
@@ -8,11 +9,11 @@ import 'package:cotton_natural/shopHop/screens/ShAddNewAddress.dart';
 import 'package:cotton_natural/shopHop/screens/sh_order_placed.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
 import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
-import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
 import 'package:cotton_natural/shopHop/utils/ShStrings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wp_woocommerce/models/order_payload.dart';
 import 'package:flutter_wp_woocommerce/woocommerce.dart';
+import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -41,6 +42,10 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
   late ShAddressModel billAddressModel;
   var primaryColor;
   bool billAsShipping = false;
+
+  final dateTimeController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
 
   @override
   void initState() {
@@ -77,7 +82,10 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
   }
 
   @override
-  void dispose() {
+  dispose() {
+    dateTimeController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
     super.dispose();
   }
 
@@ -109,7 +117,6 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
       city: billTo.city,
       country: billTo.country,
       state: billTo.region,
-      phone: billTo.phone,
       postcode: billTo.zip,
     );
     WooOrderPayloadShipping? shipping = WooOrderPayloadShipping(
@@ -127,11 +134,14 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
       lineItems: productItem,
     );
     try {
-      await wooCommerce.createOrder(order).then(
+      await wooCommerce
+          .createOrder(order)
+          .then(
             (value) => Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => OrderPlaced()),
             ),
-          );
+          )
+          .then((value) => list.clear());
     } catch (e) {
       log("error sending Products $e");
     }
@@ -192,10 +202,6 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
       billAddressModel.zip,
       style: TextStyle(fontFamily: fontRegular, fontSize: textSizeMedium),
     );
-    final phoneBillTo = Text(
-      billAddressModel.phone ?? "",
-      style: TextStyle(fontFamily: fontRegular, fontSize: textSizeMedium),
-    );
 
     final bodySipTo = Container(
       child: Wrap(
@@ -247,39 +253,42 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
               ],
             ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    ShAddNewAddress().launch(context);
-                  },
-                  child: isAddressEmpty()
-                      ? Container(
-                          margin: const EdgeInsets.only(
-                            top: spacing_standard_new,
-                          ),
-                          padding: const EdgeInsets.only(top: 8, bottom: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+              InkWell(
+                onTap: () {
+                  ShAddNewAddress().launch(context);
+                },
+                child: isAddressEmpty()
+                    ? Container(
+                        width: 250,
+                        margin: const EdgeInsets.only(
+                          top: spacing_standard_new,
+                        ),
+                        padding: const EdgeInsets.only(top: 8, bottom: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            width: 1,
                             color: sh_colorPrimary.withOpacity(0.9),
                           ),
-                          child: Center(
-                            child: text(
-                              'Add Ship Address',
-                              textColor: sh_white,
-                              fontSize: textSizeLargeMedium,
-                              fontFamily: fontRegular,
-                            ),
-                          ),
-                        )
-                      : text(
-                          'Change Ship To',
-                          textColor: sh_colorPrimary,
-                          fontSize: textSizeSMedium,
-                          fontFamily: fontRegular,
-                          underline: true,
                         ),
-                ),
+                        child: Center(
+                          child: text(
+                            'Add Ship Address',
+                            textColor: sh_colorPrimary,
+                            fontSize: textSizeLargeMedium,
+                            fontFamily: fontBold,
+                          ),
+                        ),
+                      )
+                    : text(
+                        'Change Ship To',
+                        textColor: sh_colorPrimary,
+                        fontSize: textSizeSMedium,
+                        fontFamily: fontRegular,
+                        underline: true,
+                      ),
               ),
             ],
           ),
@@ -357,43 +366,45 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
                     Expanded(child: zipBillTo),
                   ],
                 ),
-                phoneBillTo
               ],
             ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    ShAddNewBillToAddress().launch(context);
-                  },
-                  child: isBillAddressEmpty()
-                      ? Container(
-                          margin: const EdgeInsets.only(
-                            top: spacing_standard_new,
-                          ),
-                          padding: const EdgeInsets.only(top: 8, bottom: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+              InkWell(
+                onTap: () {
+                  ShAddNewBillToAddress().launch(context);
+                },
+                child: isBillAddressEmpty()
+                    ? Container(
+                        width: 250,
+                        margin: const EdgeInsets.only(
+                          top: spacing_standard_new,
+                        ),
+                        padding: const EdgeInsets.only(top: 8, bottom: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            width: 1,
                             color: sh_colorPrimary.withOpacity(0.9),
                           ),
-                          child: Center(
-                            child: text(
-                              'Add Bill Address',
-                              textColor: sh_white,
-                              fontSize: textSizeLargeMedium,
-                              fontFamily: fontRegular,
-                            ),
-                          ),
-                        )
-                      : text(
-                          'Change Bill To',
-                          textColor: sh_colorPrimary,
-                          fontSize: textSizeSMedium,
-                          fontFamily: fontRegular,
-                          underline: true,
                         ),
-                ),
+                        child: Center(
+                          child: text(
+                            'Add Bill Address',
+                            textColor: sh_colorPrimary,
+                            fontSize: textSizeLargeMedium,
+                            fontFamily: fontBold,
+                          ),
+                        ),
+                      )
+                    : text(
+                        'Change Bill To',
+                        textColor: sh_colorPrimary,
+                        fontSize: textSizeSMedium,
+                        fontFamily: fontRegular,
+                        underline: true,
+                      ),
               ),
             ],
           ),
@@ -494,13 +505,13 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
                                               width: spacing_standard,
                                             ),
                                             //
-                                            // text(
-                                            //   ShProduct.getSizeTypeText(
-                                            //     list[index]!.size!,
-                                            //   ),
-                                            //   textColor: sh_textColorPrimary,
-                                            //   fontSize: textSizeMedium,
-                                            // ),
+                                            text(
+                                              ProductController.getSizeTypeText(
+                                                list[index]!.size!,
+                                              ),
+                                              textColor: sh_textColorPrimary,
+                                              fontSize: textSizeMedium,
+                                            ),
                                             SizedBox(
                                               width: spacing_standard,
                                             ),
@@ -540,25 +551,6 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
                                           ],
                                         ),
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16.0),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: <Widget>[
-                                            text(
-                                              list[index]!
-                                                  .price
-                                                  .toString()
-                                                  .toCurrencyFormat(),
-                                              textColor: sh_colorPrimary,
-                                              fontSize: textSizeNormal,
-                                              fontFamily: fontMedium,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -575,84 +567,6 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
             },
           )
         : Container();
-
-    //! deleted
-    // var paymentDetail = Container(
-    //   margin: EdgeInsets.fromLTRB(
-    //     spacing_standard_new,
-    //     spacing_standard_new,
-    //     spacing_standard_new,
-    //     spacing_standard_new,
-    //   ),
-    //   decoration:
-    //       BoxDecoration(border: Border.all(color: sh_view_color, width: 1.0)),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: <Widget>[
-    //       Padding(
-    //         padding: const EdgeInsets.fromLTRB(
-    //           spacing_standard_new,
-    //           spacing_middle,
-    //           spacing_standard_new,
-    //           spacing_middle,
-    //         ),
-    //         child: text(
-    //           sh_lbl_payment_details,
-    //           textColor: sh_textColorPrimary,
-    //           fontSize: textSizeLargeMedium,
-    //           fontFamily: fontMedium,
-    //         ),
-    //       ),
-    //       Divider(
-    //         height: 1,
-    //         color: sh_view_color,
-    //       ),
-    //       Padding(
-    //         padding: const EdgeInsets.fromLTRB(
-    //           spacing_standard_new,
-    //           spacing_middle,
-    //           spacing_standard_new,
-    //           spacing_middle,
-    //         ),
-    //         child: Column(
-    //           children: <Widget>[
-    //             SizedBox(
-    //               height: spacing_standard,
-    //             ),
-    //             Row(
-    //               children: <Widget>[
-    //                 text(sh_lbl_shipping_charge),
-    //                 text(
-    //                   Provider.of<OrdersProvider>(context, listen: false)
-    //                       .getShippingMethod()
-    //                       .price
-    //                       .toCurrencyFormat(),
-    //                   textColor: sh_colorPrimary,
-    //                   fontFamily: fontMedium,
-    //                 ),
-    //               ],
-    //             ),
-    //             SizedBox(
-    //               height: spacing_standard,
-    //             ),
-    //             Row(
-    //               children: <Widget>[
-    //                 text(sh_lbl_total_amount),
-    //                 text(
-    //                   Provider.of<OrdersProvider>(context, listen: true)
-    //                       .getTotalPrice(),
-    //                   textColor: sh_colorPrimary,
-    //                   fontFamily: fontBold,
-    //                   fontSize: textSizeLargeMedium,
-    //                 ),
-    //               ],
-    //             ),
-    //           ],
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
 
     var addressContainer = isLoaded
         ? Container(
@@ -691,68 +605,6 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
             ),
           )
         : Container();
-
-    //! deleted
-    // var bottomButtons = Container(
-    //   height: 60,
-    //   decoration: BoxDecoration(
-    //     boxShadow: [
-    //       BoxShadow(
-    //         color: sh_shadow_color,
-    //         blurRadius: 10,
-    //         spreadRadius: 2,
-    //         offset: Offset(0, 3),
-    //       )
-    //     ],
-    //     color: sh_white,
-    //   ),
-    //   child: Row(
-    //     children: <Widget>[
-    //       Expanded(
-    //         child: Column(
-    //           crossAxisAlignment: CrossAxisAlignment.center,
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           children: <Widget>[
-    //             text(
-    //               Provider.of<OrdersProvider>(context, listen: true)
-    //                   .getTotalPrice(),
-    //               textColor: sh_textColorPrimary,
-    //               fontFamily: fontBold,
-    //               fontSize: textSizeLargeMedium,
-    //             ),
-    //             text('Order Total'),
-    //           ],
-    //         ),
-    //       ),
-    //       Expanded(
-    //         child: InkWell(
-    //           child: Container(
-    //             child: text(
-    //               sh_lbl_continue,
-    //               textColor: sh_white,
-    //               fontSize: textSizeLargeMedium,
-    //               fontFamily: fontMedium,
-    //             ),
-    //             color: sh_colorPrimary,
-    //             alignment: Alignment.center,
-    //             height: double.infinity,
-    //           ),
-    //           onTap: () {
-    //             // if (validateAddress(context)) {
-    //             //   Navigator.pushReplacement(
-    //             //     context,
-    //             //     MaterialPageRoute(
-    //             //       builder: (BuildContext context) => ShPaymentsScreen(),
-    //             //     ),
-    //             //   );
-    //             //   // ShPaymentsScreen().launch(context);
-    //             // }
-    //           },
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
 
     var submitOrder = list.length > 0
         ? SizedBox(
@@ -809,6 +661,27 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            buildWholesale(
+              title: "Ship Date",
+              txtController: dateTimeController,
+              keyBType: TextInputType.datetime,
+              icon: Icons.calendar_today_outlined,
+              isDateTime: true,
+            ),
+            buildWholesale(
+              title: "Email",
+              txtController: emailController,
+              keyBType: TextInputType.emailAddress,
+              icon: Icons.email_outlined,
+              isDateTime: false,
+            ),
+            buildWholesale(
+              title: "Phone",
+              txtController: phoneController,
+              keyBType: TextInputType.phone,
+              icon: Icons.phone_outlined,
+              isDateTime: false,
+            ),
             Stack(
               alignment: Alignment.bottomLeft,
               children: <Widget>[
@@ -853,6 +726,68 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildWholesale({
+    required String title,
+    required TextEditingController txtController,
+    required TextInputType keyBType,
+    required IconData icon,
+    required bool isDateTime,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          text(
+            title,
+            fontSize: textSizeNormal,
+            fontFamily: fontSemibold,
+          ),
+          TextField(
+            controller: txtController,
+            keyboardType: keyBType,
+            decoration: InputDecoration(
+              suffixIcon: Icon(
+                icon,
+              ),
+            ),
+            onTap: isDateTime
+                ? () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(), //get today's date
+                      firstDate: DateTime
+                          .now(), //DateTime.now() - not to allow to choose before today.
+                      lastDate: DateTime(2100),
+                    );
+                    if (pickedDate != null) {
+                      log(
+                        pickedDate,
+                      ); //get the picked date in the format => 2022-07-04 00:00:00.000
+                      String formattedDate = DateFormat('yyyy-MM-dd').format(
+                        pickedDate,
+                      ); // format date in required form here we use yyyy-MM-dd that means time is removed
+                      log(
+                        formattedDate,
+                      ); //formatted date output using intl package =>  2022-07-04
+                      //You can format date as per your need
+
+                      setState(() {
+                        txtController.text =
+                            formattedDate; //set foratted date to TextField value.
+                      });
+                    } else {
+                      print("Date is not selected");
+                    }
+                  }
+                : null,
+          ),
+        ],
       ),
     );
   }

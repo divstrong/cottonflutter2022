@@ -8,7 +8,7 @@ import 'package:nb_utils/src/extensions/string_extensions.dart';
 class OrdersProvider extends ChangeNotifier {
   List<ShOrder> _orderList = [];
   double _totalPrice = 0.00;
-  bool isLoggedIn = false;
+
   // Standard Delivery $5.99 / Delivery in 5 to 7 business Days
   // Express Delivery $19.99 / Delivery in 1 business Days
   ShippingMethod _shippingMethod = ShippingMethod(
@@ -178,7 +178,6 @@ class OrdersProvider extends ChangeNotifier {
   resetOrdersProvider() {
     this._orderList = [];
     this._totalPrice = 0.00;
-    this.isLoggedIn = false;
     this._shippingMethod = ShippingMethod(
       id: 'notset',
       name: 'Not Set',

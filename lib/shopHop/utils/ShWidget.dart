@@ -1,7 +1,6 @@
 import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/main/utils/common.dart';
 import 'package:cotton_natural/main/utils/dots_indicator/dots_indicator.dart';
-import 'package:cotton_natural/shopHop/controllers/AuthController.dart';
 import 'package:cotton_natural/shopHop/providers/OrdersProvider.dart';
 import 'package:cotton_natural/shopHop/screens/ShHomeScreen.dart';
 import 'package:cotton_natural/shopHop/screens/ShProductDetail.dart';
@@ -43,7 +42,7 @@ class ProductHorizontalList extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
 
     return Container(
-      height: 255,
+      height: 265,
       margin: EdgeInsets.only(top: spacing_standard_new),
       child: (list.length > 0)
           ? ListView.builder(
@@ -71,7 +70,7 @@ class ProductHorizontalList extends StatelessWidget {
                         networkCachedImage(
                           list[index].images[0].src,
                           aWidth: double.infinity,
-                          aHeight: 200,
+                          aHeight: 195,
                           fit: BoxFit.cover,
                         ),
                         SizedBox(height: spacing_standard),
@@ -82,27 +81,12 @@ class ProductHorizontalList extends StatelessWidget {
                             children: <Widget>[
                               Expanded(
                                 child: text(
-                                  list[index].name,
+                                  list[index].name.capitalizeFirstLetter(),
                                   maxLine: 2,
                                   textColor: sh_textColorPrimary,
                                   fontFamily: fontMedium,
                                 ),
                               ),
-                              // Row(
-                              //   crossAxisAlignment: CrossAxisAlignment.center,
-                              //   children: <Widget>[
-                              //     SizedBox(width: spacing_control_half),
-                              //     text(
-                              //       list[index]
-                              //           .price
-                              //           .toString()
-                              //           .toCurrencyFormat(),
-                              //       textColor: sh_colorPrimary,
-                              //       fontFamily: fontMedium,
-                              //       fontSize: textSizeMedium,
-                              //     ),
-                              //   ],
-                              // )
                             ],
                           ),
                         ),
@@ -601,11 +585,6 @@ Widget cartIcon(context, cartCount) {
       ],
     ),
     onTap: () async {
-      if (Provider.of<OrdersProvider>(context, listen: false).isLoggedIn ==
-          false) {
-        Provider.of<OrdersProvider>(context, listen: false).isLoggedIn =
-            await AuthController.isLoginUser();
-      }
       // if(Provider.of<OrdersProvider>(context, listen: false).isLoggedIn == false){
       //   toasty(context, 'Please Login First');
       // }else

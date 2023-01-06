@@ -1,23 +1,19 @@
-import 'package:cotton_natural/shopHop/controllers/AuthController.dart';
-import 'package:cotton_natural/shopHop/screens/MaintenanceScreen.dart';
-import 'package:cotton_natural/shopHop/screens/ShSignIn.dart';
 import 'package:flutter/material.dart';
 
 enum RequestType { Post, Get, PostWithAuth, GetWithAuth }
 
 class ApiUtil {
-
   /*----------------- Fpr development server -----------------*/
-  static const String IP_ADDRESS = "staging.cottonnatural.com";/*192.168.1.105 10.0.2.2/cottonlaravel/public cottonlaravel-o7458.ondigitalocean.app*/
+  static const String IP_ADDRESS =
+      "staging.cottonnatural.com"; /*192.168.1.105 10.0.2.2/cottonlaravel/public cottonlaravel-o7458.ondigitalocean.app*/
 
   static const String PORT = "80";
   static const String API_VERSION = "v1";
   static const String USER_MODE = "user/";
   static const String BASE_URL = "https://" + IP_ADDRESS + "/";
 
-
-  static const String MAIN_API_URL_DEV = BASE_URL + "api/" + API_VERSION + "/" + USER_MODE;
-
+  static const String MAIN_API_URL_DEV =
+      BASE_URL + "api/" + API_VERSION + "/" + USER_MODE;
 
   //Main Url for production and testing
   static const String MAIN_API_URL = MAIN_API_URL_DEV;
@@ -27,16 +23,15 @@ class ApiUtil {
   static const int ERROR_CODE = 400;
   static const int UNAUTHORIZED_CODE = 401;
 
-
   //Custom codes
   static const int INTERNET_NOT_AVAILABLE_CODE = 500;
   static const int SERVER_ERROR_CODE = 501;
   static const int MAINTENANCE_CODE = 503;
 
-
   //------------------ Header ------------------------------//
 
-  static Map<String, String> getHeader({RequestType requestType = RequestType.Get, String token = ""}) {
+  static Map<String, String> getHeader(
+      {RequestType requestType = RequestType.Get, String token = ""}) {
     switch (requestType) {
       case RequestType.Post:
         return {
@@ -72,14 +67,11 @@ class ApiUtil {
   //Maintenance
   static const String MAINTENANCE = "maintenance/";
 
-
   //App Data
   static const String CONTACT_US = "contact_us/";
 
-
   //User
   static const String USER = "user/";
-
 
   //Auth
   static const String AUTH_LOGIN = "login/";
@@ -118,32 +110,30 @@ class ApiUtil {
       case ERROR_CODE:
         return;
       case UNAUTHORIZED_CODE:
-        await AuthController.logoutUser();
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => ShSignIn(),
-          ),
-          (route) => false,
-        );
+        // await AuthController.logoutUser();
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (BuildContext context) => ShSignIn(),
+        //   ),
+        //   (route) => false,
+        // );
         return;
       case MAINTENANCE_CODE:
       case SERVER_ERROR_CODE:
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => MaintenanceScreen(),
-          ),
-          (route) => false,
-        );
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (BuildContext context) => MaintenanceScreen(),
+        //   ),
+        //   (route) => false,
+        // );
         return;
     }
     return;
   }
 
-  static bool isResponseSuccess(int responseCode){
-    return responseCode>=200 && responseCode<300;
+  static bool isResponseSuccess(int responseCode) {
+    return responseCode >= 200 && responseCode < 300;
   }
-
-
 }

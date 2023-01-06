@@ -60,6 +60,14 @@ class CategoryController with ChangeNotifier {
     return _subCategoryList;
   }
 
+  static String? decodeCategoriesNames(String? catName) {
+    switch (catName) {
+      case "Big &amp; Tall":
+        return "Big-Tall";
+    }
+    return catName;
+  }
+
   List<WooProductCategory> get getAllCategory => _categoryList;
   List<WooProductCategory> get getMainCategory => _mainCategoryList;
 }

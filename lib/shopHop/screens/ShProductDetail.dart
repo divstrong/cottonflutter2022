@@ -1,6 +1,5 @@
 import 'package:cotton_natural/main/utils/AppWidget.dart';
 import 'package:cotton_natural/main/utils/common.dart';
-import 'package:cotton_natural/shopHop/controllers/AuthController.dart';
 import 'package:cotton_natural/shopHop/models/ShReview.dart';
 import 'package:cotton_natural/shopHop/providers/OrdersProvider.dart';
 import 'package:cotton_natural/shopHop/utils/ShColors.dart';
@@ -55,8 +54,8 @@ class ShProductDetailState extends State<ShProductDetail> {
     var sliderImages = Container(
       // height: 380,
       constraints: BoxConstraints(
-        minHeight: 380,
-        maxHeight: 580,
+        minHeight: 250,
+        maxHeight: 550,
       ),
       child: PageView.builder(
         itemCount: widget.product!.images.length,
@@ -165,6 +164,7 @@ class ShProductDetailState extends State<ShProductDetail> {
                     fontSize: textSizeLargeMedium,
                   )
                 : SizedBox(),
+            SizedBox(height: spacing_standard),
             Container(
               height: 50,
               child: sizes,
@@ -185,12 +185,6 @@ class ShProductDetailState extends State<ShProductDetail> {
         children: <Widget>[
           InkWell(
             onTap: () async {
-              if (Provider.of<OrdersProvider>(context, listen: false)
-                      .isLoggedIn ==
-                  false) {
-                Provider.of<OrdersProvider>(context, listen: false).isLoggedIn =
-                    await AuthController.isLoginUser();
-              }
               if (selectedSize < 0) {
                 toasty(context, 'Please Select A Size');
               } else {
@@ -236,60 +230,63 @@ class ShProductDetailState extends State<ShProductDetail> {
     );
 
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.bottomLeft,
-        children: <Widget>[
-          DefaultTabController(
-            length: 1,
-            child: NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                changeStatusColor(
-                  innerBoxIsScrolled ? Colors.white : Colors.transparent,
-                );
-                return <Widget>[
-                  SliverAppBar(
-                    expandedHeight: 620,
-                    floating: false,
-                    pinned: true,
-                    titleSpacing: 0,
-                    backgroundColor: sh_white,
-                    iconTheme: IconThemeData(color: sh_textColorPrimary),
-                    actionsIconTheme: IconThemeData(color: sh_textColorPrimary),
-                    actions: <Widget>[
-                      cartIcon(
-                        context,
-                        Provider.of<OrdersProvider>(context, listen: true)
-                            .getOrderCount(),
+      body: SafeArea(
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: <Widget>[
+            DefaultTabController(
+              length: 1,
+              child: NestedScrollView(
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  changeStatusColor(
+                    innerBoxIsScrolled ? Colors.white : Colors.transparent,
+                  );
+                  return <Widget>[
+                    SliverAppBar(
+                      expandedHeight: 620,
+                      floating: false,
+                      pinned: true,
+                      titleSpacing: 0,
+                      backgroundColor: sh_white,
+                      iconTheme: IconThemeData(color: sh_textColorPrimary),
+                      actionsIconTheme:
+                          IconThemeData(color: sh_textColorPrimary),
+                      actions: <Widget>[
+                        cartIcon(
+                          context,
+                          Provider.of<OrdersProvider>(context, listen: true)
+                              .getOrderCount(),
+                        ),
+                      ],
+                      title: text(
+                        innerBoxIsScrolled ? widget.product!.name : "",
+                        textColor: sh_textColorPrimary,
+                        fontSize: textSizeNormal,
+                        fontFamily: fontMedium,
                       ),
-                    ],
-                    title: text(
-                      innerBoxIsScrolled ? widget.product!.name : "",
-                      textColor: sh_textColorPrimary,
-                      fontSize: textSizeNormal,
-                      fontFamily: fontMedium,
-                    ),
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Column(
-                        children: <Widget>[
-                          sliderImages,
-                          productInfo,
-                        ],
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Column(
+                          children: <Widget>[
+                            sliderImages,
+                            productInfo,
+                          ],
+                        ),
+                        collapseMode: CollapseMode.pin,
                       ),
-                      collapseMode: CollapseMode.pin,
                     ),
-                  ),
-                ];
-              },
-              body: TabBarView(
-                children: [
-                  descriptionTab,
-                ],
+                  ];
+                },
+                body: TabBarView(
+                  children: [
+                    descriptionTab,
+                  ],
+                ),
               ),
             ),
-          ),
-          bottomButtons
-        ],
+            bottomButtons
+          ],
+        ),
       ),
     );
   }

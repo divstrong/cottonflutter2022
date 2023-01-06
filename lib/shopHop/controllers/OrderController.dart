@@ -6,12 +6,10 @@ import 'package:cotton_natural/shopHop/api/api_util.dart';
 import 'package:cotton_natural/shopHop/models/Order.dart';
 import 'package:cotton_natural/shopHop/utils/InternetUtils.dart';
 
-import 'AuthController.dart';
-
 class OrderController {
   //--------------------- get Order List ---------------------------------------------//
   static Future<MyResponse<List<Order>>> getOrderList() async {
-    String token = await AuthController.getApiToken() ?? '';
+    String token = '';
     String url = ApiUtil.MAIN_API_URL + ApiUtil.ORDER;
     Map<String, String> headers =
         ApiUtil.getHeader(requestType: RequestType.GetWithAuth, token: token);
@@ -44,7 +42,7 @@ class OrderController {
   //------------------------ Get single order -----------------------------------------//
   static Future<MyResponse<Order_data>> getSingleOrder(int? id) async {
     //Getting User Api Token
-    String token = await AuthController.getApiToken() ?? '';
+    String token = '';
     String url = ApiUtil.MAIN_API_URL + ApiUtil.ORDER_DETAIL + id!.toString();
     Map<String, String> headers =
         ApiUtil.getHeader(requestType: RequestType.GetWithAuth, token: token);
