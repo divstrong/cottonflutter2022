@@ -63,13 +63,11 @@ class OrdersProvider extends ChangeNotifier {
   }
 
   bool isProductAlreadyAdded(int? productId, String? size) {
-    bool res = false;
-    _orderList.forEach((element) {
-      if (element.item!.id.toInt() == productId && element.item!.size == size)
-        res = true;
-    });
-
-    return res;
+    for (ShOrder order in _orderList) {
+      if (order.item!.id.toInt() == productId && order.item!.size == size)
+        return true;
+    }
+    return false;
   }
 
   void increaseProductCount(int? productId, String? size) {
@@ -175,7 +173,7 @@ class OrdersProvider extends ChangeNotifier {
     return count;
   }
 
-  resetOrdersProvider() {
+  void resetOrdersProvider() {
     this._orderList = [];
     this._totalPrice = 0.00;
     this._shippingMethod = ShippingMethod(

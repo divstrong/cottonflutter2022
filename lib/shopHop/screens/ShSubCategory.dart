@@ -33,21 +33,29 @@ class ShSubCategoryState extends State<ShSubCategory> {
 
   List<WooProduct> wooProducts = [];
 
+  bool isBusy = true;
+
   @override
   void initState() {
     super.initState();
     fetchData();
   }
 
-  fetchData() async {
+  void fetchData() async {
+    isBusy = true;
+    setState(() {});
+
     wooProducts =
         Provider.of<ProductController>(context, listen: false).getAllProducts;
 
     subCategoryList = Provider.of<CategoryController>(context, listen: false)
         .fetchSubCategory(category!.id);
 
-    subCatWooProducts = Provider.of<ProductController>(context, listen: false)
-        .getCategoryProducts(subCategoryList: subCategoryList);
+    subCatWooProducts =
+        await Provider.of<ProductController>(context, listen: false)
+            .getCategoryProducts(subCategoryList: subCategoryList);
+
+    isBusy = false;
     setState(() {});
   }
 
@@ -72,62 +80,66 @@ class ShSubCategoryState extends State<ShSubCategory> {
           fontSize: textSizeNormal,
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: 120,
-              margin: EdgeInsets.only(top: spacing_standard_new),
-              padding: EdgeInsets.symmetric(vertical: 15),
-              alignment: Alignment.topLeft,
-              child: ListView.builder(
-                itemCount: subCategoryList.length,
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.only(
-                  left: spacing_standard,
-                  right: spacing_standard,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ShViewAllProductScreen(
-                            subCatId: subCategoryList[index].id,
-                            subCatName: subCategoryList[index].name,
-                            mProductModel:
-                                subCatWooProducts[subCategoryList[index].id]!,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(
+      body: (isBusy)
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: 120,
+                    margin: EdgeInsets.only(top: spacing_standard_new),
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    alignment: Alignment.topLeft,
+                    child: ListView.builder(
+                      itemCount: subCategoryList.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.only(
                         left: spacing_standard,
                         right: spacing_standard,
                       ),
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.all(spacing_middle),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.black87,
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ShViewAllProductScreen(
+                                  subCatId: subCategoryList[index].id,
+                                  subCatName: subCategoryList[index].name,
+                                  mProductModel: subCatWooProducts[
+                                      subCategoryList[index].id]!,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              left: spacing_standard,
+                              right: spacing_standard,
                             ),
-                            child: Image.network(
-                              'images/shophop/sub_cat/${widget.category!.slug}/${subCategoryList[index].slug}.png',
-                              width: 25,
-                              color: sh_white,
-                            ),
-                          ),
-                          SizedBox(height: spacing_control),
-                          text(
-                            subCategoryList[index].name,
-                            textColor: Colors.black87,
-                            fontFamily: fontMedium,
-                          )
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.all(spacing_middle),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black87,
+                                  ),
+                                  child: Image.asset(
+                                    'images/shophop/sub_cat/${widget.category!.slug}/${subCategoryList[index].slug}.png',
+                                    width: 25,
+                                    color: sh_white,
+                                  ),
+                                ),
+                                SizedBox(height: spacing_control),
+                                text(
+                                  subCategoryList[index].name,
+                                  textColor: Colors.black87,
+                                  fontFamily: fontMedium,
+                                )
                         ],
                       ),
                     ),

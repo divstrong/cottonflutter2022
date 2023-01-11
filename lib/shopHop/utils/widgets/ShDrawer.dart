@@ -93,11 +93,9 @@ class _customDrawerState extends State<customDrawer> {
                   callback: () async {
                     const String url =
                         'https://www.cottonnatural.com/shipping-and-handling/';
-                    await launch(
-                      url,
-                      forceSafariVC: true,
-                      forceWebView: false,
-                      enableJavaScript: true,
+                    await launchUrl(
+                      Uri.parse(url),
+                      mode: LaunchMode.externalApplication,
                     );
                   },
                 ),
@@ -107,25 +105,9 @@ class _customDrawerState extends State<customDrawer> {
                   callback: () async {
                     const String url =
                         'https://www.cottonnatural.com/warranty-and-return/';
-                    await launch(
-                      url,
-                      forceSafariVC: true,
-                      forceWebView: false,
-                      enableJavaScript: true,
-                    );
-                  },
-                ),
-                SizedBox(height: 10),
-                getDrawerItem(
-                  'Wholesale',
-                  callback: () async {
-                    const String url =
-                        'https://cottonlaravel-o7458.ondigitalocean.app/wholesale';
-                    await launch(
-                      url,
-                      forceSafariVC: true,
-                      forceWebView: false,
-                      enableJavaScript: true,
+                    await launchUrl(
+                      Uri.parse(url),
+                      mode: LaunchMode.externalApplication,
                     );
                   },
                 ),
@@ -134,12 +116,10 @@ class _customDrawerState extends State<customDrawer> {
                   'Retail Locations',
                   callback: () async {
                     const String url =
-                        'https://cottonlaravel-o7458.ondigitalocean.app/retail';
-                    await launch(
-                      url,
-                      forceSafariVC: true,
-                      forceWebView: false,
-                      enableJavaScript: true,
+                        'https://www.cottonnatural.com/retail-locations/';
+                    await launchUrl(
+                      Uri.parse(url),
+                      mode: LaunchMode.externalApplication,
                     );
                   },
                 ),

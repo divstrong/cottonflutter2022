@@ -140,12 +140,6 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    // padding:
-                                    //     EdgeInsets.all(spacing_control_half),
-                                    // decoration: BoxDecoration(
-                                    //   shape: BoxShape.circle,
-                                    //   color: sh_textColorPrimary,
-                                    // ),
                                     child: Image.asset(
                                       'images/shophop/cat/${list[index].slug}.png',
                                       width: 40,

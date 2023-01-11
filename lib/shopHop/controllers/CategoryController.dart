@@ -19,7 +19,9 @@ class CategoryController with ChangeNotifier {
     _categoryList = [];
 
     try {
-      _categoryList = await wooCommerce.getProductCategories(perPage: 100);
+      _categoryList = (await wooCommerce.getProductCategories(perPage: 100))
+          .where((e) => (e.slug != 'sales'))
+          .toList();
       log("all category length ===>>> ${_categoryList.length}");
     } catch (e) {
       //If any server error...
@@ -36,7 +38,9 @@ class CategoryController with ChangeNotifier {
     _mainCategoryList = [];
 
     try {
-      _mainCategoryList = await wooCommerce.getProductCategories(parent: 0);
+      _mainCategoryList = (await wooCommerce.getProductCategories(parent: 0))
+          .where((e) => (e.slug != 'sales'))
+          .toList();
       log("main category length ===>>> ${_mainCategoryList.toString()}");
     } catch (e) {
       //If any server error...

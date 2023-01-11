@@ -423,22 +423,6 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.all(spacing_standard_new),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Expanded(
-                          child: text(
-                            'Items:',
-                            textColor: sh_textColorPrimary,
-                            fontSize: textSizeXNormal,
-                            fontFamily: fontBold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   Container(
                     color: sh_itemText_background,
                     margin: EdgeInsets.only(
@@ -540,11 +524,6 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
                                                         sh_textColorPrimary,
                                                     fontSize: textSizeSMedium,
                                                   ),
-                                                  // Icon(
-                                                  //   Icons.arrow_drop_down,
-                                                  //   color: sh_textColorPrimary,
-                                                  //   size: 16,
-                                                  // )
                                                 ],
                                               ),
                                             )
@@ -556,6 +535,37 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
                                 ),
                               ],
                             ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  Provider.of<OrdersProvider>(
+                                    context,
+                                    listen: false,
+                                  ).removeItemFromBasket(
+                                    productId: list[index]!.id.toInt(),
+                                    size: list[index]!.size,
+                                  );
+
+                                  orderList = Provider.of<OrdersProvider>(
+                                    context,
+                                    listen: false,
+                                  ).getOrderList();
+
+                                  list.clear();
+                                  orderList.forEach((element) {
+                                    list.add(element.item);
+                                  });
+                                  setState(() {});
+                                },
+                                icon: Icon(
+                                  Icons.delete_outline,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -646,6 +656,23 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
           )
         : SizedBox();
 
+    var itemText = Padding(
+      padding: EdgeInsets.all(spacing_standard_new),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Expanded(
+            child: text(
+              'Items:',
+              textColor: sh_textColorPrimary,
+              fontSize: textSizeXNormal,
+              fontFamily: fontBold,
+            ),
+          ),
+        ],
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: sh_white,
@@ -692,8 +719,8 @@ class ShOrderSummaryScreenState extends State<ShOrderSummaryScreen> {
                       children: <Widget>[
                         isLoaded ? addressContainer : Container(),
                         isLoaded ? billToAddressContainer : Container(),
+                        itemText,
                         cartList,
-                        // paymentDetail,
                         images.isNotEmpty
                             ? Container(
                                 decoration: BoxDecoration(

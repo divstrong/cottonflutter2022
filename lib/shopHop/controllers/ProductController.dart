@@ -40,23 +40,16 @@ class ProductController with ChangeNotifier {
     _wooProductList = pList;
   }
 
-  Map<int, List<WooProduct>> getCategoryProducts({
+  Future<Map<int, List<WooProduct>>> getCategoryProducts({
     required List<WooProductCategory> subCategoryList,
-  }) {
+  }) async {
     Map<int, List<WooProduct>> subCatWooProducts = {};
 
     for (var subCat in subCategoryList) {
-      subCatWooProducts.putIfAbsent(subCat.id!, () {
-        List<WooProduct> wooSubProducts = [];
-        for (var product in _wooProductList) {
-          for (var cats in product.categories) {
-            if (subCat.id == cats.id) {
-              wooSubProducts.add(product);
-            }
-          }
-        }
-        return wooSubProducts;
-      });
+      List<WooProduct> wooSubProducts = await wooCommerce.getProducts(
+        category: subCat.id.toString(),
+      );
+      subCatWooProducts[subCat.id!] = wooSubProducts;
     }
     return subCatWooProducts;
   }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 
 import '../../main/utils/AppWidget.dart';
+import '../providers/OrdersProvider.dart';
 import '../utils/ShColors.dart';
 import '../utils/ShConstant.dart';
 import '../utils/ShImages.dart';
 import '../utils/ShStrings.dart';
+import 'ShHomeScreen.dart';
 
 class OrderPlaced extends StatelessWidget {
   const OrderPlaced({Key? key}) : super(key: key);
@@ -63,14 +66,11 @@ class OrderPlaced extends StatelessWidget {
                     Expanded(
                       child: InkWell(
                         onTap: () async {
-                          const String url =
-                              'https://cottonlaravel-o7458.ondigitalocean.app/';
-                          await launch(
-                            url,
-                            forceSafariVC: true,
-                            forceWebView: false,
-                            enableJavaScript: true,
-                          );
+                          Provider.of<OrdersProvider>(context, listen: false)
+                              .resetOrdersProvider();
+                          ShHomeScreen(
+                            goToTabIndex: 0,
+                          ).launch(context);
                         },
                         child: Container(
                           margin: const EdgeInsets.only(
@@ -86,7 +86,7 @@ class OrderPlaced extends StatelessWidget {
                           ),
                           child: Center(
                             child: text(
-                              'Visit Website',
+                              'Continue Shopping',
                               textColor: sh_white,
                               fontSize: textSizeLargeMedium,
                               fontFamily: fontBold,
