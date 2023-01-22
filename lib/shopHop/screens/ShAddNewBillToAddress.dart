@@ -75,6 +75,8 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
         city: billProviderAddress.city,
         address: billProviderAddress.address,
         country: billProviderAddress.country,
+        email: billProviderAddress.email,
+        phone: billProviderAddress.phone,
       ) ==
       ShAddressModel.empty();
 
@@ -88,6 +90,8 @@ class ShAddNewBillToAddressState extends State<ShAddNewBillToAddress> {
         city: cityCont.text,
         address: addressCont.text,
         country: countryCont.text,
+        email: '',
+        phone: '',
       );
       await AddressController.cacheBillToAddress(newAddress);
       Provider.of<OrdersProvider>(context, listen: false)

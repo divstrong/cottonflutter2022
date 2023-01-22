@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../main/utils/AppWidget.dart';
 import '../providers/OrdersProvider.dart';
@@ -46,13 +48,63 @@ class OrderPlaced extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              text(
-                sh_order_Placed_body,
-                textColor: sh_textColorSecondary,
-                isCentered: true,
-                maxLine: 5,
-                fontSize: textSizeNormal,
-                fontFamily: fontMedium,
+              RichText(
+                textAlign: TextAlign.center,
+                maxLines: 6,
+                text: TextSpan(
+                  text: sh_order_Placed_body,
+                  style: TextStyle(
+                    color: sh_textColorSecondary,
+                    fontSize: textSizeNormal,
+                    fontFamily: fontMedium,
+                    letterSpacing: 0.5,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Instagram',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: new TapGestureRecognizer()
+                        ..onTap = () async {
+                          const String url =
+                              'https://www.instagram.com/cottonnatural/';
+                          bool isSuccess = await launchUrl(
+                            Uri.parse(url),
+                            mode: LaunchMode.externalApplication,
+                          );
+                          if (!isSuccess) {
+                            toasty(context, 'URL could not be open');
+                          }
+                        },
+                    ),
+                    TextSpan(text: ' and '),
+                    TextSpan(
+                      text: 'Facebook',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: new TapGestureRecognizer()
+                        ..onTap = () async {
+                          const String url =
+                              'https://www.facebook.com/CottonNatural1/';
+                          bool isSuccess = await launchUrl(
+                            Uri.parse(url),
+                            mode: LaunchMode.externalApplication,
+                          );
+                          if (!isSuccess) {
+                            toasty(context, 'URL could not be open');
+                          }
+                        },
+                    ),
+                    TextSpan(text: '.'),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
               ),
               Image.asset(
                 ic_app_icon,

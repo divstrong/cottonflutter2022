@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "933051193347",
+    "project_id": "cotton-natural-copy",
+    "storage_bucket": "cotton-natural-copy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933051193347:android:729934c1414d49031f9636",
+        "android_client_info": {
+          "package_name": "com.cottonnatural.cottonnatural"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933051193347-cfdn7adfpcghapq454unrd81leen8s5f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIiaEqerYR2l8ioYpWpKduBPMOyLWrzIY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "933051193347-cfdn7adfpcghapq454unrd81leen8s5f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "933051193347-etcg4m9nhoe9rogop887p3qcskvfa59b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cottonnatural.cottonnatural"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

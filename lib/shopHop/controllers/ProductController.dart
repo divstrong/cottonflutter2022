@@ -36,7 +36,7 @@ class ProductController with ChangeNotifier {
   Future<void> fetchWooProducts() async {
     // await wooCommerce.createOrder();
     List<WooProduct> pList = [];
-    pList = await wooCommerce.getProducts(perPage: 100);
+    pList = await wooCommerce.getProducts(perPage: 10);
     _wooProductList = pList;
   }
 
@@ -54,11 +54,12 @@ class ProductController with ChangeNotifier {
     return subCatWooProducts;
   }
 
-  List<WooProduct> get getAllProducts => _wooProductList;
-
-  Future<List<String>> loadBanners() async {
-    List<String> banner = [];
-
-    return banner;
+  Future<List<WooProduct>> searchProduct({
+    required String searchText,
+    int? page,
+  }) async {
+    return await wooCommerce.getProducts(page: page, search: searchText);
   }
+
+  List<WooProduct> get getAllProducts => _wooProductList;
 }

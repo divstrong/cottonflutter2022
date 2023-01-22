@@ -10,12 +10,14 @@ import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../shopHop/utils/ShConstant.dart';
 import 'AppColors.dart';
 import 'AppConstant.dart';
 import 'lat_lang_geohash.dart';
 
 Widget text(
   String? text, {
+  Key? key,
   var fontSize = textSizeLargeMedium,
   Color? textColor,
   var fontFamily,
@@ -29,6 +31,7 @@ Widget text(
 }) {
   return Text(
     textAllCaps ? text!.toUpperCase() : text!,
+    key: key,
     textAlign: isCentered ? TextAlign.center : TextAlign.start,
     maxLines: isLongText ? null : maxLine,
     overflow: TextOverflow.ellipsis,

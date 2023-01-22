@@ -3,11 +3,13 @@ import 'package:cotton_natural/shopHop/controllers/CategoryController.dart';
 import 'package:cotton_natural/shopHop/controllers/ProductController.dart';
 import 'package:cotton_natural/shopHop/models/ShAddress.dart';
 import 'package:cotton_natural/shopHop/providers/OrdersProvider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'firebase_options.dart';
 import 'main/store/AppStore.dart';
 import 'shopHop/screens/ShHomeScreen.dart';
 import 'shopHop/utils/ShStrings.dart';
@@ -15,10 +17,7 @@ import 'shopHop/utils/ShStrings.dart';
 AppStore appStore = AppStore();
 
 void main() async {
-  await Hive.initFlutter();
-  Hive.registerAdapter(ShAddressModelAdapter());
-
-  await Hive.openBox(sh_cached_data);
+  await initPrefs();
 
   runApp(
     MultiProvider(
@@ -36,6 +35,19 @@ void main() async {
       child: const MyApp(),
     ),
   );
+}
+
+Future<void> initPrefs() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(ShAddressModelAdapter());
+
+  await Hive.openBox(sh_cached_data);
 }
 
 class MyApp extends StatelessWidget {

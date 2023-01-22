@@ -1,0 +1,64 @@
+# Automatically generated on 2023-01-13 UTC from https://codemagic.io/app/63bfa7c454eef88d78943166/settings
+# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
+
+workflows:
+  default-workflow:
+    name: Default Workflow
+    max_build_duration: 60
+    environment:
+      vars:
+        APP_STORE_CONNECT_ISSUER_ID: 8675c21b-851f-4bdd-9277-48b1294294b5
+        APP_STORE_CONNECT_KEY_IDENTIFIER: 739L4KNMB3
+        APP_STORE_CONNECT_PRIVATE_KEY: Encrypted(Z0FBQUFBQmp3YlpLTGpFZnRFQkEwRWxudjdYelAzUDl3U25wNW0wUkd4cTJvS0t5RHd2S1BDMnY0VGRUSDZDQnEteUl0Y3VhWllkYk5NNVdhLXV3TUZNSzBtRW1hWmZ3c2Y5cE13SVhjT25NaUxLd1lhbUlMdHdOc2w0OTRWLTAxUTI5RUoya0FmX1Zwd2wyQXZFekhGYzc4d2NMZ1BRUk9WRzRfUVJBXzFja21sT0FXRUNtSmg4M3VtY2FwQ3BXY3ZkbTd2RVNMWjhONkcxRnRKUW5IbVpOMk1Zbmt6Ync5Qy15bHNucWdsN1B5R1ZuX2tXa1RzUmIycklMVWl4djMtREJxTUZPYms2RDRkTXJxMmlXb3YxTmNpZGpwMld4QjN2aTVmaDZQd0xHTHpxZE41R3RMUXJMeFo0cTVKWHlUX29ZN2RaTmhjUGkydjZCWGtob1M3WU52VW43QXZobGdhb2xuMHJiWEFZblpuRE05UDdUcUZ0RlZVUXNfbzItUGZxaDF0cmN1eGZtRlp6YkVxREFQQmlyM0lRNXpGeFJnVFZhd0JDOWgxSW5ISng4TVZrWmpPYz0=)
+        CERTIFICATE_PRIVATE_KEY: Encrypted(Z0FBQUFBQmp3YlpKNDRKNDgtNGRiakNjWWFISWtneG1KSmxSaW43Vko0cHFtRzZvMjI1NzhCTFhVcnZMNy1WZlhXYUdTTXFYV24zZVlqTlhMTU5Fc1d2eWFwZmRoeF9xb2hlc2pEWmVETHhUYUdfYm9fbDFUeklnSDFiQnZDLUZsOHN2LUdIWDRNRVdRWG5kZEZuTHAxOFdWV0stbDRZM0ZrMVkwbnFvaXQ2MU9Eb211U05vdEQtckVxMVJuLXlPMXNKS0hWVzNJVXFpTUxCdGc0SEpQeDliUVRIWWN4YmZrOTI2VWhhbll6cEdfSzRYdHcyLWJBSXhlR3RiLXdwb05PdU1vdF9lU2h1blFTeTVyWldXLVRZMHZEV3dtdWVvb2NOT0d3NXdKM05jWVVpQk01OU9FM0VsT3ktU1JZaWRVT3dHVE1CS2RwZUZnalU5ZVpWVzYxTG5lT29uQjZpaUdrWGZPX3puRG9RWlB5ME1ZRFBtU2dVc3RfN09MUW9ORlFyM3ROSFBnanhab0M1Snp5bjhqV0FwalptVUx5VUV0OTJxSjFGeEl4WkVLZjl5OHhsZjVVNDZiRG5HRzhjUGxDS1V2akpfVHhYSzRUY1JMb0hTR0tzSTVUTnZUZ3UwdmpYNWdla3M3eURGRlZkR1VJRHlBZl9NYld6T0Z4dWU5RGl0Y3NYelNZNnZsNHJoWTk2c19ZZmhzS2tNZ3o0MnpydUJ2ZVJUcXVRUm96dUREUTRXZ3VfT2ZlV3lqVEJ2UDlaZmczRFlSa0I1N3dHMEJLazhpS3FhaGw2LWlBSmh2RWY3bmV5UkZNemtESlRXSHFhalpzaGJpUjIxc0pMTFljQ1FVazg4S01WR0pUaVMwWVZBV0VlcXFFeF9LZmF4MlZWc3k2RHZtN3U3ck4weEFLVk1pOHhRZHZpNzA3VUlVNUl5YXV5NmN4eVAxY1FlWmZFa3pHY1hTNENlcjU4RTR3SXRhRl96WFJvdWhBWWJLQ2xoN1M2aS1YeDhfbXF3b09XZEdlYzFwbjl0RUdhT2FBUTNaazV3Rk1OcFlCRzgxUFdCbnkxS3ZnSHVIaTNzVE5KV3RHekZhbEJCSURVcHpPTHhSWldianlaWkdubGN3a0hLZkkxQkF5VDlmVklwa1BvZXl1Z0xvZ1ZvZnFpSmtYekJYb3pqMzgwSnhjSy1QZWY0M0FYekpBRHJMYWttS1NkR2Rnc2JPX29SQV9wUXFBNnhQRVVCZDE2Y01XU1pEdnNvZ0xIVGI4OU9qT25kaEtnem54cDFreWd1bGNZbXBtWDM0WkFLaktqN2tIdjJLLU5rcjNPMFgxVXpfdkJ1cUt0bW1yQ0ptU0hOd3lWVmRKT19PcGg3dHd2WVhyeGs5a1RqQVhlSXRMQ3hjbGZudHY5aFphSDNQT0g1X2JSaU5kcURkOWFReXJOY1dKSnpEVks2ekt4QnppVURKeTFCdFRHZHRhcHNYajVYY2NuRm5JNjlseVVLUUk4cXJ5R21VTFliS1BlMzZhLWQ0NEdkRTd3WENMYkI2eHJFTDRKUXJhbUtZMXYyWHpqRWJiRlFXTW1jdWd1bTdLOF9sV1JoSXdhN0swR0VlUGRSM2NZTHpXU3lYQlg5WTdiVmdrZlR0c1F0SE1ZejNXamJvemlRdUZpVTlwc0w4cWtNTEhEMjJBNlV0SHVFR083ZEZvSksyM210a3E5d1pETk5CajVTLUt3VzczVXluTTFoSklialpLQXpLYWRQMEVCdWpDcUpLN0ljUVp3TlZGLUNCQkd1enV5M2NqcUViUkxvMGgtWnh3VWZDMzIzSlh5d3J0MUVvb2lNUFNWYm5VTFcyMEJ4Nm03R0J0Z3l6dkJNVzU0YXcwQVZnLTNVRWZDOGlNZHFxR2tSWWNUVG1keTcxd2hGWUtCTzZCTDlYeUhEM0dRN3RRcGlaeVdtbnFCUTA0RE1PdkprYWtwbFZSWUlickg2SXpIbnZWSmFLYXpINndtQjJ3cGQ5WGxhUS1fUFZTRERrUFFLRDE5MUFYRlhDbXV3QWhjSE9CMUc5alpjRnF1VTF6dko0RWstMmlRbVVUT1BBSUstWURCd2wxRXdXbUhLd3FTRk8tS1htUFdDM1lldWJHWUt5VW5vRlZCUDQtQnhXem5Xc2dpaVh3WXNnNW9SSkJOWFZnWkNTYUNWNzlYSWdfd1Q0VjlURS1zVkNyUjhLcFFpUFhuejhMQzl6c1pUOVgzdDZUakNGa3RIQU9DVjZxTjBVT3JnLTgwZzR5ZHdfb09EZ3FRclphLWpEUnpvdHhBLWtYZzFnY3pySWxfY29zQ3g3eElGMFJMRzdmWEJjMjVaUE9OM0R4Wm96ZGRYZDl6dHRraEhsbXFiT1hpdFNvOGQ1UFBERmpqUlFPODdLOW9MUGdYWjR5SExlQ1NfX09GWm9yNEpSREdXN2Nhb2JEejdLUkFFVmlYMkljS3BQU2ZVRGNfUi1rN3M4Y2VkSG12MkxyT3VvaThjUUN5YU5WS0NGY1Uyam02MFBIQU5neXhJT2RtUzFIWEl3bWtkSUhDbmFxT2RuZ1M3VGRCeXItREZQOEtmTzdKU2Z0WjFmT2p0Mm1WUkZ3WURQX1RRbVd3NmwzS0hqNW44cEZNNTZLSEVqVldSenVQNl9ZVmlET256UVhxWGpVQVkxbDZYbDRPQ1luNVIxZUE0TGFSZWZndThuMzZSUFVJbS1oQ0lEYnNEUWpkQUtqUklSRlVhczVLa2FFbDJ5SlVHcl9LNFhaNllvRm5ORVFXdjZva0hZbFpwRXcxYjVHNlBOOU5EeWM3MHdWeDNYQXdhcm5UN0MwdERFbERDZU5iYWpUWUhTNmZEWmRFelBrWkliZjl4elcwV3lXUVlDWjVCeUEzWDdmU2Vzb1htRmxlMFlNejNscW1kQU83bDgyamgzM0pYWkxyUDhyWEJXZS0tcUxGLUJlRG5nUzZyOXBwMWEyanBBQ3VQbjlTZUZTSmJnaW1tUG4wbDc1YUM4M01abXhjYTRxbFltUHd1SnVBLXhOTlM4RzhHa3kxenVXaXdpSkxXMXRJb2NyY2V6akdQ)
+      flutter: default
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - |
+        # set up debug keystore
+        rm -f ~/.android/debug.keystore
+        keytool -genkeypair \
+          -alias androiddebugkey \
+          -keypass android \
+          -keystore ~/.android/debug.keystore \
+          -storepass android \
+          -dname 'CN=Android Debug,O=Android,C=US' \
+          -keyalg 'RSA' \
+          -keysize 2048 \
+          -validity 10000
+      - |
+        # set up local properties
+        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
+      - flutter packages pub get
+      - flutter build appbundle --debug
+      - find . -name "Podfile" -execdir pod install \;
+      - keychain initialize
+      - app-store-connect fetch-signing-files "com.cottonnatural.cottonnatural" --type
+        IOS_APP_STORE --create
+      - keychain add-certificates
+      - xcode-project use-profiles
+      - flutter build ipa --export-options-plist ~/export_options.plist
+      - name: Emulator tests
+        script: |
+          flutter emulators --launch apple_ios_simulator
+          flutter -d iPhone test integration_test
+    artifacts:
+      - build/**/outputs/apk/**/*.apk
+      - build/**/outputs/bundle/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - '*.snap'
+      - build/windows/**/*.msix
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - zamanrshq@gmail.com
+      app_store_connect:
+        api_key: Encrypted(Z0FBQUFBQmp3YlpLUUhINzJFQ21UVE9nNy1yQm5McUxnRzRrcHRTVVh3WjRKYXFOM3M2dTgxY3p2QnZzQ1lHdWV5ajBFamNhNngxczFhYWMxZjBaY2lIOTNrb3pMeVk1RUxqYjVidXN6bGJSSjVYd1RGd19jMVBybkpjMEZVRURwYU5ZS0R0d09QRkRrYnNDVFRzYnRmNFNaVzlERnV2WjhSNGNzMkQwUEU0OWtpZ0tJZVN6cG1oNzBlM1V3Z0trdVAyb19EcWNjU1VITE9rMlNGa2doQWRwS3R6cGNMVTdHZktSYklUR1pIR3hnQU9sc1plMDU5NzktZWx0TUxHcDEtM2FqMHg0WmNyTlEzaVpRY2dpSWI1LVVSanF3SjRDUWFCU056Mm5XNW5LOUt6YzM3ZGZBQ3hfQkp3N280ZElsRW91eHVQc0JwRnVKdWdqd2JrRV9ONHdxcTVKR29kbldqS1dsTlVXR3h3UWhQMjJoYm5idkRvNVYyclhublIxNDFHc3Z3VHJDYkZyS3RxS1A3SDJHb3B6MXNMYUhjN0xGdDJxbzJ3ODlCbVAwT2E4VVk2NmZCOD0=)
+        key_id: 739L4KNMB3
+        issuer_id: 8675c21b-851f-4bdd-9277-48b1294294b5
+        submit_to_testflight: true
+        submit_to_app_store: false

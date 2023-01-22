@@ -6,6 +6,10 @@
    <application
         android:label="Cotton Natural"
         android:icon="@mipmap/launcher_icon">
+
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyDy7HBo2RAeyVdVKMU8jRvbQ6CH8pMRM5U"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

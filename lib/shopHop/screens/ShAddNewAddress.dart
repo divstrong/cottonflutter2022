@@ -37,7 +37,7 @@ class ShAddNewAddressState extends State<ShAddNewAddress> {
 
   init() async {
     providerAddress =
-        Provider.of<OrdersProvider>(context, listen: false).getAddress();
+        Provider.of<OrdersProvider>(context, listen: false).getShipAddress();
     if (isAddressProviderEmpty()) {
       providerAddress = await AddressController.getShipToFromCachedData();
       // print('loaded from shp ${providerAddress.name} ${providerAddress.email}');
@@ -74,6 +74,8 @@ class ShAddNewAddressState extends State<ShAddNewAddress> {
         city: cityCont.text,
         address: addressCont.text,
         country: countryCont.text,
+        email: '',
+        phone: '',
       );
       await AddressController.cacheShipToAddress(newAddress);
       Provider.of<OrdersProvider>(context, listen: false)

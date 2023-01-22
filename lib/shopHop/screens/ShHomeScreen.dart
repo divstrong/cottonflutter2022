@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../main/utils/AppConstant.dart';
 import 'ShOrderSummaryScreen.dart';
 
 class ShHomeScreen extends StatefulWidget {
@@ -70,6 +71,7 @@ class ShHomeScreenState extends State<ShHomeScreen> {
         ],
         title: text(
           title,
+          key: keyHomeAppBar,
           textColor: sh_textColorPrimary,
           fontFamily: fontBold,
           fontSize: textSizeNormal,

@@ -31,17 +31,34 @@ class ShProductDetailState extends State<ShProductDetail> {
   int selectedSize = -1;
   List<ShReview> list = [];
   bool autoValidate = false;
-  TextEditingController controller = TextEditingController();
+  TextEditingController tcQuantity = TextEditingController();
   bool isWished = false;
 
   @override
   void initState() {
     super.initState();
+    _fetchData();
+  }
+
+  void _fetchData() {
+    _setQuantityField();
+  }
+
+  void _setQuantityField() {
+    String? size = (widget.product!.attributes.isEmpty ||
+            (widget.product!.attributes[0].options?.isEmpty ?? true) ||
+            selectedSize < 0)
+        ? null
+        : widget.product!.attributes[0].options?[selectedSize];
+    int savedQuantity = Provider.of<OrdersProvider>(context, listen: false)
+        .getItemQty(widget.product?.id, size);
+    tcQuantity.text = (savedQuantity >= 1) ? savedQuantity.toString() : '1';
   }
 
   @override
   void dispose() {
     changeStatusColor(Colors.white);
+    tcQuantity.dispose();
     super.dispose();
   }
 
@@ -94,47 +111,78 @@ class ShProductDetailState extends State<ShProductDetail> {
       ),
     );
 
-    // ToDo return Sizes
-    var sizes = ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: widget.product!.attributes[0].options?.length,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            selectedSize = index;
-            setState(() {});
-          },
-          child: Container(
-            width: 40,
-            height: 40,
-            margin: EdgeInsets.only(right: spacing_control),
-            // padding: EdgeInsets.all(spacing_control),
-            decoration: selectedSize == index
-                ? BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    border: Border.all(color: sh_textColorPrimary, width: 0.5),
-                    color: sh_colorPrimary,
-                  )
-                : BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    border: Border.all(color: sh_textColorPrimary, width: 1),
-                    // color: sh_colorPrimary,
-                  ),
-            child: Center(
-              child: text(
-                ProductController.getSizeTypeText(
-                  widget.product!.attributes[0].options![index],
-                ),
-                textColor:
-                    selectedSize == index ? sh_white : sh_textColorPrimary,
-                fontSize: textSizeLargeMedium,
-                fontFamily: fontMedium,
-              ),
+    var sizes = (widget.product!.attributes.isEmpty)
+        ? Text(
+            sh_text_size_not_available,
+            style: TextStyle(
+              color: sh_cat_4,
+              fontFamily: fontSemibold,
+              fontSize: textSizeNormal,
             ),
-          ),
-        );
-      },
+          )
+        : ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: widget.product!.attributes[0].options?.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  selectedSize = index;
+                  _setQuantityField();
+                  setState(() {});
+                },
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  margin: EdgeInsets.only(right: spacing_control),
+                  // padding: EdgeInsets.all(spacing_control),
+                  decoration: selectedSize == index
+                      ? BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          border: Border.all(
+                            color: sh_textColorPrimary,
+                            width: 0.5,
+                          ),
+                          color: sh_colorPrimary,
+                        )
+                      : BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          border:
+                              Border.all(color: sh_textColorPrimary, width: 1),
+                          // color: sh_colorPrimary,
+                        ),
+                  child: Center(
+                    child: text(
+                      ProductController.getSizeTypeText(
+                        widget.product!.attributes[0].options![index],
+                      ),
+                      textColor: selectedSize == index
+                          ? sh_white
+                          : sh_textColorPrimary,
+                      fontSize: textSizeLargeMedium,
+                      fontFamily: fontMedium,
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+
+    var quantity = Container(
+      width: 60,
+      height: 40,
+      margin: EdgeInsets.only(right: spacing_control),
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        border: Border.all(color: sh_textColorPrimary, width: 1),
+      ),
+      child: Center(
+        child: TextField(
+          controller: tcQuantity,
+          textAlign: TextAlign.center,
+          keyboardType: TextInputType.number,
+        ),
+      ),
     );
 
     var descriptionTab = SingleChildScrollView(
@@ -155,7 +203,9 @@ class ShProductDetailState extends State<ShProductDetail> {
               ],
             ),
             SizedBox(height: spacing_large),
-            widget.product!.attributes[0].options!.isNotEmpty
+            (widget.product!.attributes.isNotEmpty &&
+                    (widget.product!.attributes[0].options?.isNotEmpty ??
+                        false))
                 ? text(
                     sh_lbl_size,
                     textAllCaps: true,
@@ -168,7 +218,20 @@ class ShProductDetailState extends State<ShProductDetail> {
             Container(
               height: 50,
               child: sizes,
-            )
+            ),
+            SizedBox(height: spacing_large),
+            text(
+              sh_lbl_quantity,
+              textAllCaps: true,
+              textColor: sh_textColorPrimary,
+              fontFamily: fontMedium,
+              fontSize: textSizeLargeMedium,
+            ),
+            SizedBox(height: spacing_standard),
+            Container(
+              height: 50,
+              child: quantity,
+            ),
           ],
         ),
       ),
@@ -185,15 +248,36 @@ class ShProductDetailState extends State<ShProductDetail> {
         children: <Widget>[
           InkWell(
             onTap: () async {
-              if (selectedSize < 0) {
+              if ((widget.product!.attributes.isNotEmpty &&
+                      (widget.product!.attributes[0].options?.isNotEmpty ??
+                          false)) &&
+                  selectedSize < 0) {
                 toasty(context, 'Please Select A Size');
-              } else {
-                String? size =
-                    widget.product!.attributes[0].options![selectedSize];
-                Provider.of<OrdersProvider>(context, listen: false)
-                    .addItemToBasket(product: widget.product, size: size);
-                toasty(context, 'Product Added To Cart');
+                return;
               }
+
+              int? quantityValue = int.tryParse(tcQuantity.text);
+              if (quantityValue == null) {
+                toasty(context, 'Invalid Quantity');
+                return;
+              }
+
+              if (quantityValue < 1) {
+                toasty(context, 'Quantity can not be less than 1');
+                return;
+              }
+
+              String? size = (widget.product!.attributes.isEmpty ||
+                      (widget.product!.attributes[0].options?.isEmpty ?? true))
+                  ? null
+                  : widget.product!.attributes[0].options?[selectedSize];
+              Provider.of<OrdersProvider>(context, listen: false)
+                  .addItemToBasket(
+                product: widget.product,
+                size: size,
+                count: quantityValue,
+              );
+              toasty(context, 'Product Added To Cart');
             },
             child: Container(
               constraints: BoxConstraints(
@@ -209,8 +293,11 @@ class ShProductDetailState extends State<ShProductDetail> {
                     offset: Offset(3, 1),
                   )
                 ],
-                color: widget.product!.attributes[0].options!.isNotEmpty &&
-                        selectedSize < 0
+                color: ((widget.product!.attributes.isNotEmpty &&
+                            (widget.product!.attributes[0].options
+                                    ?.isNotEmpty ??
+                                false)) &&
+                        selectedSize < 0)
                     ? Colors.grey
                     : sh_colorPrimary,
               ),

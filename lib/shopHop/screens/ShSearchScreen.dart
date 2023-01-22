@@ -5,7 +5,9 @@ import 'package:cotton_natural/shopHop/utils/ShConstant.dart';
 import 'package:cotton_natural/shopHop/utils/ShExtension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wp_woocommerce/models/products.dart';
+import 'package:provider/provider.dart';
 
+import '../controllers/ProductController.dart';
 import 'ShProductDetail.dart';
 
 class ShSearchScreen extends StatefulWidget {
@@ -27,9 +29,9 @@ class ShSearchScreenState extends State<ShSearchScreen> {
     super.initState();
   }
 
-  fetchData() async {
-    List<WooProduct> filteredList = [];
-
+  void fetchData() async {
+    list = await Provider.of<ProductController>(context, listen: false)
+        .searchProduct(searchText: searchText);
     setState(() {
       isEmpty = list.isEmpty;
       isLoadingMoreData = false;

@@ -51,19 +51,20 @@ class _customDrawerState extends State<customDrawer> {
               children: <Widget>[
                 Stack(
                   children: <Widget>[
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 70,
-                          right: spacing_large,
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(height: spacing_middle),
-                            Image.asset(ic_app_icon, width: 80),
-                            SizedBox(height: spacing_middle),
-                          ],
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: spacing_middle + 70.0,
+                        bottom: spacing_middle,
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Image.asset(ic_app_icon, width: 80),
+                          text(
+                            "v 1.0",
+                            textColor: sh_textColorPrimary,
+                            fontSize: textSizeSmall,
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -122,23 +123,6 @@ class _customDrawerState extends State<customDrawer> {
                       mode: LaunchMode.externalApplication,
                     );
                   },
-                ),
-                SizedBox(height: 30),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  padding: EdgeInsets.all(34),
-                  child: Column(
-                    children: <Widget>[
-                      Image.asset(ic_app_icon, width: 80),
-                      text(
-                        "v 1.0",
-                        textColor: sh_textColorPrimary,
-                        fontSize: textSizeSmall,
-                      )
-                    ],
-                  ),
                 ),
                 SizedBox(height: 30),
               ],

@@ -20,7 +20,7 @@ class CategoryController with ChangeNotifier {
 
     try {
       _categoryList = (await wooCommerce.getProductCategories(perPage: 100))
-          .where((e) => (e.slug != 'sales'))
+          .where((e) => (e.slug != 'sales' && e.slug != 'mwb_wgm_giftcard'))
           .toList();
       log("all category length ===>>> ${_categoryList.length}");
     } catch (e) {
@@ -39,7 +39,7 @@ class CategoryController with ChangeNotifier {
 
     try {
       _mainCategoryList = (await wooCommerce.getProductCategories(parent: 0))
-          .where((e) => (e.slug != 'sales'))
+          .where((e) => (e.slug != 'sales' && e.slug != 'mwb_wgm_giftcard'))
           .toList();
       log("main category length ===>>> ${_mainCategoryList.toString()}");
     } catch (e) {

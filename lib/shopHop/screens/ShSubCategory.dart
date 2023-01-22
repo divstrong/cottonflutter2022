@@ -31,8 +31,6 @@ class ShSubCategoryState extends State<ShSubCategory> {
   String subCatSlug = 'all';
   int limit = 10;
 
-  List<WooProduct> wooProducts = [];
-
   bool isBusy = true;
 
   @override
@@ -44,9 +42,6 @@ class ShSubCategoryState extends State<ShSubCategory> {
   void fetchData() async {
     isBusy = true;
     setState(() {});
-
-    wooProducts =
-        Provider.of<ProductController>(context, listen: false).getAllProducts;
 
     subCategoryList = Provider.of<CategoryController>(context, listen: false)
         .fetchSubCategory(category!.id);
@@ -88,7 +83,7 @@ class ShSubCategoryState extends State<ShSubCategory> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    height: 120,
+                    height: 150.0,
                     margin: EdgeInsets.only(top: spacing_standard_new),
                     padding: EdgeInsets.symmetric(vertical: 15),
                     alignment: Alignment.topLeft,
@@ -126,12 +121,10 @@ class ShSubCategoryState extends State<ShSubCategory> {
                                   padding: EdgeInsets.all(spacing_middle),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.black87,
                                   ),
                                   child: Image.asset(
                                     'images/shophop/sub_cat/${widget.category!.slug}/${subCategoryList[index].slug}.png',
-                                    width: 25,
-                                    color: sh_white,
+                                    width: 60,
                                   ),
                                 ),
                                 SizedBox(height: spacing_control),

@@ -24,6 +24,8 @@ class OrdersProvider extends ChangeNotifier {
     city: '',
     address: '',
     country: '',
+    email: '',
+    phone: '',
   );
 
   ShAddressModel _billAddress = ShAddressModel(
@@ -33,6 +35,8 @@ class OrdersProvider extends ChangeNotifier {
     city: '',
     address: '',
     country: '',
+    email: '',
+    phone: '',
   );
 
   setShipAddress(ShAddressModel newAddress) {
@@ -46,7 +50,7 @@ class OrdersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  ShAddressModel getAddress() {
+  ShAddressModel getShipAddress() {
     return this._orderAddress;
   }
 
@@ -70,10 +74,14 @@ class OrdersProvider extends ChangeNotifier {
     return false;
   }
 
-  void increaseProductCount(int? productId, String? size) {
+  void increaseProductCount(
+    int? productId,
+    String? size, {
+    int count = 1,
+  }) {
     _orderList.forEach((element) {
       if (element.item!.id.toInt() == productId && element.item!.size == size) {
-        element.item!.count = ((element.item!.count!.toInt()) + 1).toString();
+        element.item!.count = ((element.item!.count!.toInt()) + count).toString();
       }
     });
 
@@ -108,7 +116,7 @@ class OrdersProvider extends ChangeNotifier {
     String? size,
   }) {
     if (this.isProductAlreadyAdded(product!.id, size)) {
-      increaseProductCount(product.id, size);
+      increaseProductCount(product.id, size, count: count);
     } else {
       Item item = Item(
         id: product.id.toString(),

@@ -17,15 +17,9 @@ class ShHomeFragment extends StatefulWidget {
 }
 
 class ShHomeFragmentState extends State<ShHomeFragment> {
-  List<WooProductCategory> list = [];
+  List<WooProductCategory> allProductCategoryList = [];
   List<WooProduct> allProducts = [];
-  List<WooProduct> featured = [];
 
-  List<WooProduct> featuredProducts = [];
-  var position = 0;
-  var colors = [sh_cat_1, sh_cat_2, sh_cat_3, sh_cat_4, sh_cat_5];
-
-  //todo
   WooProductCategory menCategory = WooProductCategory(
     id: 78,
     name: 'Men',
@@ -43,41 +37,27 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
     fetchData();
   }
 
-  fetchData() async {
-    final catController =
+  void fetchData() async {
+    final categoryController =
         Provider.of<CategoryController>(context, listen: false);
-    final proController =
+
+    allProductCategoryList.clear();
+    if (categoryController.getAllCategory.isEmpty) {
+      await categoryController.fetchMainCategories();
+    }
+    allProductCategoryList =
+        categoryController.getMainCategory.reversed.toList();
+
+    final productController =
         Provider.of<ProductController>(context, listen: false);
 
-    if (catController.getAllCategory.isEmpty) {
-      await catController.fetchMainCategories().then(
-            (value) => list = catController.getMainCategory,
-          );
-    } else {
-      list.clear();
-      list = catController.getMainCategory;
+    allProducts.clear();
+    if (productController.getAllProducts.isEmpty) {
+      await productController.fetchWooProducts();
     }
+    allProducts = productController.getAllProducts;
 
-    if (proController.getAllProducts.isEmpty) {
-      await proController.fetchWooProducts().then(
-            (value) => allProducts = proController.getAllProducts,
-          );
-    } else {
-      allProducts.clear();
-      allProducts = proController.getAllProducts;
-    }
     setState(() {});
-
-    allProducts.forEach((product) {
-      if (product.featured == 1) {
-        featured.add(product);
-      }
-    });
-
-    setState(() {
-      featuredProducts.clear();
-      featuredProducts.addAll(featured);
-    });
   }
 
   @override
@@ -113,7 +93,7 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
                       margin: EdgeInsets.only(top: spacing_standard_new),
                       alignment: Alignment.topLeft,
                       child: ListView.builder(
-                        itemCount: list.length,
+                        itemCount: allProductCategoryList.length,
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         padding: EdgeInsets.only(
@@ -127,7 +107,7 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ShSubCategory(
-                                    category: list[index],
+                                    category: allProductCategoryList[index],
                                   ),
                                 ),
                               );
@@ -141,14 +121,14 @@ class ShHomeFragmentState extends State<ShHomeFragment> {
                                 children: <Widget>[
                                   Container(
                                     child: Image.asset(
-                                      'images/shophop/cat/${list[index].slug}.png',
+                                      'images/shophop/cat/${allProductCategoryList[index].slug}.png',
                                       width: 40,
                                     ),
                                   ),
                                   SizedBox(height: spacing_control),
                                   text(
                                     CategoryController.decodeCategoriesNames(
-                                      list[index].name,
+                                      allProductCategoryList[index].name,
                                     ),
                                     textColor: sh_textColorPrimary,
                                     fontFamily: fontMedium,
